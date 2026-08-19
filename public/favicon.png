@@ -1,0 +1,1860 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="SK limo,SK Limousine,SKリモ,SKリムジン,ハイヤー,リムジン,hire,limousine,観光,貸切,空港送迎,羽田空港,成田空港">
+    <meta name="description" content="全てのお客様にご満足いただけるハイヤーサービスならSKリモにおまかせください。空港送迎、観光、ゴルフ送迎などお客様のご要望に合わせたサービスをご提供いたします。">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+	<meta name="robots" content="index, follow">
+    <link rel="shortcut icon" type="image/png" href="favicon.png">
+    
+	<link rel="stylesheet" type="text/css" href="./all.css?5840">
+	<link href='https://fonts.googleapis.com/css?family=M+PLUS+1p&display=swap&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Montserrat:100,200,300,700,800,900,40&display=swap&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Lato:100,300,700,900,40&display=swap&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <title>株式会社ＳＫリモ - ハイヤー</title>
+
+<script>
+	function set2fig(num) {
+	   // 桁数が1桁だったら先頭に0を加えて2桁に調整する
+	   var ret;
+	   if( num < 10 ) { ret = "0" + num; }
+	   else { ret = num; }
+	   return ret;
+	}
+	function showClock2() {
+	   var nowTime = new Date();
+  		var year = nowTime.getFullYear();
+		var mon = nowTime.getMonth() + 1;
+		var day = nowTime.getDate();
+	   var nowHour = set2fig( nowTime.getHours() );
+	   var nowMin  = set2fig( nowTime.getMinutes() );
+	   var nowSec  = set2fig( nowTime.getSeconds() );
+	   var msg = year + "年" + mon + "月" + day + "日 " + nowHour + ":" + nowMin + ":" + nowSec;
+	   document.getElementById("realtimeclockarea").innerHTML = msg;
+	}
+	setInterval('showClock2()',1000);
+</script>
+    
+<!-- Analytics -->
+ 
+<!-- Analytics END -->
+    
+</head>
+<body>
+
+<!-- Preloader -->
+<div id="page-loading-blocs-notifaction" class="page-preloader"></div>
+<!-- Preloader END -->
+
+
+<!-- Main container -->
+<div class="page-container">
+    
+<!-- sidebar -->
+<div class="bloc l-bloc october-sidebar none " id="sidebar">
+	<div class="container bloc-no-padding">
+		<div class="row">
+			<div class="col-lg-12 october-sidebar-row col-md-12 col-sm-12 col-12">
+				<div>
+					<div class="row align-items-center">
+						<div class="col-lg-12 col-md-12 col-sm-8 col-8">
+							<a href="index.html"><img src="img/SKLimoバナー2.svg" class="img-fluid img-protected october-logo mx-auto d-block" alt="logo%20oragea" width="150" height="31" /></a>
+						</div>
+						<div class="col-lg-12 col-md-12 text-lg-center text-md-center col-sm-3 text-center text-sm-center col-3">
+							<a href="login.php"><blocsicon class="iicons rotate-anti-clockwise-hvr svg-icon-stroke"><svg width="512" height="512" viewBox="0 0 512 512"><rect x="48" y="48" width="176" height="176" rx="20" ry="20" style="fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"></rect><rect x="288" y="48" width="176" height="176" rx="20" ry="20" style="fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"></rect><rect x="48" y="288" width="176" height="176" rx="20" ry="20" style="fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"></rect><rect x="288" y="288" width="176" height="176" rx="20" ry="20" style="fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"></rect></svg></blocsicon></a>
+						</div>
+						<div class="col-sm-5 col-lg-12 col-md-12 col-4 object-hidden">
+								<div class="text-center">
+									<div class="btn-group btn-dropdown dropdown">
+										<a href="#" class="btn  btn-d dropdown-toggle lang01" data-toggle="dropdown" aria-expanded="false" tabindex="0">LANGUAGE</a>
+										<ul class="dropdown-menu" role="menu">
+											<li class="lang02">
+												<div class="text-center text-lg-center">
+													<a href="index.html" class="dropdown-item text-lg-center">JAPANEASE</a>
+												</div>
+											</li>
+											<li class="lang02">
+												<a href="index.html" class="dropdown-item text-lg-center">ENGLISH</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+					</div>
+				</div>
+				<div>
+						<nav class="navbar navbar-light row navbar-expand-md october-navbar" role="navigation">
+							<button id="nav-toggle" type="button" class="ml-auto ui-navbar-toggler navbar-toggler border-0 p-0" data-toggle="collapse" data-target=".navbar-42626" aria-expanded="false" aria-label="Toggle navigation">
+								<span class="navbar-toggler-icon"><svg height="32" viewBox="0 0 32 32" width="32"><path class="svg-menu-icon " d="m2 9h28m-28 7h28m-28 7h28"></path></svg></span>
+							</button>
+							<div class="collapse navbar-collapse navbar-42626  sidebar-nav">
+									<ul class="site-navigation nav navbar-nav ml-auto">
+										<li class="nav-item october-nav-link">
+											<a href="#" class="nav-link october-sidebar-link" data-scroll-speed="1000" onclick="scrollToTarget('#section01',this)">ホーム(ハイヤーサービスとは)</a>
+										</li>
+										<li class="nav-item october-nav-link">
+											<a href="#" class="nav-link october-sidebar-link f-fol-blue" data-scroll-speed="1000" onclick="scrollToTarget('#section03',this)">ご自宅・ホテル等〜空港</a>
+										</li>
+										<li class="nav-item october-nav-link">
+											<a href="#" class="nav-link october-sidebar-link f-fol-blue" data-scroll-speed="1000" onclick="scrollToTarget('#section04',this)">空港〜ご自宅・ホテル</a>
+										</li>
+										<li class="nav-item october-nav-link">
+											<a href="#" class="nav-link october-sidebar-link f-fol-blue" data-scroll-speed="1000" onclick="scrollToTarget('#section05',this)">ビジネスミーティング</a>
+										</li>
+										<li class="nav-item october-nav-link">
+											<a href="#" class="nav-link a-btn october-sidebar-link f-fol-blue" data-scroll-speed="1000" onclick="scrollToTarget('#section06',this)">観光案内</a>
+										</li>
+										<li class="nav-item october-nav-link">
+											<a href="#" class="nav-link october-sidebar-link f-fol-blue" data-scroll-speed="1000" onclick="scrollToTarget('#section07',this)">冠婚葬祭</a>
+										</li>
+										<li class="nav-item october-nav-link">
+											<a href="#" class="nav-link october-sidebar-link f-fol-blue" data-scroll-speed="1000" onclick="scrollToTarget('#section08',this)">区間送迎 (個人様向け)</a>
+										</li>
+										<li class="nav-item october-nav-link">
+											<a href="#" class="nav-link october-sidebar-link f-fol-blue" data-scroll-speed="1000" onclick="scrollToTarget('#section09',this)">区間送迎 (一般企業様向け)</a>
+										</li>
+										<li class="nav-item october-nav-link">
+											<a href="#" class="nav-link october-sidebar-link f-fol-blue" data-scroll-speed="1000" onclick="scrollToTarget('#section10',this)">区間送迎 (物流企業様向け)</a>
+										</li>
+										<li class="nav-item october-nav-link">
+											<a href="#" class="nav-link october-sidebar-link f-fol-blue" data-scroll-speed="1000" onclick="scrollToTarget('#section11',this)">イベント送迎 (旅行会社様向け)</a>
+										</li>
+										<li class="nav-item october-nav-link">
+											<a href="#" class="nav-link october-sidebar-link f-fol-blue" data-scroll-speed="1000" onclick="scrollToTarget('#section12',this)">その他のご利用シーン</a>
+										</li>
+										<li class="nav-item october-nav-link">
+											<a href="#" class="nav-link october-sidebar-link f-fol-green" data-scroll-speed="1000" onclick="scrollToTarget('#section12-2',this)">ハイエース15台保有</a>
+										</li>
+										<li class="nav-item october-nav-link">
+											<a href="#" class="nav-link october-sidebar-link f-fol-green" data-scroll-speed="1000" onclick="scrollToTarget('#section12-3',this)">ミートサービス</a>
+										</li>
+										<li class="nav-item october-nav-link">
+											<a href="#" class="nav-link october-sidebar-link f-fol-green" data-scroll-speed="1000" onclick="scrollToTarget('#section12-4',this)">関西エリア送迎</a>
+										</li>
+										<li class="nav-item october-nav-link">
+											<a href="#" class="nav-link october-sidebar-link" data-scroll-speed="1000" onclick="scrollToTarget('#section13',this)">料金体系</a>
+										</li>
+										<li class="nav-item october-nav-link">
+											<a href="#" class="nav-link october-sidebar-link" data-scroll-speed="1000" onclick="scrollToTarget('#section14',this)">車両情報</a>
+										</li>
+										<li class="nav-item october-nav-link">
+											<a href="contact.html" class="nav-link october-sidebar-link">ご予約・お問い合わせ</a>
+										</li>
+										<li class="nav-item october-nav-link">
+											<a href="https://sklimo-recruit.com/" class="nav-link october-sidebar-link" target="_blank">求人情報</a>
+										</li>
+										<li class="nav-item october-nav-link">
+											<a href="#" class="nav-link october-sidebar-link" data-scroll-speed="1000" onclick="scrollToTarget('#section17',this)">会社概要</a>
+										</li>
+										<li class="nav-item october-nav-link">
+											<a href="#" class="nav-link october-sidebar-link" data-scroll-speed="1000" onclick="scrollToTarget('#section18',this)">支払い方法</a>
+										</li>
+									</ul>
+								</div>
+						</nav>
+					</div>
+				<div class="d-md-block  d-none">
+							<div class="col-lg-12 col-md-12 col-7 reysol00 d-md-block  d-none col-sm-4">
+								<a href="https://www.reysol.co.jp/" target="_blank"><img src="img/reysol.png" class="img-fluid img-protected mx-auto d-block reysol-logo" alt="logo%20oragea" width="146" height="94" /></a>
+								<h5 class="mb-4 text-lg-center h5-style text-md-center">
+									SKリモは柏レイソルを<br>応援しています
+								</h5>
+							</div>
+							<h6 class="text-lg-center tc-7824 mx-auto d-block mg-clear october-copyright h6-style">
+								Copyright © 2025 SK Limo
+							</h6>
+						</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- sidebar END -->
+
+<!-- top -->
+<div class="bloc none full-width-bloc p-line-1 bgc-7824 d-bloc" id="top">
+	<div class="container main-right-offset bloc-sm-lg bloc-sm-md bloc-sm-sm bloc-sm">
+		<div class="row gyo_kihon">
+			<div class="col-md-12 offset-lg-0 col-lg-12">
+				<img src="img/SKLimoBanner01.png" class="img-fluid img-protected mx-auto d-block img-intro-style mb-lg-0" alt="logo" id="home" width="300" height="48" />
+			</div>
+		</div>
+	</div>
+</div>
+<!-- top END -->
+
+<!-- section01 -->
+<div class="bloc none full-width-bloc  d-md-none d-flex bgc-7824 d-bloc" id="section01">
+	<div class="container main-right-offset bloc-no-padding-lg bloc-no-padding">
+		<div class="row gyo_kihon">
+			<div class="col-md-12 offset-lg-0 col-lg-12">
+				<img src="img/lazyload-ph.png" data-src="img/reysol.png" class="img-fluid img-protected img-style mx-auto d-block lazyload" alt="reysol" width="250" height="162" />
+				<h4 class="mb-4 text-lg-center text-center tc-3579">
+					SKリモは柏レイソルを応援しています
+				</h4>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- section01 END -->
+
+<!-- section02 -->
+<div class="bloc none full-width-bloc l-bloc" id="section02">
+	<div class="container main-right-offset bloc-sm">
+		<div class="row gyo_kihon">
+			<div class="col-md-12 col">
+				<h1 class="mg-md text-center h1-intro-style">
+					ハイヤーサービス(リムジン)とは
+				</h1>
+				<p class="p-line-1 margin-bottom">
+					運転手付きの貸し切り乗用車で、要人やエグゼクティブ向けの交通手段です。<br><br>タクシーと同様に目的地まで運んでもらうサービスですが、利用方法や料金体系、車種などが異なります。<br>（AIによるハイヤーサービスの定義を引用）<br><br>現代のハイヤー需要は大別すると、国内需要と海外需要の2つに分かれます。<br><br>国内需要は企業の役員専用車両（昔からハイヤーと言えばこのイメージ）など。<br>海外需要はインバウンド需要、つまり旅行者の皆様などです。<br>
+				</p>
+				<h3 class="mb-4 h3-style">
+					ハイヤーは皆様の「して欲しい」を叶えます！
+				</h3>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- section02 END -->
+
+<!-- section03 -->
+<div class="bloc none full-width-bloc bgc-3579 l-bloc" id="section03">
+	<div class="container main-right-offset bloc-sm">
+		<div class="row gyo_kihon">
+			<div class="col-md-12 offset-lg-0 col-lg-12">
+				<h1 class="mg-md text-center h1-intro-style">
+					ご自宅・ホテル等〜空港
+				</h1>
+				<div class="row imgbox90">
+					<div class="col-md-12 col-lg-6 text-lg-center text-md-center text-sm-center text-center">
+						<img src="img/lazyload-ph.png" data-src="img/AdobeStock_432494756.jpeg" class="img-fluid img-protected mx-auto d-block img-send-style lazyload" alt="AdobeStock_477113218.jpeg" width="535" height="357" />
+					</div>
+					<div class="col text-lg-center text-md-center text-sm-center text-center">
+						<img src="img/lazyload-ph.png" data-src="img/AdobeStock_98998141.jpeg" class="img-fluid img-protected mx-auto d-block img-send-style lazyload" alt="AdobeStock_477113218.jpeg" width="535" height="357" />
+					</div>
+				</div>
+				<h5 class="mb-4 h5-aa-style">
+					こんな事を御依頼頂けます
+				</h5>
+				<ul>
+					<li>
+						<p>
+							予約の時間を何時に設定したら良いか教えて欲しい<br>
+						</p>
+					</li>
+					<li>
+						<p>
+							ご予約前日までに車両及びドライバー情報をお知らせいたします。
+						</p>
+					</li>
+					<li>
+						<p>
+							車両が到着した際にインターホンを押して欲しい。（押さないで欲しい）
+						</p>
+					</li>
+					<li>
+						<p>
+							車両が到着した際に指定の携帯電話にドライバーから電話して欲しい。
+						</p>
+					</li>
+					<li>
+						<p>
+							上記2点は行わず、静かに待機していて欲しい。
+						</p>
+					</li>
+					<li>
+						<p>
+							基本的にドライバーは車外にて待機しておりますが、ご近所の目があるから車内で待機していて欲しい。
+						</p>
+					</li>
+					<li>
+						<p>
+							基本サービスとして水とおしぼりを用意しております。（無料）
+						</p>
+					</li>
+					<li>
+						<p>
+							外国人ゲストなのでWi-Fiルーターを用意して欲しい。（無料）
+						</p>
+					</li>
+					<li>
+						<p>
+							チャイルドシートやジュニアシートを用意して欲しい。（無料）
+						</p>
+					</li>
+					<li>
+						<p>
+							車両に乗車する際にステップ（踏み台）を用意して欲しい。（無料）
+						</p>
+					</li>
+					<li>
+						<p>
+							英会話が可能なドライバーを手配して欲しい（有料）
+						</p>
+					</li>
+					<li>
+						<p>
+							空港到着後にチェックインカウンターまでフォローをして欲しい。（外部委託にて有料）<br>
+						</p>
+					</li>
+					<li>
+						<p>
+							その他、ご要望に応じて対応させて頂きます。
+						</p>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- section03 END -->
+
+<!-- section04 -->
+<div class="bloc none full-width-bloc l-bloc" id="section04">
+	<div class="container main-right-offset bloc-sm">
+		<div class="row gyo_kihon">
+			<div class="col-md-12 offset-lg-0 col-lg-12">
+				<h1 class="mg-md text-center h1-intro-style">
+					空港〜ご自宅・ホテル
+				</h1>
+				<div class="row imgbox90">
+					<div class="col-md-12 col-lg-6 text-lg-center text-md-center text-sm-center text-center">
+						<img src="img/lazyload-ph.png" data-src="img/AdobeStock_142677790.jpeg" class="img-fluid img-protected mx-auto d-block img-send-style lazyload" alt="AdobeStock_477113218.jpeg" width="535" height="357" />
+					</div>
+					<div class="col text-center">
+						<img src="img/lazyload-ph.png" data-src="img/AdobeStock_309641099.jpeg" class="img-fluid img-protected mx-auto d-block img-send-style lazyload" alt="AdobeStock_477113218.jpeg" width="535" height="357" />
+					</div>
+				</div>
+				<h5 class="mb-4 h5-aa-style">
+					こんな事を御依頼頂けます
+				</h5>
+				<ul>
+					<li>
+						<p>
+							ご予約前日までに車両及びドライバー情報をお知らせいたします。<br>
+						</p>
+					</li>
+					<li>
+						<p>
+							到着ゲートの前で出迎えをして欲しい。
+						</p>
+					</li>
+					<li>
+						<p>
+							出迎えの際に掲げるステッカーの指定をしたい。(ゲスト名や企業ロゴ等)
+						</p>
+					</li>
+					<li>
+						<p>
+							ゲストと会えたら指定の番号へドライバーから電話をかけて欲しい。
+						</p>
+					</li>
+					<li>
+						<p>
+							お供が終了したら指定の番号へドライバーから電話をかけて欲しい。
+						</p>
+					</li>
+					<li>
+						<p>
+							当日の飛行機到着時刻に合わせて配車いたします。
+						</p>
+					</li>
+					<li>
+						<p>
+							基本サービスとして水とおしぼりを用意しております。（無料）
+						</p>
+					</li>
+					<li>
+						<p>
+							外国人ゲストなのでWi-Fiルーターを用意して欲しい。（無料）
+						</p>
+					</li>
+					<li>
+						<p>
+							チャイルドシートやジュニアシートを用意して欲しい。（無料）
+						</p>
+					</li>
+					<li>
+						<p>
+							車両に乗車する際にステップ（踏み台）を用意して欲しい。（無料）
+						</p>
+					</li>
+					<li>
+						<p>
+							英会話が可能なドライバーを手配して欲しい（有料）
+						</p>
+					</li>
+					<li>
+						<p>
+							ホテルでチェックインアシストをして欲しい。(外部委託にて有料)<br>
+						</p>
+					</li>
+					<li>
+						<p>
+							その他、ご要望に応じて対応させて頂きます。
+						</p>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- section04 END -->
+
+<!-- section05 -->
+<div class="bloc none full-width-bloc bgc-3579 l-bloc" id="section05">
+	<div class="container main-right-offset bloc-sm">
+		<div class="row gyo_kihon">
+			<div class="col-md-12 offset-lg-0 col-lg-12">
+				<h1 class="mg-md text-center h1-intro-style">
+					ビジネスミーティング
+				</h1>
+				<div class="row imgbox90">
+					<div class="col-md-12 col-lg-6 text-center">
+						<img src="img/lazyload-ph.png" data-src="img/AdobeStock_277535170.jpeg" class="img-fluid img-protected mx-auto d-block img-send-style lazyload" alt="AdobeStock_477113218.jpeg" width="535" height="357" />
+					</div>
+					<div class="col text-center">
+						<img src="img/lazyload-ph.png" data-src="img/AdobeStock_165806799.jpeg" class="img-fluid img-protected mx-auto d-block img-send-style lazyload" alt="AdobeStock_477113218.jpeg" width="535" height="357" />
+					</div>
+				</div>
+				<h5 class="mb-4 h5-aa-style">
+					こんな事を御依頼頂けます
+				</h5>
+				<ul>
+					<li>
+						<p>
+							配車時(ホテル等に到着の際)指定の携帯電話にドライバーから電話して欲しい。<br>
+						</p>
+					</li>
+					<li>
+						<p>
+							ミーティングの行程を渡すから下調べをしておいて欲しい。
+						</p>
+					</li>
+					<li>
+						<p>
+							基本サービスとして水とおしぼりを用意しております。(無料)
+						</p>
+					</li>
+					<li>
+						<p>
+							外国人ゲストなのでWi-Fiルーターを用意して欲しい。(無料)
+						</p>
+					</li>
+					<li>
+						<p>
+							英会話が可能なドライバーを手配して欲しい。(有料)
+						</p>
+					</li>
+					<li>
+						<p>
+							数日間利用するので同じ車両を手配して欲しい。また、プレゼン資料が大量にあるので車両に保管しておいて欲しい。<br>
+						</p>
+					</li>
+					<li>
+						<p>
+							ミーティングの後に夜は会食があるので、お店前で待機して最後ホテルまでのお供をして欲しい。<br>
+						</p>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- section05 END -->
+
+<!-- section06 -->
+<div class="bloc none full-width-bloc l-bloc" id="section06">
+	<div class="container main-right-offset bloc-sm">
+		<div class="row gyo_kihon">
+			<div class="col-md-12 offset-lg-0 col-lg-12">
+				<h1 class="mg-md text-center h1-intro-style">
+					観光案内
+				</h1>
+				<div class="row imgbox90">
+					<div class="col-md-12 col-lg-6 text-center">
+						<img src="img/lazyload-ph.png" data-src="img/AdobeStock_294087813.jpeg" class="img-fluid img-protected mx-auto d-block img-send-style lazyload" alt="AdobeStock_477113218.jpeg" width="535" height="357" />
+					</div>
+					<div class="col text-center">
+						<img src="img/lazyload-ph.png" data-src="img/AdobeStock_680414634.jpeg" class="img-fluid img-protected mx-auto d-block img-send-style lazyload" alt="AdobeStock_477113218.jpeg" width="535" height="357" />
+					</div>
+				</div>
+				<h5 class="mb-4 h5-aa-style">
+					こんな事を御依頼頂けます
+				</h5>
+				<ul>
+					<li>
+						<p>
+							お勧めの観光スポットをまわって欲しい。<br>
+						</p>
+					</li>
+					<li>
+						<p>
+							観光ガイドを手配して欲しい。
+						</p>
+					</li>
+					<li>
+						<p>
+							よくあるご利用先、都内観光、富士山観光、箱根観光、鎌倉観光、日光観光など。
+						</p>
+					</li>
+					<li>
+						<p>
+							遠方までドライバーも1週間程度、帯同して運行をして欲しい。(例.都内〜富士山〜松本〜金沢〜白川郷〜京都〜大阪〜関西空港等)
+						</p>
+					</li>
+					<li>
+						<p>
+							英会話が可能なドライバーを手配して欲しい。(有料)
+						</p>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- section06 END -->
+
+<!-- section07 -->
+<div class="bloc none full-width-bloc bgc-3579 l-bloc" id="section07">
+	<div class="container main-right-offset bloc-sm">
+		<div class="row gyo_kihon">
+			<div class="col-md-12 offset-lg-0 col-lg-12">
+				<h1 class="mg-md text-center h1-intro-style">
+					冠婚葬祭
+				</h1>
+				<div class="row imgbox90">
+					<div class="col-md-12 col-lg-6 text-center">
+						<img src="img/lazyload-ph.png" data-src="img/AdobeStock_216746038.jpeg" class="img-fluid img-protected mx-auto d-block img-send-style lazyload" alt="AdobeStock_477113218.jpeg" width="535" height="357" />
+					</div>
+					<div class="col text-center">
+						<img src="img/lazyload-ph.png" data-src="img/AdobeStock_443557189.jpeg" class="img-fluid img-protected mx-auto d-block img-send-style lazyload" alt="AdobeStock_477113218.jpeg" width="535" height="357" />
+					</div>
+				</div>
+				<h5 class="mb-4 h5-aa-style">
+					こんな事を御依頼頂けます
+				</h5>
+				<ul>
+					<li>
+						<p>
+							参列者のご自宅〜会場までの車両を手配して欲しい。<br>
+						</p>
+					</li>
+					<li>
+						<p>
+							予約の時間を何時に設定したら良いか教えて欲しい。
+						</p>
+					</li>
+					<li>
+						<p>
+							会場〜ご自宅までの手配もして欲しい。
+						</p>
+					</li>
+					<li>
+						<p>
+							乗車するゲストに支払いをさせないで欲しい。
+						</p>
+					</li>
+					<li>
+						<p>
+							高齢のゲストなので丁寧な運転をして欲しい。
+						</p>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- section07 END -->
+
+<!-- section08 -->
+<div class="bloc none full-width-bloc l-bloc" id="section08">
+	<div class="container main-right-offset bloc-sm">
+		<div class="row gyo_kihon">
+			<div class="col-md-12 offset-lg-0 col-lg-12">
+				<h1 class="mg-md text-center h1-intro-style">
+					区間送迎 (個人様向け)
+				</h1>
+				<div class="row imgbox90">
+					<div class="col-md-12 col-lg-6 text-center">
+						<img src="img/lazyload-ph.png" data-src="img/AdobeStock_314906682.jpeg" class="img-fluid img-protected mx-auto d-block img-send-style lazyload" alt="AdobeStock_477113218.jpeg" width="535" height="357" />
+					</div>
+					<div class="col text-center">
+						<img src="img/lazyload-ph.png" data-src="img/AdobeStock_395924917.jpeg" class="img-fluid img-protected mx-auto d-block img-send-style lazyload" alt="AdobeStock_477113218.jpeg" width="535" height="357" />
+					</div>
+				</div>
+				<h5 class="mb-4 h5-aa-style">
+					こんな事を御依頼頂けます
+				</h5>
+				<ul>
+					<li>
+						<p>
+							数日間現地に滞在するので、片道だけの移動手段を確保したい。<br>
+						</p>
+					</li>
+					<li>
+						<p>
+							箱根 40,000円〜
+						</p>
+					</li>
+					<li>
+						<p>
+							河口湖　50,000円〜
+						</p>
+					</li>
+					<li>
+						<p>
+							白馬 90,000円〜
+						</p>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- section08 END -->
+
+<!-- section09 -->
+<div class="bloc none full-width-bloc bgc-3579 l-bloc" id="section09">
+	<div class="container main-right-offset bloc-sm">
+		<div class="row gyo_kihon">
+			<div class="col-md-12 offset-lg-0 col-lg-12">
+				<h1 class="mg-md text-center h1-intro-style">
+					区間送迎 (一般企業向け)
+				</h1>
+				<div class="row imgbox90">
+					<div class="col-md-12 col-lg-6 text-center">
+						<img src="img/lazyload-ph.png" data-src="img/AdobeStock_164655904.jpeg" class="img-fluid img-protected mx-auto d-block img-send-style lazyload" alt="AdobeStock_477113218.jpeg" width="535" height="357" />
+					</div>
+					<div class="col text-center">
+						<img src="img/lazyload-ph.png" data-src="img/AdobeStock_494162865.jpeg" class="img-fluid img-protected mx-auto d-block img-send-style lazyload" alt="AdobeStock_477113218.jpeg" width="535" height="357" />
+					</div>
+				</div>
+				<h5 class="mb-4 h5-aa-style">
+					こんな事を御依頼頂けます
+				</h5>
+				<ul>
+					<li>
+						<p>
+							会社から指定の場所への車両を予約したい。<br>
+						</p>
+					</li>
+					<li>
+						<p>
+							会食前後の送迎に車両を予約したい。
+						</p>
+					</li>
+					<li>
+						<p>
+							支払いは請求書対応にして欲しい。
+						</p>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- section09 END -->
+
+<!-- section10 -->
+<div class="bloc none full-width-bloc l-bloc" id="section10">
+	<div class="container main-right-offset bloc-sm">
+		<div class="row gyo_kihon">
+			<div class="col-md-12 offset-lg-0 col-lg-12">
+				<h1 class="mg-md text-center h1-intro-style">
+					区間送迎 (物流企業様向け)
+				</h1>
+				<div class="row imgbox90">
+					<div class="col-md-12 col-lg-6 text-center">
+						<img src="img/lazyload-ph.png" data-src="img/AdobeStock_525418498.jpeg" class="img-fluid img-protected mx-auto d-block img-send-style lazyload" alt="AdobeStock_477113218.jpeg" width="535" height="358" />
+					</div>
+					<div class="col text-center">
+						<img src="img/lazyload-ph.png" data-src="img/AdobeStock_300574797.jpeg" class="img-fluid img-protected mx-auto d-block img-send-style lazyload" alt="AdobeStock_477113218.jpeg" width="535" height="358" />
+					</div>
+				</div>
+				<h5 class="mb-4 h5-aa-style">
+					こんな事を御依頼頂けます
+				</h5>
+				<ul>
+					<li>
+						<p>
+							駅と物流倉庫間を結ぶ、社員様の送迎をして欲しい。<br>
+						</p>
+					</li>
+					<li>
+						<p>
+							マンションと駅を結ぶ、住民様の送迎をして欲しい。
+						</p>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- section10 END -->
+
+<!-- section11 -->
+<div class="bloc none full-width-bloc bgc-3579 l-bloc" id="section11">
+	<div class="container main-right-offset bloc-sm">
+		<div class="row gyo_kihon">
+			<div class="col-md-12 offset-lg-0 col-lg-12">
+				<h1 class="mg-md text-center h1-intro-style">
+					イベント送迎 (旅行会社様向け)
+				</h1>
+				<div class="row imgbox90">
+					<div class="col-md-12 col-lg-6 text-center">
+						<img src="img/lazyload-ph.png" data-src="img/AdobeStock_85588147.jpeg" class="img-fluid img-protected mx-auto d-block img-send-style lazyload" alt="AdobeStock_477113218.jpeg" width="535" height="357" />
+					</div>
+					<div class="col text-center">
+						<img src="img/lazyload-ph.png" data-src="img/AdobeStock_205825466.jpeg" class="img-fluid img-protected mx-auto d-block img-send-style lazyload" alt="AdobeStock_477113218.jpeg" width="535" height="357" />
+					</div>
+				</div>
+				<h5 class="mb-4 h5-aa-style">
+					こんな事を御依頼頂けます
+				</h5>
+				<ul>
+					<li>
+						<p>
+							国際会議(サミット、Ｇ７、その他国際会議)<br>
+						</p>
+					</li>
+					<li>
+						<p>
+							スポーツイベント(WBC、MLB、欧州クラブチーム、ACL、その他国際親善試合等)
+						</p>
+					</li>
+					<li>
+						<p>
+							音楽イベント(クラシック、オペラ、夏フェス、クラブイベント等)
+						</p>
+					</li>
+					<li>
+						<p>
+							ハイブランドイベント(数百台単位のイベント)
+						</p>
+					</li>
+					<li>
+						<p>
+							イベントで車両は数十台〜数百台手配して欲しいので、取りまとめをして欲しい。
+						</p>
+					</li>
+					<li>
+						<p>
+							イベントに現場の配車担当者を配置して欲しい。
+						</p>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- section11 END -->
+
+<!-- section12 -->
+<div class="bloc none full-width-bloc l-bloc" id="section12">
+	<div class="container main-right-offset bloc-sm">
+		<div class="row gyo_kihon">
+			<div class="col-md-12 offset-lg-0 col-lg-12">
+				<h1 class="mg-md text-center h1-intro-style">
+					その他のご利用シーン
+				</h1>
+				<div class="row imgbox90">
+					<div class="col-md-12 col-lg-6 text-center">
+						<img src="img/lazyload-ph.png" data-src="img/AdobeStock_256604300.jpeg" class="img-fluid img-protected mx-auto d-block img-send-style lazyload" alt="AdobeStock_477113218.jpeg" width="535" height="357" />
+					</div>
+					<div class="col text-center">
+						<img src="img/lazyload-ph.png" data-src="img/AdobeStock_320079063.jpeg" class="img-fluid img-protected mx-auto d-block img-send-style lazyload" alt="AdobeStock_477113218.jpeg" width="535" height="357" />
+					</div>
+				</div>
+				<h5 class="mb-4 h5-aa-style">
+					ハイヤーはエグゼクティブだけのものではありません！
+				</h5>
+				<ul>
+					<li>
+						<p>
+							子供の送り迎えがどうしても出来ない日があって困っている。<br>
+						</p>
+					</li>
+					<li>
+						<p>
+							友人とレンタカーを借りたいけど運転に自信がない。
+						</p>
+					</li>
+					<li>
+						<p>
+							日帰りの旅行先でもお酒を楽しみたいし、帰りはゆっくり眠りたい。
+						</p>
+					</li>
+					<li>
+						<p>
+							ペットと旅行に行きたいけど、自分で運転はしたくない。
+						</p>
+					</li>
+					<li>
+						<p>
+							タクシー1台では乗り切れない人数や荷物がある。(最大9名まで可能です)
+						</p>
+					</li>
+					<li>
+						<p>
+							記念日のサプライズ演出の為に車を使いたい。
+						</p>
+					</li>
+					<li>
+						<p>
+							年末年始の挨拶まわりや、日頃の営業活動で1日に数十件の取引先を訪問したい。
+						</p>
+					</li>
+					<li>
+						<p>
+							忘年会、納涼会(屋形船)の際に大人数の移動がある。
+						</p>
+					</li>
+					<li>
+						<p>
+							早朝空港に行かなくてはならないが、タクシーの予約を断られた。
+						</p>
+					</li>
+					<li>
+						<p>
+							大型バスで移動したいが予約が取れない。
+						</p>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- section12 END -->
+
+<!-- section12-2 -->
+<div class="bloc none full-width-bloc bgc-3579 l-bloc" id="section12-2">
+	<div class="container main-right-offset bloc-sm">
+		<div class="row gyo_kihon">
+			<div class="col-md-12 offset-lg-0 col-lg-12">
+				<div class="row imgbox90">
+					<div class="col-md-12 col-lg-6 text-center bloc-padding-top">
+						<h1 class="mg-md text-center h1-intro-style">
+							ハイエース15台保有
+						</h1>
+						<h2 class="mb-4 h5-aa-style text-lg-left">
+							当社は、ハイエースを15台保有しており、少人数のプライベートな移動から、大人数での団体移動まで、あらゆるお客様のニーズに柔軟に対応できます。<br><br>ビジネスでの移動、空港送迎、観光、イベント送迎など、用途に合わせて最適なハイエースをご用意。広々とした車内空間で、快適かつ安全な移動をお約束します。<br>
+						</h2>
+					</div>
+					<div class="text-center col-lg-6 bloc-padding-top">
+						<img src="img/lazyload-ph.png" data-src="img/S__66707472.jpg" class="img-fluid img-protected mx-auto d-block img-send-style-99 lazyload" alt="AdobeStock_477113218.jpeg" width="535" height="363" />
+					</div>
+					<div class="col bloc-padding-top">
+						<h5 class="mb-4 h5-aa-style">
+							【当社のハイエースが選ばれる理由】
+						</h5>
+						<ul>
+							<li>
+								<p>
+									豊富な車両数: 15台のハイエースを保有しているため、急なご依頼や複数の車両が必要な場合でも、迅速かつ確実な手配が可能です。<br>
+								</p>
+							</li>
+							<li>
+								<p>
+									多様なニーズに対応: 少人数でのゆったりとした移動から、研修やイベントなどでの大人数での移動まで、お客様の人数に合わせて柔軟に対応いたします。
+								</p>
+							</li>
+							<li>
+								<p>
+									快適な車内空間: 長距離移動でも疲れにくい、ゆとりのある座席と充実した設備で、移動時間を快適にお過ごしいただけます。
+								</p>
+							</li>
+							<li>
+								<p>
+									経験豊富なドライバー: 安全運転はもちろんのこと、お客様への細やかな気配りを大切にするプロのドライバーが安心の移動をサポートします。
+								</p>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- section12-2 END -->
+
+<!-- section12-3 -->
+<div class="bloc none full-width-bloc l-bloc" id="section12-3">
+	<div class="container main-right-offset bloc-sm">
+		<div class="row gyo_kihon">
+			<div class="col-md-12 offset-lg-0 col-lg-12">
+				<div class="row imgbox90">
+					<div class="col-md-12 col-lg-6 text-center bloc-padding-top">
+						<h1 class="mg-md text-center h1-intro-style">
+							ミートサービス
+						</h1>
+						<h2 class="mb-4 h5-aa-style text-lg-left">
+							成田空港、羽田空港、関西空港で、お客様の快適なご移動をサポートするミートサービスの手配を承っております。（ミーティングサービス会社　AIRMEにてご提供）<br>**ご到着から、お客様専属のスタッフがお車までの移動を細やかにサポート。<br>**初めての空港でも、お荷物が多い時でも、言葉の壁がある場合でも、安心してスムーズにご移動いただけます。<br>
+						</h2>
+						<h4 class="mb-4 h4-2-style text-lg-left">
+							社　名：株式会社AIRME<br>所在地：〒135-0051 東京都江東区枝川1-15-9-226<br>電　話：050-8882-0642<br>ＷＥＢ：<a class="link-col01" href="https://airme.jp/" target="_blank">https://airme.jp/</a>
+						</h4>
+					</div>
+					<div class="text-center col-lg-6 bloc-padding-top">
+						<img src="img/lazyload-ph.png" data-src="img/Gemini_Generated_Image_uc1xm3uc1xm3uc1x.png" class="img-fluid img-protected mx-auto d-block img-send-style-99 lazyload" alt="AdobeStock_477113218.jpeg" width="535" height="403" />
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- section12-3 END -->
+
+<!-- section12-4 -->
+<div class="bloc none full-width-bloc bgc-3579 l-bloc" id="section12-4">
+	<div class="container main-right-offset bloc-sm">
+		<div class="row gyo_kihon">
+			<div class="col-md-12 offset-lg-0 col-lg-12">
+				<div class="row imgbox90">
+					<div class="col-md-12 col-lg-6 text-center bloc-padding-top">
+						<h1 class="mg-md text-center h1-intro-style">
+							関西エリア送迎
+						</h1>
+						<h2 class="mb-4 h5-aa-style text-lg-left">
+							大阪、京都エリアでの送迎につきましても、弊社提携会社が責任を持って手配いたしますので、ご安心ください。<br>快適な移動をお約束いたします。<br>
+						</h2>
+						<h4 class="mb-4 h4-2-style text-lg-left">
+							社　名：株式会社トモクルーズ<br>所在地：〒552-0001 大阪府大阪市港区波除<br> 4丁目 2-27 小野ビル 3F<br>電　話：06-6626-9564<br>ＷＥＢ：<a class="link-col01" href="https://tomocruise.jp/" target="_blank">https://tomocruise.jp/</a>
+						</h4>
+					</div>
+					<div class="text-center col-lg-6 bloc-padding-top">
+						<img src="img/lazyload-ph.png" data-src="img/スクリーンショット%202025-07-25%2013.46.11.png" class="img-fluid img-protected mx-auto d-block img-send-style-99 lazyload" alt="AdobeStock_477113218.jpeg" width="535" height="429" />
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- section12-4 END -->
+
+<!-- section13 -->
+<div class="bloc none full-width-bloc l-bloc" id="section13">
+	<div class="container main-right-offset bloc-sm">
+		<div class="row gyo_kihon">
+			<div class="col-md-12 text-lg-center offset-lg-0 col-lg-12">
+				<h1 class="mg-md text-center h1-intro-style">
+					料金体系
+				</h1>
+				<div class="row">
+					<div class="col-lg-4 bloc-padding-bottom">
+						<div class="card">
+							<div class="card-header card_head01">
+								<h3 class="mg-clear h3_02">
+									羽田空港
+								</h3>
+							</div>
+							<ul class="list-margin-top">
+								<li>
+									<p class="text-lg-left">
+										セダン 18,000円〜
+									</p>
+								</li>
+								<li>
+									<p class="text-lg-left">
+										ミニバン　20,000円〜
+									</p>
+								</li>
+							</ul>
+							<div class="card-body card00">
+								<p class="text-lg-left boxp_01">
+									※通行料込み<br>※到着ゲートでの出迎えを専門業者に依頼した場合、別途7,000円(税込)
+								</p>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-4 bloc-padding-bottom">
+						<div class="card">
+							<div class="card-header card_head01">
+								<h3 class="mg-clear h3_02">
+									成田空港
+								</h3>
+							</div>
+							<ul class="list-margin-top">
+								<li>
+									<p class="text-lg-left">
+										セダン 34,000円〜
+									</p>
+								</li>
+								<li>
+									<p class="text-lg-left">
+										ミニバン　39,000円〜
+									</p>
+								</li>
+							</ul>
+							<div class="card-body card00">
+								<p class="text-lg-left boxp_01">
+									※通行料込み<br>※到着ゲートでの出迎えを専門業者に依頼した場合、別途10,000円(税込)
+								</p>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-4 bloc-padding-bottom">
+						<div class="card">
+							<div class="card-header card_head01">
+								<h3 class="mg-clear h3_02">
+									都内貸切
+								</h3>
+							</div>
+							<ul class="list-margin-top">
+								<li>
+									<p class="text-lg-left">
+										セダン 2時間　14,110円〜
+									</p>
+								</li>
+								<li>
+									<p class="text-lg-left">
+										ミニバン　2時間　16,930円〜
+									</p>
+								</li>
+							</ul>
+							<div class="card-body card00">
+								<p class="text-lg-left boxp_01">
+									※通行料、駐車場代等の実費は別料金
+								</p>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-4 bloc-padding-bottom">
+						<div class="card">
+							<div class="card-header card_head01">
+								<h3 class="mg-clear h3_02">
+									ゴルフパック<br>(ご自宅〜ゴルフ場〜ご自宅)
+								</h3>
+							</div>
+							<ul class="list-margin-top">
+								<li>
+									<p class="text-lg-left">
+										セダン 60,000円〜
+									</p>
+								</li>
+								<li>
+									<p class="text-lg-left">
+										ミニバン　72,000円〜
+									</p>
+								</li>
+							</ul>
+							<div class="card-body card00">
+								<p class="text-lg-left boxp_01">
+									※通行料の実費は別料金
+								</p>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-4 bloc-padding-bottom">
+						<div class="card">
+							<div class="card-header card_head01">
+								<h3 class="mg-clear h3_02">
+									観光貸切<br>(富士山・箱根エリア)
+								</h3>
+							</div>
+							<ul class="list-margin-top">
+								<li>
+									<p class="text-lg-left">
+										セダン 90,000円〜
+									</p>
+								</li>
+								<li>
+									<p class="text-lg-left">
+										ミニバン　100,000円〜
+									</p>
+								</li>
+							</ul>
+							<div class="card-body card00">
+								<p class="text-lg-left boxp_01">
+									※通行料込み<br>※駐車場代、その他実費は別料金<br>
+								</p>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-4 bloc-padding-bottom">
+						<div class="card can02">
+							<div class="card-header card_head01 can01">
+								<h3 class="mg-clear h3_02">
+									キャンセルポリシー
+								</h3>
+							</div>
+							<ul class="list-margin-top">
+								<li>
+									<p class="text-lg-left">
+										3日前 なし
+									</p>
+								</li>
+								<li>
+									<p class="text-lg-left">
+										2日前 30%
+									</p>
+								</li>
+								<li>
+									<p class="text-lg-left">
+										前日17時まで　50%
+									</p>
+								</li>
+								<li>
+									<p class="text-lg-left">
+										前日17時以降　100%
+									</p>
+								</li>
+							</ul>
+							<div class="card-body card00 can01">
+								<p class="text-lg-left boxp_01">
+									こちらの金額を申し受けます。<br>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- section13 END -->
+
+<!-- section14 -->
+<div class="bloc none full-width-bloc bgc-3579 l-bloc" id="section14">
+	<div class="container main-right-offset bloc-sm">
+		<div class="row gyo_kihon">
+			<div class="col-md-12 text-lg-center col-lg-12">
+				<h1 class="mg-md text-center h1-intro-style">
+					車両情報
+				</h1>
+				<div class="row">
+					<div class="col-lg-6 ro90">
+						<div class="card">
+							<div class="card-header bgc-211">
+								<h3 class="mg-clear tc-3579 h3-マジェスタ-style">
+									CROWN MAJESTA
+								</h3>
+							</div>
+							<div class="card-body gbor90">
+								<div class="img445">
+									<div id="carousel-1" class="carousel slide" data-ride="carousel">
+										<ol class="carousel-indicators">
+											<li data-target="#carousel-1" data-slide-to="0" class="active">
+											</li>
+											<li data-target="#carousel-1" data-slide-to="1">
+											</li>
+											<li data-target="#carousel-1" data-slide-to="2">
+											</li>
+										</ol>
+										<div class="carousel-inner" role="listbox">
+											<div class="carousel-item img-protected active">
+												<img class="d-inline-block w-100" alt="slide 1" src="img/1002マジェスタ外装.jpg" />
+												<div class="carousel-caption">
+												</div>
+											</div>
+											<div class="carousel-item img-protected">
+												<img alt="slide 2" class="d-inline-block w-100" src="img/1002マジェスタトランク.jpg" />
+												<div class="carousel-caption">
+												</div>
+											</div>
+											<div class="carousel-item img-protected">
+												<img class="d-inline-block w-100" alt="slide 3" src="img/1002マジェスタ開口部.jpg" />
+												<div class="carousel-caption">
+												</div>
+											</div>
+										</div><a class="carousel-nav-controls carousel-control-prev" href="#carousel-1" role="button" data-slide="prev"><svg width="26" height="26" viewBox="0 0 32 32"><path class="carousel-nav-icon carousel-prev-icon" d="M22,2L9,16,22,30"></path></svg><span class="sr-only">Previous</span></a><a class="carousel-nav-controls carousel-control-next" href="#carousel-1" role="button" data-slide="next"><svg width="26" height="26" viewBox="0 0 32 32"><path class="carousel-nav-icon carousel-next-icon" d="M10.344,2l13,14-13,14"></path></svg><span class="sr-only">Next</span></a>
+									</div>
+								</div>
+								<div class="row line445">
+											<div class="box001 col-lg-6">
+												<p class="ini2s">
+													定員：
+												</p>
+											</div>
+											<div class="col box001">
+												<p class="tol09">
+													4名（推奨:3名）
+												</p>
+											</div>
+										</div>
+								<div class="row line445">
+											<div class="box001 col-lg-6">
+												<p class="ini2s">
+													スーツケース：
+												</p>
+											</div>
+											<div class="col box001">
+												<p class="tol09">
+													2個
+												</p>
+											</div>
+										</div>
+								<div class="row line445">
+											<div class="box001 col-lg-6">
+												<p class="ini2s">
+													ゴルフバッグ：
+												</p>
+											</div>
+											<div class="col box001">
+												<p class="tol09">
+													3個
+												</p>
+											</div>
+										</div>
+								<div class="row line445">
+											<div class="box001 col-lg-6">
+												<p class="ini2s">
+													保有台数：
+												</p>
+											</div>
+											<div class="col box001">
+												<p class="tol09">
+													1台
+												</p>
+											</div>
+										</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-6 ro90">
+								<div class="card">
+									<div class="card-header bgc-211">
+										<h3 class="mg-clear tc-3579 h3-マジェスタ-style text-left text-md-center">
+											GRANACE
+										</h3>
+									</div>
+									<div class="card-body gbor90">
+										<div class="img445">
+											<div id="carousel-4" class="carousel slide" data-ride="carousel">
+												<ol class="carousel-indicators">
+													<li data-target="#carousel-4" data-slide-to="0" class="active">
+													</li>
+													<li data-target="#carousel-4" data-slide-to="1">
+													</li>
+													<li data-target="#carousel-4" data-slide-to="2">
+													</li>
+													<li data-target="#carousel-4" data-slide-to="3">
+													</li>
+													<li data-target="#carousel-4" data-slide-to="4">
+													</li>
+												</ol>
+												<div class="carousel-inner" role="listbox">
+													<div class="carousel-item img-protected active">
+														<img class="d-inline-block w-100" alt="slide 1" src="img/4003グランエース外装.jpg" />
+														<div class="carousel-caption">
+														</div>
+													</div>
+													<div class="carousel-item img-protected">
+														<img alt="slide 2" class="d-inline-block w-100" src="img/4003グランエース内装.jpg" />
+														<div class="carousel-caption">
+														</div>
+													</div>
+													<div class="carousel-item img-protected">
+														<img class="d-inline-block w-100" alt="slide 3" src="img/4003グランエース開口部.jpg" />
+														<div class="carousel-caption">
+														</div>
+													</div>
+													<div class="carousel-item img-protected">
+														<img class="d-inline-block w-100" alt="4003グランエーストランク1" src="img/4003グランエーストランク1.jpg" />
+														<div class="carousel-caption ">
+														</div>
+													</div>
+													<div class="carousel-item img-protected">
+														<img class="d-inline-block w-100" alt="4003グランエーストランク2" src="img/4003グランエーストランク2.jpg" />
+														<div class="carousel-caption ">
+														</div>
+													</div>
+												</div><a class="carousel-nav-controls carousel-control-prev" href="#carousel-4" role="button" data-slide="prev"><svg width="26" height="26" viewBox="0 0 32 32"><path class="carousel-nav-icon carousel-prev-icon" d="M22,2L9,16,22,30"></path></svg><span class="sr-only">Previous</span></a><a class="carousel-nav-controls carousel-control-next" href="#carousel-4" role="button" data-slide="next"><svg width="26" height="26" viewBox="0 0 32 32"><path class="carousel-nav-icon carousel-next-icon" d="M10.344,2l13,14-13,14"></path></svg><span class="sr-only">Next</span></a>
+											</div>
+										</div>
+										<div class="row line445">
+													<div class="box001 col-lg-6">
+														<p class="ini2s">
+															定員：
+														</p>
+													</div>
+													<div class="col box001">
+														<p class="tol09">
+															5名（推奨:4名）
+														</p>
+													</div>
+												</div>
+										<div class="row line445">
+													<div class="box001 col-lg-6">
+														<p class="ini2s">
+															スーツケース：
+														</p>
+													</div>
+													<div class="col box001">
+														<p class="tol09">
+															5個
+														</p>
+													</div>
+												</div>
+										<div class="row line445">
+													<div class="box001 col-lg-6">
+														<p class="ini2s">
+															ゴルフバッグ：
+														</p>
+													</div>
+													<div class="col box001">
+														<p class="tol09">
+															5個
+														</p>
+													</div>
+												</div>
+										<div class="row line445">
+													<div class="box001 col-lg-6">
+														<p class="ini2s">
+															保有台数：
+														</p>
+													</div>
+													<div class="col box001">
+														<p class="tol09">
+															3台
+														</p>
+													</div>
+												</div>
+									</div>
+								</div>
+							</div>
+					<div class="ro90 col-md-12 col-lg-6">
+										<div class="card">
+											<div class="card-header bgc-211">
+												<h3 class="mg-clear tc-3579 h3-マジェスタ-style">
+													ALPHARD
+												</h3>
+											</div>
+											<div class="card-body gbor90">
+												<div class="img445">
+													<div id="carousel-2" class="carousel slide" data-ride="carousel">
+														<ol class="carousel-indicators">
+															<li data-target="#carousel-2" data-slide-to="0" class="active">
+															</li>
+															<li data-target="#carousel-2" data-slide-to="1">
+															</li>
+															<li data-target="#carousel-2" data-slide-to="2">
+															</li>
+															<li data-target="#carousel-2" data-slide-to="3">
+															</li>
+															<li data-target="#carousel-2" data-slide-to="4">
+															</li>
+															<li data-target="#carousel-2" data-slide-to="5">
+															</li>
+															<li data-target="#carousel-2" data-slide-to="6">
+															</li>
+															<li data-target="#carousel-2" data-slide-to="7">
+															</li>
+															<li data-target="#carousel-2" data-slide-to="8">
+															</li>
+															<li data-target="#carousel-2" data-slide-to="9">
+															</li>
+														</ol>
+														<div class="carousel-inner" role="listbox">
+															<div class="carousel-item img-protected active">
+																<img class="d-inline-block w-100" alt="slide 1" src="img/r2005アルファード外装.jpg" />
+																<div class="carousel-caption">
+																</div>
+															</div>
+															<div class="carousel-item img-protected">
+																<img alt="slide 2" class="d-inline-block w-100" src="img/r2005アルファード内装.jpg" />
+																<div class="carousel-caption">
+																</div>
+															</div>
+															<div class="carousel-item img-protected">
+																<img class="d-inline-block w-100" alt="slide 3" src="img/r2005アルファードスライドドア開口部.jpg" />
+																<div class="carousel-caption">
+																</div>
+															</div>
+															<div class="carousel-item img-protected">
+																<img class="d-inline-block w-100" alt="2005アルファードトランク1" src="img/r2005アルファードトランク1.jpg" />
+																<div class="carousel-caption ">
+																</div>
+															</div>
+															<div class="carousel-item img-protected">
+																<img class="d-inline-block w-100" alt="2005アルファードトランク2" src="img/r2005アルファードトランク2.jpg" />
+																<div class="carousel-caption ">
+																</div>
+															</div>
+															<div class="carousel-item img-protected">
+																<img class="d-inline-block w-100" alt="r2010アルファード外観" src="img/r2010アルファード外観.jpg" />
+																<div class="carousel-caption ">
+																</div>
+															</div>
+															<div class="carousel-item img-protected">
+																<img class="d-inline-block w-100" alt="r2010アルファード内装" src="img/r2010アルファード内装.jpg" />
+																<div class="carousel-caption ">
+																</div>
+															</div>
+															<div class="carousel-item img-protected">
+																<img class="d-inline-block w-100" alt="r2010アルファードスライドドア開口部" src="img/r2010アルファードスライドドア開口部.jpg" />
+																<div class="carousel-caption ">
+																</div>
+															</div>
+															<div class="carousel-item img-protected">
+																<img class="d-inline-block w-100" alt="r2010アルファードトランク1" src="img/r2010アルファードトランク1.jpg" />
+																<div class="carousel-caption ">
+																</div>
+															</div>
+															<div class="carousel-item img-protected">
+																<img class="d-inline-block w-100" alt="r2010アルファードトランク2" src="img/r2010アルファードトランク2.jpg" />
+																<div class="carousel-caption ">
+																</div>
+															</div>
+														</div><a class="carousel-nav-controls carousel-control-prev" href="#carousel-2" role="button" data-slide="prev"><svg width="26" height="26" viewBox="0 0 32 32"><path class="carousel-nav-icon carousel-prev-icon" d="M22,2L9,16,22,30"></path></svg><span class="sr-only">Previous</span></a><a class="carousel-nav-controls carousel-control-next" href="#carousel-2" role="button" data-slide="next"><svg width="26" height="26" viewBox="0 0 32 32"><path class="carousel-nav-icon carousel-next-icon" d="M10.344,2l13,14-13,14"></path></svg><span class="sr-only">Next</span></a>
+													</div>
+												</div>
+												<div class="row line445">
+															<div class="box001 col-lg-6">
+																<p class="ini2s">
+																	定員：
+																</p>
+															</div>
+															<div class="col box001">
+																<p class="tol09">
+																	6名（推奨:5名）
+																</p>
+															</div>
+														</div>
+												<div class="row line445">
+															<div class="box001 col-lg-6">
+																<p class="ini2s">
+																	スーツケース：
+																</p>
+															</div>
+															<div class="col box001">
+																<p class="tol09">
+																	4個
+																</p>
+															</div>
+														</div>
+												<div class="row line445">
+															<div class="box001 col-lg-6">
+																<p class="ini2s">
+																	ゴルフバッグ：
+																</p>
+															</div>
+															<div class="col box001">
+																<p class="tol09">
+																	4個
+																</p>
+															</div>
+														</div>
+												<div class="row line445">
+															<div class="box001 col-lg-6">
+																<p class="ini2s">
+																	保有台数：
+																</p>
+															</div>
+															<div class="col box001">
+																<p class="tol09">
+																	9台
+																</p>
+															</div>
+														</div>
+											</div>
+										</div>
+									</div>
+					<div class="col ro90">
+												<div class="card">
+													<div class="card-header bgc-211">
+														<h3 class="mg-clear tc-3579 h3-マジェスタ-style">
+															HIACE
+														</h3>
+													</div>
+													<div class="card-body gbor90">
+														<div class="img445">
+															<div id="carousel-3" class="carousel slide" data-ride="carousel">
+																<ol class="carousel-indicators">
+																	<li data-target="#carousel-3" data-slide-to="0" class="active">
+																	</li>
+																	<li data-target="#carousel-3" data-slide-to="1">
+																	</li>
+																	<li data-target="#carousel-3" data-slide-to="2">
+																	</li>
+																	<li data-target="#carousel-3" data-slide-to="3">
+																	</li>
+																	<li data-target="#carousel-3" data-slide-to="4">
+																	</li>
+																	<li data-target="#carousel-3" data-slide-to="5">
+																	</li>
+																	<li data-target="#carousel-3" data-slide-to="6">
+																	</li>
+																	<li data-target="#carousel-3" data-slide-to="7">
+																	</li>
+																</ol>
+																<div class="carousel-inner" role="listbox">
+																	<div class="carousel-item img-protected active">
+																		<img class="d-inline-block w-100" alt="slide 1" src="img/r3001ハイエース外装.jpg" />
+																		<div class="carousel-caption">
+																		</div>
+																	</div>
+																	<div class="carousel-item img-protected">
+																		<img alt="slide 2" class="d-inline-block w-100" src="img/r3001ハイエース内装.jpg" />
+																		<div class="carousel-caption">
+																		</div>
+																	</div>
+																	<div class="carousel-item img-protected">
+																		<img class="d-inline-block w-100" alt="slide 3" src="img/r3001ハイエース開口部.jpg" />
+																		<div class="carousel-caption">
+																		</div>
+																	</div>
+																	<div class="carousel-item img-protected">
+																		<img class="d-inline-block w-100" alt="3001ハイエーストランク1" src="img/r3001ハイエーストランク1.jpg" />
+																		<div class="carousel-caption ">
+																		</div>
+																	</div>
+																	<div class="carousel-item img-protected">
+																		<img class="d-inline-block w-100" alt="3001ハイエーストランク2" src="img/r3001ハイエーストランク2.jpg" />
+																		<div class="carousel-caption ">
+																		</div>
+																	</div>
+																	<div class="carousel-item img-protected">
+																		<img class="d-inline-block w-100" alt="3008トランク" src="img/r3008ハイエース外観.jpg" />
+																		<div class="carousel-caption ">
+																		</div>
+																	</div>
+																	<div class="carousel-item img-protected">
+																		<img class="d-inline-block w-100" alt="r3008ハイエーススライドドア開口部" src="img/r3008ハイエーススライドドア開口部.jpg" />
+																		<div class="carousel-caption ">
+																		</div>
+																	</div>
+																	<div class="carousel-item img-protected">
+																		<img class="d-inline-block w-100" alt="r3008トランク" src="img/r3008トランク.jpg" />
+																		<div class="carousel-caption ">
+																		</div>
+																	</div>
+																</div><a class="carousel-nav-controls carousel-control-prev" href="#carousel-3" role="button" data-slide="prev"><svg width="26" height="26" viewBox="0 0 32 32"><path class="carousel-nav-icon carousel-prev-icon" d="M22,2L9,16,22,30"></path></svg><span class="sr-only">Previous</span></a><a class="carousel-nav-controls carousel-control-next" href="#carousel-3" role="button" data-slide="next"><svg width="26" height="26" viewBox="0 0 32 32"><path class="carousel-nav-icon carousel-next-icon" d="M10.344,2l13,14-13,14"></path></svg><span class="sr-only">Next</span></a>
+															</div>
+														</div>
+														<div class="row line445">
+																	<div class="box001 col-lg-6">
+																		<p class="ini2s">
+																			定員：
+																		</p>
+																	</div>
+																	<div class="col box001">
+																		<p class="tol09">
+																			9名（推奨:8名）
+																		</p>
+																	</div>
+																</div>
+														<div class="row line445">
+																	<div class="box001 col-lg-6">
+																		<p class="ini2s">
+																			スーツケース：
+																		</p>
+																	</div>
+																	<div class="col box001">
+																		<p class="tol09">
+																			9個
+																		</p>
+																	</div>
+																</div>
+														<div class="row line445">
+																	<div class="box001 col-lg-6">
+																		<p class="ini2s">
+																			ゴルフバッグ：
+																		</p>
+																	</div>
+																	<div class="col box001">
+																		<p class="tol09">
+																			9個
+																		</p>
+																	</div>
+																</div>
+														<div class="row line445">
+																	<div class="box001 col-lg-6">
+																		<p class="ini2s">
+																			保有台数：
+																		</p>
+																	</div>
+																	<div class="col box001">
+																		<p class="tol09">
+																			15台
+																		</p>
+																	</div>
+																</div>
+													</div>
+												</div>
+											</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- section14 END -->
+
+<!-- section15 -->
+<div class="bloc none full-width-bloc bgc-3579 l-bloc object-hidden" id="section15">
+	<div class="container main-right-offset bloc-sm">
+		<div class="row gyo_kihon">
+			<div class="col-md-12 offset-lg-0 col-lg-12">
+				<h1 class="mg-md text-center tc-7824 h1-intro-style">
+					ご予約・お問い合わせ
+				</h1>
+			</div>
+			<div class="col-sm-10 offset-sm-1 col-md-8 offset-md-2 offset-lg-0 col-lg-12">
+				<div class="text-center">
+					<a href="index.html" class="btn btn-d btn-sq btn-lg">別タブで開く</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- section15 END -->
+
+<!-- section16 -->
+<div class="bloc full-width-bloc bgc-6417 l-bloc object-hidden" id="section16">
+	<div class="container main-right-offset bloc-sm">
+		<div class="row gyo_kihon">
+			<div class="offset-lg-0 col-lg-12">
+				<h1 class="mg-md text-center tc-7824 h1-intro-style">
+					求人情報
+				</h1>
+			</div>
+			<div class="col-sm-10 offset-sm-1 col-md-8 offset-md-2 offset-lg-0 col-lg-12">
+				<div class="text-center">
+					<a href="index.html" class="btn btn-d btn-sq btn-lg">別タブで開く<br></a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- section16 END -->
+
+<!-- section17 -->
+<div class="bloc none full-width-bloc l-bloc" id="section17">
+	<div class="container main-right-offset bloc-sm">
+		<div class="row gyo_kihon">
+			<div class="col-md-12 offset-lg-0 col-lg-12">
+				<h1 class="mg-md text-center tc-7824 h1-intro-style">
+					会社概要
+				</h1>
+				<div >
+					<table class="tbl01" cellspacing="10" cellpadding="10">
+<tbody><tr>
+<td class="td01" valign="top">社　名</td>
+<td class="td02">株式会社ＳＫリモ</td>
+</tr>
+<tr>
+<td class="td01" valign="top">所在地</td>
+<td class="td02">（枝 川 本 社）〒135-0051　東京都江東区枝川１-１５-９-２２６<br>（亀戸営業所）〒136-0071　東京都江東区亀戸７丁目６４-９</td>
+</tr>
+<tr>
+<td class="td01" valign="top">設　立</td>
+<td class="td02">平成30年12月3日</td>
+</tr>
+<tr>
+<td class="td01" valign="top">資本金</td>
+<td class="td02">¥10,000,000</td>
+</tr>
+<tr>
+<td class="td01" valign="top">電　話</td>
+<td class="td02">03-6899-3918</td>
+</tr>
+<tr>
+<td class="td01" valign="top">F A X</td>
+<td class="td02">050-1793-8187</td>
+</tr>
+<tr>
+<td class="td01" valign="top">メール</td>
+<td class="td02">ｉｎｆｏ＠ｓｋ．ｌｉｍｏ　※全角大文字で記載しています。</td>
+</tr>
+<tr>
+<td class="td01" valign="top">事業内容</td>
+<td class="td02">一般乗用旅客自動車運送事業(ハイヤー運行）<br>車両手配（タクシー・ハイヤー・バス）</td>
+</tr>
+<tr>
+<td class="td01" valign="top">取引銀行</td>
+<td class="td02">みずほ銀行 池袋支店<br>きらぼし銀行 深川支店</td>
+</tr>
+</tbody></table>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- section17 END -->
+
+<!-- section18 -->
+<div class="bloc full-width-bloc bgc-3579 l-bloc" id="section18">
+	<div class="container main-right-offset bloc-sm">
+		<div class="row gyo_kihon">
+			<div class="offset-lg-0 col-lg-12">
+				<h1 class="mg-md text-center tc-7824 h1-intro-style">
+					お支払い方法
+				</h1>
+			</div>
+			<div class="text-md-center col-md-12 col-lg-12 col-sm-12">
+				<div class="text-center">
+					<h5 class="mb-4 h5-section18-style">
+						各種クレジットカードがご利用いただけます。
+					</h5><img src="img/lazyload-ph.png" data-src="img/card.png" class="img-fluid img-protected mx-auto d-block img-section18-style lazyload" alt="card" width="794" height="74" />
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- section18 END -->
+
+<!-- ScrollToTop Button -->
+<button aria-label="Scroll to top button" class="bloc-button btn btn-d scrollToTop" onclick="scrollToTarget('1',this)"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 32 32"><path class="scroll-to-top-btn-icon" d="M30,22.656l-14-13-14,13"/></svg></button>
+<!-- ScrollToTop Button END-->
+
+
+<!-- bloc-9 -->
+<div class="bloc l-bloc full-width-bloc link00" id="bloc-9">
+	<div class="container pad0 bloc-sm-lg bloc-sm-md bloc-sm bloc-sm-sm">
+		<div class="row">
+			<div class="col link01">
+				<p class="p-style text-lg-center text-md-center text-sm-center text-center mb-lg-0 mb-sm-0 mb-0">
+					お役立ち情報<br>
+				</p>
+				<p class="text-lg-center tm001 mx-auto d-block">
+					現在日時
+				</p>
+				<p class="text-lg-center text-md-center text-sm-center text-center tm002" id="realtimeclockarea">
+					Tdate & Time
+				</p>
+				<div class="row">
+					<div class="pad3 col-sm-10 offset-sm-1 offset-md-0 col-md-6 col-lg-12 offset-0 col-12">
+						<p class="p-bloc-1-style">
+							【所要時間・交通情報】
+						</p><a href="https://www.navitime.co.jp/drive/" class="a-btn a-block link-p" target="_blank">自動車ルート検索 - NAVITIME</a>
+						<p class="p-5-style">
+							(navitime.co.jp)<br>
+						</p>
+						<p class="p-bloc-1-style">
+							【羽田空港の本日のフライト情報（到着便）】
+						</p>
+						<p class="p-7-style">
+							国内線（第一・第二ターミナル）<br>
+						</p><a href="https://tokyo-haneda.com/flight/flightInfo_dms.html" class="a-btn a-block link-p" target="_blank">国内線フライト | 羽田空港旅客ターミナル</a>
+						<p class="p-5-style">
+							(tokyo-haneda.com)<br>
+						</p>
+						<p class="p-7-style">
+							国際線（第三ターミナル）<br>
+						</p><a href="https://tokyo-haneda.com/flight/flightInfo_int.html" class="a-btn a-block link-p" target="_blank">国際線フライト | 羽田空港旅客ターミナル</a>
+						<p class="p-5-style">
+							(tokyo-haneda.com)<br>
+						</p>
+						<p class="p-bloc-1-style">
+							【成田空港の本日のフライト情報（到着便）】
+						</p>
+						<p class="p-7-style">
+							国内線（第一・第二・第三ターミナル）<br>
+						</p><a href="https://www.narita-airport.jp/ja/flight/arr-search/" class="a-btn a-block link-p" target="_blank">フライト情報(本日) | 成田国際空港公式WEBサイト</a>
+						<p class="p-5-style">
+							(narita-airport.jp)<br>
+						</p>
+						<p class="p-bloc-1-style">
+							【お天気情報】
+						</p><a href="https://tenki.jp/" class="a-btn a-block link-p" target="_blank">日本気象協会 / 天気・地震・台風</a>
+						<p class="p-5-style">
+							(tenki.jp)<br>
+						</p>
+						<p class="p-bloc-1-style">
+							【世界時計カレンダー】
+						</p><a href="https://www.jal.co.jp/worldclock/" class="a-btn a-block link-p" target="_blank">世界時計カレンダー</a>
+						<p class="p-5-style">
+							(jal.co.jp)<br>
+						</p>
+						<p class="p-bloc-1-style">
+							【羽田空港第一ターミナル到着ロビー】
+						</p><a href="https://tokyo-haneda.com/floor/terminal1/1st_floor.html" class="a-btn a-block link-p" target="_blank">1F | T1（第1ターミナル） | フロアガイド&nbsp;</a>
+						<p class="p-5-style">
+							(tokyo-haneda.com)
+						</p>
+						<p class="p-bloc-1-style">
+							【羽田空港第二ターミナル到着ロビー】
+						</p>
+						<p class="p-7-style">
+							〈国際線〉
+						</p><a href="https://tokyo-haneda.com/floor/terminal2/2nd_floor.html" class="a-btn a-block link-p" target="_blank">2F | T2（第2ターミナル） | フロアガイド&nbsp;</a>
+						<p class="p-5-style">
+							(tokyo-haneda.com)
+						</p>
+						<p class="p-7-style">
+							〈国内線〉
+						</p><a href="https://tokyo-haneda.com/floor/terminal2/1st_floor.html" class="a-btn a-block link-p" target="_blank">1F | T2（第2ターミナル） | フロアガイド&nbsp;</a>
+						<p class="p-5-style">
+							(tokyo-haneda.com)
+						</p>
+						<p class="p-bloc-1-style">
+							【羽田空港第三ターミナル到着ロビー】
+						</p><a href="https://tokyo-haneda.com/floor/terminal3/2nd_floor.html" class="a-btn a-block link-p" target="_blank">2F | T3（第3ターミナル） | フロアガイド</a>
+						<p class="p-5-style">
+							(tokyo-haneda.com)
+						</p>
+					</div>
+					<div class="pad3 col-sm-10 offset-sm-1 offset-md-0 col-md-6 col-lg-12 offset-0 col-12">
+						<p class="p-bloc-1-style">
+							【成田空港第一ターミナル到着ロビー】
+						</p><a href="https://www.narita-airport.jp/jp/map?terminal=1&map=2" class="a-btn a-block link-p" target="_blank">フロアマップ | 成田国際空港公式WEBサイト</a>
+						<p class="p-5-style">
+							(narita-airport.jp)
+						</p>
+						<p class="p-bloc-1-style">
+							【成田空港第二ターミナル到着ロビー】
+						</p><a href="https://www.narita-airport.jp/jp/map?terminal=2&map=9" class="a-btn a-block link-p" target="_blank">フロアマップ | 成田国際空港公式WEBサイト</a>
+						<p class="p-5-style">
+							(narita-airport.jp)
+						</p>
+						<p class="p-bloc-1-style">
+							【東京駅】
+						</p>
+						<p class="p-7-style">
+							〈新幹線乗り場（1F）〉
+						</p><a href="https://www.jreast.co.jp/estation/stations/1039.html" class="a-btn a-block link-p" target="_blank">JR東日本：東京駅構内図（東京駅）1F</a>
+						<p class="p-5-style">
+							(jreast.co.jp)
+						</p>
+						<p class="p-7-style">
+							〈新幹線ホーム（M2F・2F）〉
+						</p><a href="https://www.jreast.co.jp/estation/stations/1039.html" class="a-btn a-block link-p" target="_blank">JR東日本：東京駅構内図（東京駅）2F</a>
+						<p class="p-5-style">
+							(jreast.co.jp)
+						</p>
+						<p class="p-7-style">
+							〈タクシー降車場 八重洲口（1F）<br>※1Fマップ中央下部にございます
+						</p><a href="https://www.jreast.co.jp/estation/stations/1039.html" class="a-btn a-block link-p" target="_blank">JR東日本：東京駅構内図（東京駅）1F</a>
+						<p class="p-5-style">
+							(jreast.co.jp)
+						</p><a href="https://www.google.com/maps/place/%E3%82%BF%E3%82%AF%E3%82%B7%E3%83%BC%E9%99%8D%E8%BB%8A%E5%A0%B4+%E5%85%AB%E9%87%8D%E6%B4%B2%E5%8F%A3/@35.6802264,139.7682537,18z/data=!3m1!5s0x60188bfbd91993eb:0xc9da05c5e162fa6a!4m14!1m7!3m6!1s0x60188bfc6883c1e1:0xec18c18a95808eaa!2z44K_44Kv44K344O86ZmN6LuK5aC0IOWFq-mHjea0suWPow!8m2!3d35.6809097!4d139.7688283!16s%2Fg%2F11d_7gg15z!3m5!1s0x60188bfc6883c1e1:0xec18c18a95808eaa!8m2!3d35.6809097!4d139.7688283!16s%2Fg%2F11d_7gg15z?hl=ja&entry=ttu" class="a-btn a-block link-p" target="_blank">タクシー降車場 八重洲口</a>
+						<p class="p-5-style">
+							(<a href="google.com/maps/">g</a>oogle.com/maps)
+						</p>
+						<p class="p-7-style">
+							〈東京駅日本橋口（1F）<br>※1Fマップ右奥下部にございます
+						</p><a href="https://www.jreast.co.jp/estation/stations/1039.html" class="a-btn a-block link-p" target="_blank">JR東日本：東京駅構内図　日本橋口</a>
+						<p class="p-5-style">
+							(jreast.co.jp)
+						</p><a href="https://www.google.com/maps/place/%E6%9D%B1%E4%BA%AC%E9%A7%85%E6%97%A5%E6%9C%AC%E6%A9%8B%E5%8F%A3%EF%BC%88%E3%83%90%E3%82%B9%EF%BC%89/@35.6834083,139.7677219,18z/data=!4m14!1m7!3m6!1s0x60188bfebe17f329:0xea94f8e4576e6401!2z5p2x5Lqs6aeF5pel5pys5qmL5Y-j77yI44OQ44K577yJ!8m2!3d35.68349!4d139.769!16s%2Fg%2F1q6qcgbst!3m5!1s0x60188bfebe17f329:0xea94f8e4576e6401!8m2!3d35.68349!4d139.769!16s%2Fg%2F1q6qcgbst?entry=ttu" class="a-btn a-block link-p" target="_blank">東京駅日本橋口（バス）</a>
+						<p class="p-5-style">
+							(google.com/maps)
+						</p>
+						<p class="p-bloc-1-style">
+							【品川駅】
+						</p><a href="https://www.jreast.co.jp/estation/stations/788.html" class="a-btn a-block link-p" target="_blank">JR東日本：品川駅構内図（バス）</a>
+						<p class="p-5-style">
+							(jreast.co.jp)
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- bloc-9 END -->
+
+</div>
+<!-- Main container END -->
+    
+
+
+<!-- Additional JS -->
+<script src="./js/all.js?4588"></script>
+<!-- Additional JS END -->
+
+
+</body>
+</html>
