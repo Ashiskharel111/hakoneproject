@@ -531,7 +531,7 @@ export default function WinterTourPage() {
                           }`}
                         >
                           <div className="relative h-20 w-28 sm:h-14 sm:w-20 rounded-lg overflow-hidden shrink-0 bg-[#05070B]">
-                            <Image src={v.img} alt={v.name} fill className="object-cover object-[center_15%]" />
+                            <Image src={v.img} alt={v.name} fill className="object-cover object-[center_35%]" />
                           </div>
                           <div>
                             <span className="text-xs font-bold text-white block">

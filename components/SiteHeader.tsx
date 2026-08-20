@@ -111,11 +111,11 @@ export default function SiteHeader({
       en: 'Hakuba, Nozawa & Shiga Kogen 4WD',
     }[currentLang],
     fleetLabel: {
-      ja: 'アルファード・グランエース・ハイエース',
-      zh: '埃尔法・格兰亚・海狮车队',
-      fr: 'Flotte Alphard, Granace & HiAce',
-      es: 'Flota Alphard, Granace y HiAce',
-      en: 'Alphard, Granace & HiAce Fleet',
+      ja: 'プレミアムフリート',
+      zh: '尊享车队',
+      fr: 'Flotte Premium',
+      es: 'Flota Premium',
+      en: 'Premium Fleet',
     }[currentLang],
     fleetSub: {
       ja: '最高峰VIPミニバン・大容量ハイヤー',
@@ -189,20 +189,17 @@ export default function SiteHeader({
               {t.sightseeing}
             </Link>
 
-            {/* Winter Ski Clean Pill Button */}
+            {/* Winter Ski standard nav link */}
             <Link
               href="/tours/winter"
-              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold tracking-wider transition-all duration-200 ${
-                activePage === 'winter'
-                  ? 'bg-[#C5A059] text-[#0A0D14] font-bold'
-                  : 'bg-[#0E131F] border border-slate-700/80 text-slate-200 hover:border-[#C5A059] hover:text-[#E5C378]'
+              className={`hover:text-[#C5A059] transition-colors duration-200 py-1 ${
+                activePage === 'winter' ? 'text-[#C5A059] font-bold border-b border-[#C5A059]' : ''
               }`}
             >
-              <Snowflake className="w-3.5 h-3.5 text-cyan-400" />
-              <span>{t.winterButton}</span>
+              {t.winterButton}
             </Link>
 
-            {/* Alphard, Granace & HiAce Fleet */}
+            {/* Premium Fleet */}
             <Link
               href="/tours#fleet"
               className="hover:text-[#C5A059] transition-colors duration-200 py-1 text-slate-400 hover:text-white"
@@ -221,10 +218,11 @@ export default function SiteHeader({
             </Link>
             <Link
               href="/tours/winter"
-              className="inline-flex items-center gap-1 bg-[#0E131F] border border-slate-700 text-slate-200 px-2.5 py-1 rounded-full text-[11px] font-medium"
+              className={`hover:text-[#C5A059] transition-colors ${
+                activePage === 'winter' ? 'text-[#C5A059] font-bold' : ''
+              }`}
             >
-              <Snowflake className="w-3 h-3 text-cyan-400" />
-              <span>{t.winterButton}</span>
+              {t.winterButton}
             </Link>
             <Link href="/tours#fleet" className="hover:text-[#C5A059] transition-colors text-[11px] text-slate-400">
               {t.fleetLabel}

@@ -75,15 +75,40 @@ export default function DestinationDetailPage({
   const destInclusions = mlData?.inclusions || (lang === 'ja' ? destination.inclusionsJa : destination.inclusions);
   const destExclusions = mlData?.exclusions || (lang === 'ja' ? destination.exclusionsJa : destination.exclusions);
 
-  // Selected Vehicle Config
+  // Dynamic Pricing Model: Base Vehicle Fee + Per-Person Fee (+15% overall increase applied)
+  // Alphard and Granace provide superior VIP luxury tiers; Minimum guaranteed ¥40,000+
+  const baseTourRate = Math.round((destination.granacePrice || 85000) * 1.15 / 1000) * 1000;
+
+  const calculateDynamicPrice = (vKey: 'alphard' | 'granace' | 'hiace', riderCount: number) => {
+    let baseFee = 75000;
+    let perPersonFee = 6000;
+
+    if (vKey === 'alphard') {
+      baseFee = Math.round(Math.max(58000, baseTourRate - 20000) / 1000) * 1000;
+      perPersonFee = 6000;
+    } else if (vKey === 'granace') {
+      baseFee = Math.round(Math.max(63000, baseTourRate - 15000) / 1000) * 1000;
+      perPersonFee = 6000;
+    } else if (vKey === 'hiace') {
+      baseFee = Math.round(Math.max(52000, baseTourRate - 25000) / 1000) * 1000;
+      perPersonFee = 3500;
+    }
+
+    const calculated = baseFee + perPersonFee * Math.max(1, riderCount);
+    return Math.max(40000, calculated);
+  };
+
+  // Selected Vehicle Config with Real-Time Dynamic Pricing (+15%)
   const vehicleConfig = {
     alphard: {
       name: 'Toyota Alphard Executive',
       nameJa: 'トヨタ アルファード',
       maxPax: 4,
       maxLuggage: 4,
-      price: destination.alphardPrice,
-      priceFormatted: destination.alphardPriceFormatted,
+      baseFee: Math.round(Math.max(58000, baseTourRate - 20000) / 1000) * 1000,
+      perPersonFee: 6000,
+      price: calculateDynamicPrice('alphard', passengers),
+      priceFormatted: `¥${calculateDynamicPrice('alphard', passengers).toLocaleString()}`,
       desc: lang === 'ja' ? 'VIPオットマンシート、静粛性と最高級の乗り心地' : 'VIP Ottoman recliners, unparalleled luxury & whisper quietness',
       img: '/images/fleet-toyota-alphard-exterior-1477x1108.jpg',
     },
@@ -92,8 +117,10 @@ export default function DestinationDetailPage({
       nameJa: 'トヨタ グランエース',
       maxPax: 5,
       maxLuggage: 4,
-      price: destination.granacePrice,
-      priceFormatted: destination.granacePriceFormatted,
+      baseFee: Math.round(Math.max(63000, baseTourRate - 15000) / 1000) * 1000,
+      perPersonFee: 6000,
+      price: calculateDynamicPrice('granace', passengers),
+      priceFormatted: `¥${calculateDynamicPrice('granace', passengers).toLocaleString()}`,
       desc: lang === 'ja' ? '本革キャプテンシート、広々とした室内空間' : 'VIP Leather Captain Chairs with spacious interior lounge',
       img: '/images/fleet-toyota-granace-exterior-4032x3024.jpg',
     },
@@ -102,8 +129,10 @@ export default function DestinationDetailPage({
       nameJa: 'トヨタ ハイエース グランドキャビン',
       maxPax: 9,
       maxLuggage: 9,
-      price: destination.hiacePrice,
-      priceFormatted: destination.hiacePriceFormatted,
+      baseFee: Math.round(Math.max(52000, baseTourRate - 25000) / 1000) * 1000,
+      perPersonFee: 3500,
+      price: calculateDynamicPrice('hiace', passengers),
+      priceFormatted: `¥${calculateDynamicPrice('hiace', passengers).toLocaleString()}`,
       desc: lang === 'ja' ? '最大9名様ご乗車、大量のスーツケースやお荷物に対応' : 'Spacious Grand Cabin for up to 9 guests and massive luggage space',
       img: '/images/fleet-toyota-hiace-exterior-1477x1108.jpg',
     },
@@ -125,7 +154,7 @@ export default function DestinationDetailPage({
   };
 
   const whatsAppUrl = `https://wa.me/818012345678?text=${encodeURIComponent(
-    `Hello SK Limo! I am inquiring about the private day tour to ${destination.name} (${destination.charterHours}) for ${passengers} guests on ${travelDate} with ${currentVeh.name}.`
+    `Hello SK Limo! I am inquiring about the private day tour to ${destination.name} (${destination.charterHours}) for ${passengers} guests (Total: ${currentVeh.priceFormatted}) on ${travelDate} with ${currentVeh.name}.`
   )}`;
 
   return (
@@ -392,10 +421,19 @@ export default function DestinationDetailPage({
 
               {/* 2. Vehicle Selection (Alphard, Granace, HiAce) */}
               <div className="space-y-2.5">
-                <label className="block text-xs font-bold uppercase tracking-wider text-[#E5C378] flex items-center gap-1.5">
-                  <Car className="w-4 h-4 text-[#C5A059]" />
-                  <span>{lang === 'ja' ? '配車クラスを選択' : 'Select Vehicle Class'}</span>
-                </label>
+                <div className="flex items-center justify-between flex-wrap gap-1">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-[#E5C378] flex items-center gap-1.5">
+                    <Car className="w-4 h-4 text-[#C5A059]" />
+                    <span>{lang === 'ja' ? '配車クラスを選択' : 'Select Vehicle Class'}</span>
+                  </label>
+                  <span className="text-[10px] text-[#C5A059] font-medium">
+                    {lang === 'ja'
+                      ? '※ 複数台での運行・コンボイ手配も承ります'
+                      : lang === 'zh'
+                      ? '※ 亦支持多车车队组合出行'
+                      : 'We also offer multiple vehicles'}
+                  </span>
+                </div>
 
                 <div className="space-y-2.5">
                   {(['alphard', 'granace', 'hiace'] as const).map((vKey) => {
@@ -407,7 +445,6 @@ export default function DestinationDetailPage({
                         type="button"
                         onClick={() => {
                           setVehicle(vKey);
-                          if (passengers > cfg.maxPax) setPassengers(cfg.maxPax);
                         }}
                         className={`w-full p-3 rounded-2xl border text-left transition-all flex items-center justify-between cursor-pointer ${
                           isSelected
@@ -417,7 +454,7 @@ export default function DestinationDetailPage({
                       >
                         <div className="flex items-center gap-3">
                           <div className="relative h-14 w-20 rounded-lg overflow-hidden shrink-0 bg-[#05070B]">
-                            <Image src={cfg.img} alt={cfg.name} fill className="object-cover object-[center_15%]" />
+                            <Image src={cfg.img} alt={cfg.name} fill className="object-cover object-[center_35%]" />
                           </div>
                           <div>
                             <span className="text-xs font-bold text-white block">
@@ -440,6 +477,18 @@ export default function DestinationDetailPage({
                     );
                   })}
                 </div>
+
+                {/* Capacity warning when riders exceed Alphard/Granace limits */}
+                {passengers > currentVeh.maxPax && (
+                  <div className="bg-[#C5A059]/10 border border-[#C5A059]/40 rounded-xl p-2.5 text-[11px] text-[#E5C378] flex items-start gap-2">
+                    <Sparkles className="w-3.5 h-3.5 text-[#C5A059] shrink-0 mt-0.5" />
+                    <span>
+                      {lang === 'ja'
+                        ? `※ ${currentVeh.name}の定員は最大${currentVeh.maxPax}名様です。${passengers}名様でのご利用は複数台運行またはハイエースのご利用が最適です。（We also offer multiple vehicles）`
+                        : `* ${currentVeh.name} max capacity is ${currentVeh.maxPax} guests. We also offer multiple vehicles for larger groups.`}
+                    </span>
+                  </div>
+                )}
               </div>
 
               {/* 3. Passengers & Luggage */}
@@ -501,11 +550,18 @@ export default function DestinationDetailPage({
                   <span>{lang === 'ja' ? 'チャーター料金総額' : 'Estimated Total'}</span>
                   <span>{destination.charterHours}</span>
                 </div>
-                <div className="flex items-baseline justify-between">
-                  <span className="text-2xl sm:text-3xl font-extrabold text-[#C5A059] font-mono">
-                    {currentVeh.priceFormatted}
-                  </span>
-                  <span className="text-[10px] text-[#25D366] font-bold">税・高速代・燃料費込</span>
+                <div className="flex items-baseline justify-between flex-wrap gap-2">
+                  <div>
+                    <span className="text-2xl sm:text-3xl font-extrabold text-[#C5A059] font-mono block">
+                      {currentVeh.priceFormatted}
+                    </span>
+                    <span className="text-[10px] text-slate-400 block mt-0.5">
+                      {lang === 'ja'
+                        ? `基本料金 ¥${currentVeh.baseFee.toLocaleString()} + ¥${currentVeh.perPersonFee.toLocaleString()} × ${passengers}名`
+                        : `Base ¥${currentVeh.baseFee.toLocaleString()} + ¥${currentVeh.perPersonFee.toLocaleString()} × ${passengers} Pax`}
+                    </span>
+                  </div>
+                  <span className="text-[10px] text-[#25D366] font-bold self-start mt-1">税・高速代・燃料費込</span>
                 </div>
               </div>
 

@@ -64,12 +64,12 @@ const AIRPORT_ROUTES: AirportRoute[] = [
     airport: 'Haneda Airport',
     airportCode: 'HND',
     duration: '35 - 50 mins',
-    alphardPrice: 30000,
-    granacePrice: 35000,
-    hiacePrice: 38000,
-    alphardPriceFormatted: '¥30,000',
-    granacePriceFormatted: '¥35,000',
-    hiacePriceFormatted: '¥38,000',
+    alphardPrice: 35000,
+    granacePrice: 40000,
+    hiacePrice: 44000,
+    alphardPriceFormatted: '¥35,000',
+    granacePriceFormatted: '¥40,000',
+    hiacePriceFormatted: '¥44,000',
     description: 'Fast and seamless door-to-door luxury transfer between Haneda Airport (Terminals 1, 2, 3) and any hotel in Tokyo (Minato, Chiyoda, Shinjuku, Shibuya, Ginza).',
     descriptionJa: '羽田空港（第1・第2・第3ターミナル）と東京都内各ホテル（港区・千代田区・新宿・渋谷・銀座等）間のドアtoドア最上級ハイヤー送迎。',
     descriptionZh: '羽田机场（第1/2/3航站楼）与东京都内各星级酒店（港区、千代田区、新宿、涩谷、银座等）之间的专属VIP门到门接送。',
@@ -86,12 +86,12 @@ const AIRPORT_ROUTES: AirportRoute[] = [
     airport: 'Narita Airport',
     airportCode: 'NRT',
     duration: '60 - 80 mins',
-    alphardPrice: 42000,
-    granacePrice: 48000,
-    hiacePrice: 52000,
-    alphardPriceFormatted: '¥42,000',
-    granacePriceFormatted: '¥48,000',
-    hiacePriceFormatted: '¥52,000',
+    alphardPrice: 48000,
+    granacePrice: 55000,
+    hiacePrice: 60000,
+    alphardPriceFormatted: '¥48,000',
+    granacePriceFormatted: '¥55,000',
+    hiacePriceFormatted: '¥60,000',
     description: 'Relax after your long-haul flight in our executive cabin with highway tolls, 60 minutes complimentary flight delay buffer, and lobby luggage service included.',
     descriptionJa: '長距離フライトの疲れを癒やす快適な車内空間。高速道路料金、60分無料待機時間、お荷物アシスタント込みの完全定額送迎。',
     descriptionZh: '长途飞行后尽享舒适座舱。包含高速公路费、60分钟免费航班延误等待及大堂行李搬运协助，尊享无忧出行。',
@@ -128,6 +128,29 @@ export default function AirportTransferPage() {
   const t = TRANSLATIONS[lang];
   const selectedRoute = AIRPORT_ROUTES.find((r) => r.id === selectedRouteId) || AIRPORT_ROUTES[0];
 
+  // Dynamic Airport Transfer Pricing Model (+15% overall increase, Minimum ¥35,000 guaranteed)
+  const calculateAirportPrice = (vKey: 'alphard' | 'granace' | 'hiace', riderCount: number) => {
+    const isNarita = selectedRoute.id === 'nrt_tokyo';
+    let base = isNarita ? 44000 : 35000;
+    let perPerson = isNarita ? 3000 : 2500;
+
+    if (vKey === 'alphard') {
+      base = isNarita ? 44000 : 35000;
+      perPerson = isNarita ? 3000 : 2500;
+    } else if (vKey === 'granace') {
+      base = isNarita ? 48000 : 39000;
+      perPerson = isNarita ? 3000 : 2500;
+    } else if (vKey === 'hiace') {
+      base = isNarita ? 46000 : 38000;
+      perPerson = isNarita ? 2500 : 2000;
+    }
+
+    const calculated = base + perPerson * Math.max(1, riderCount);
+    return Math.max(35000, calculated);
+  };
+
+  const currentDynamicPrice = calculateAirportPrice(vehicle, passengers);
+
   const vehicleConfig = {
     alphard: {
       name: { ja: 'トヨタ アルファード', zh: '丰田埃尔法 Alphard', fr: 'Toyota Alphard Executive', es: 'Toyota Alphard Executive', en: 'Toyota Alphard Executive' }[lang],
@@ -135,8 +158,10 @@ export default function AirportTransferPage() {
       maxCap: 4,
       maxLuggage: 4,
       image: '/images/fleet-toyota-alphard-exterior-1477x1108.jpg',
-      price: selectedRoute.alphardPrice,
-      priceFormatted: selectedRoute.alphardPriceFormatted,
+      baseFee: selectedRoute.id === 'nrt_tokyo' ? 38000 : 31000,
+      perPersonFee: selectedRoute.id === 'nrt_tokyo' ? 2500 : 2000,
+      price: calculateAirportPrice('alphard', passengers),
+      priceFormatted: `¥${calculateAirportPrice('alphard', passengers).toLocaleString()}`,
     },
     granace: {
       name: { ja: 'トヨタ グランエース', zh: '丰田 Granace 豪华商务旗舰', fr: 'Toyota Granace Premium', es: 'Toyota Granace Premium', en: 'Toyota Granace Premium' }[lang],
@@ -144,8 +169,10 @@ export default function AirportTransferPage() {
       maxCap: 5,
       maxLuggage: 4,
       image: '/images/fleet-toyota-granace-exterior-4032x3024.jpg',
-      price: selectedRoute.granacePrice,
-      priceFormatted: selectedRoute.granacePriceFormatted,
+      baseFee: selectedRoute.id === 'nrt_tokyo' ? 42000 : 34000,
+      perPersonFee: selectedRoute.id === 'nrt_tokyo' ? 2500 : 2000,
+      price: calculateAirportPrice('granace', passengers),
+      priceFormatted: `¥${calculateAirportPrice('granace', passengers).toLocaleString()}`,
     },
     hiace: {
       name: { ja: 'トヨタ ハイエース', zh: '丰田 HiAce Grand Cabin', fr: 'Toyota HiAce Grand Cabin', es: 'Toyota HiAce Grand Cabin', en: 'Toyota HiAce Grand Cabin' }[lang],
@@ -153,15 +180,16 @@ export default function AirportTransferPage() {
       maxCap: 9,
       maxLuggage: 9,
       image: '/images/fleet-toyota-hiace-exterior-1477x1108.jpg',
-      price: selectedRoute.hiacePrice,
-      priceFormatted: selectedRoute.hiacePriceFormatted,
+      baseFee: selectedRoute.id === 'nrt_tokyo' ? 40000 : 33000,
+      perPersonFee: selectedRoute.id === 'nrt_tokyo' ? 2000 : 1500,
+      price: calculateAirportPrice('hiace', passengers),
+      priceFormatted: `¥${calculateAirportPrice('hiace', passengers).toLocaleString()}`,
     },
   };
 
   const currentVehicle = vehicleConfig[vehicle];
   const isExceeded = passengers > currentVehicle.maxCap;
-  const minPerPerson = Math.round(currentVehicle.price / currentVehicle.maxCap);
-  const secondVehicleSurcharge = minPerPerson + 30000;
+  const secondVehicleSurcharge = 35000;
   const totalPrice = currentVehicle.price + (isExceeded && addSecondVehicle ? secondVehicleSurcharge : 0);
   const totalPriceFormatted = `¥${totalPrice.toLocaleString()}`;
 
@@ -283,10 +311,19 @@ export default function AirportTransferPage() {
 
             {/* Step 2: Select Vehicle Class (Default Alphard) */}
             <div className="bg-[#0E131F] border border-slate-800/80 rounded-2xl p-6 space-y-4">
-              <h2 className="text-base font-bold text-white flex items-center gap-2" style={{ fontFamily: 'var(--font-serif)' }}>
-                <span className="w-6 h-6 rounded-full bg-[#C5A059] text-[#0A0D14] text-xs font-bold flex items-center justify-center">2</span>
-                <span>{lang === 'ja' ? '運行車両を選択 (アルファード標準)' : lang === 'zh' ? '选择专车车型 (埃尔法标准)' : 'Select Vehicle Class (Alphard Default)'}</span>
-              </h2>
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <h2 className="text-base font-bold text-white flex items-center gap-2" style={{ fontFamily: 'var(--font-serif)' }}>
+                  <span className="w-6 h-6 rounded-full bg-[#C5A059] text-[#0A0D14] text-xs font-bold flex items-center justify-center">2</span>
+                  <span>{lang === 'ja' ? '運行車両を選択 (アルファード標準)' : lang === 'zh' ? '选择专车车型 (埃尔法标准)' : 'Select Vehicle Class (Alphard Default)'}</span>
+                </h2>
+                <span className="text-[10px] text-[#C5A059] font-medium">
+                  {lang === 'ja'
+                    ? '※ 複数台での運行も承ります'
+                    : lang === 'zh'
+                    ? '※ 亦支持多车组合出行'
+                    : 'We also offer multiple vehicles'}
+                </span>
+              </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {(['alphard', 'granace', 'hiace'] as const).map((vKey) => {
@@ -304,7 +341,7 @@ export default function AirportTransferPage() {
                     >
                       <div>
                         <div className="relative h-44 sm:h-32 md:h-28 w-full rounded-lg overflow-hidden mb-2.5 bg-[#05070B]">
-                          <Image src={cfg.image} alt={cfg.name} fill className="object-cover object-[center_15%]" />
+                          <Image src={cfg.image} alt={cfg.name} fill className="object-cover object-[center_35%]" />
                         </div>
                         <span className="font-bold text-white text-xs block line-clamp-1">
                           {cfg.name}
@@ -528,14 +565,19 @@ export default function AirportTransferPage() {
               </div>
 
               {/* Total Box */}
-              <div className="bg-[#0A0D14] border border-[#C5A059]/30 rounded-2xl p-4 flex items-center justify-between">
+              <div className="bg-[#0A0D14] border border-[#C5A059]/30 rounded-2xl p-4 flex items-center justify-between flex-wrap gap-2">
                 <div>
                   <span className="text-[10px] text-slate-500 uppercase block tracking-wider">{t.totalEstimatedQuote}</span>
-                  <span className="text-2xl sm:text-3xl font-black font-mono text-white">
+                  <span className="text-2xl sm:text-3xl font-black font-mono text-white block">
                     {totalPriceFormatted}
                   </span>
+                  <span className="text-[10px] text-slate-400 block mt-0.5">
+                    {lang === 'ja'
+                      ? `基本料金 ¥${currentVehicle.baseFee.toLocaleString()} + ¥${currentVehicle.perPersonFee.toLocaleString()} × ${passengers}名 (最低保証 ¥35,000)`
+                      : `Base ¥${currentVehicle.baseFee.toLocaleString()} + ¥${currentVehicle.perPersonFee.toLocaleString()} × ${passengers} Pax (Min ¥35,000)`}
+                  </span>
                 </div>
-                <span className="text-xs text-[#C5A059] font-bold bg-[#C5A059]/10 px-2.5 py-1 rounded-full border border-[#C5A059]/30">
+                <span className="text-xs text-[#C5A059] font-bold bg-[#C5A059]/10 px-2.5 py-1 rounded-full border border-[#C5A059]/30 self-start mt-1">
                   JPY (All-Inc)
                 </span>
               </div>
