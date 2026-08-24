@@ -1,100 +1,126 @@
-@import url('https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  --background: #0A0D14;
-  --foreground: #ededed;
+  --background: #FFFFFF;
+  --foreground: #1A1A1A;
+  --primary: #0068FF;
+  --primary-light: #E8F1FF;
+  --primary-dark: #0050CC;
+  --surface: #FFFFFF;
+  --surface-secondary: #F5F7FA;
+  --border: #E5E8ED;
+  --border-light: #F0F2F5;
+  --text-primary: #1A1A1A;
+  --text-secondary: #6B7280;
+  --text-tertiary: #9CA3AF;
+  --success: #00B37E;
+  --warning: #FF9500;
   --gold: #C5A059;
-  --gold-light: #D4AF37;
-  --navy-deep: #05070B;
-  --navy: #0A0D14;
-  --navy-light: #0E131F;
-  --navy-card: #131927;
-  --font-serif: 'Cardo', Georgia, 'Times New Roman', serif;
-  --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.dark {
+  --background: #080B11;
+  --foreground: #F1F5F9;
+  --surface: #0E131F;
+  --surface-secondary: #131b2c;
+  --border: #1E293B;
+  --border-light: #334155;
+  --text-primary: #F1F5F9;
+  --text-secondary: #94A3B8;
+  --text-tertiary: #64748B;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-body);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-sans);
 }
 
 html {
   scroll-behavior: smooth;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+html.dark {
+  background-color: #080B11;
+  color: #F1F5F9;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-body);
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
-/* Scroll-triggered animation classes */
-.fade-in-section {
-  opacity: 0;
-  transform: translateY(32px);
-  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
-              transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+/* ========================================
+   MOBILE TOUCH FIX — CRITICAL
+   Ensures all interactive elements respond
+   instantly to touch on iOS & Android.
+   ======================================== */
+button,
+a,
+select,
+input,
+textarea,
+[role="button"],
+label {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: pointer;
 }
 
-.fade-in-section.is-visible {
-  opacity: 1;
-  transform: translateY(0);
+/* Restore text selection for text inputs */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="number"],
+input[type="date"],
+input[type="search"],
+textarea {
+  -webkit-user-select: text;
+  user-select: text;
+  cursor: text;
 }
 
-/* Staggered children animation */
-.fade-in-section.is-visible .stagger-child:nth-child(1) { transition-delay: 0ms; }
-.fade-in-section.is-visible .stagger-child:nth-child(2) { transition-delay: 120ms; }
-.fade-in-section.is-visible .stagger-child:nth-child(3) { transition-delay: 240ms; }
-.fade-in-section.is-visible .stagger-child:nth-child(4) { transition-delay: 360ms; }
-
-.stagger-child {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #D1D5DB;
+  border-radius: 3px;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #9CA3AF;
 }
 
-.fade-in-section.is-visible .stagger-child {
-  opacity: 1;
-  transform: translateY(0);
+/* Trip.com clean card style */
+.card-hover {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
-/* Scroll indicator bounce */
-@keyframes bounce-subtle {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(8px); }
-}
-
-.animate-bounce-subtle {
-  animation: bounce-subtle 2.5s ease-in-out infinite;
-}
-
-/* Reviews carousel */
-@keyframes slide-in {
-  from { opacity: 0; transform: translateX(40px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
-.animate-slide-in {
-  animation: slide-in 0.5s ease-out;
-}
-
-/* Elegant serif heading utility */
-.heading-serif {
-  font-family: var(--font-serif);
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  line-height: 1.2;
-}
-
-/* Clean body text */
-.body-text {
-  font-family: var(--font-body);
-  line-height: 1.75;
-  color: #94a3b8;
+/* Ensure no overlay blocks touch events */
+.pointer-events-none {
+  pointer-events: none !important;
 }

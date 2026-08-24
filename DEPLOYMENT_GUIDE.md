@@ -1,10 +1,10 @@
-# 🚀 SK Limo Website - Deployment & Domain Setup Guide
+# SK Limo Website - Deployment & Domain Setup Guide
 
 The website has been built and tested with Next.js 16 (App Router), React 19, and Tailwind CSS. Below are the steps to deploy your website and connect it to your domain (e.g. `sk.limo`, `sklimo.jp`, or any other domain).
 
 ---
 
-## 🌟 Recommended Deployment Methods
+## Recommended Deployment Methods
 
 ### 1. Deploy with Vercel (Fastest & Recommended)
 Vercel is the creators of Next.js and provides instant deployment with free SSL, global CDN, and automatic builds.
@@ -89,7 +89,7 @@ If you prefer Google Cloud / Firebase:
 
 ---
 
-## 🛠️ Build Artifacts Summary
+## Build Artifacts Summary
 
 - **Production Build**: `.next/` (Generated via `npm run build`)
 - **Asset Images**: `public/images/`

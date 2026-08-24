@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
+import { db } from '@/lib/firebase';
+import { collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore';
 
 const stripeApiKey = process.env.STRIPE_SECRET_KEY;
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
@@ -25,11 +27,27 @@ async function triggerDispatchNotification(bookingData: {
   luggage: string;
   pickupAddress: string;
 }) {
-  console.log(`[STRIPE WEBHOOK] 🚗 Confirmed booking for ${bookingData.guestName} (${bookingData.bookingRef})`);
+  console.log(`[STRIPE WEBHOOK] Confirmed booking for ${bookingData.guestName} (${bookingData.bookingRef})`);
   console.log(`[DISPATCH TRIGGER] Date: ${bookingData.travelDate} | Destination: ${bookingData.destination} | Vehicle: ${bookingData.vehicle}`);
   console.log(`[CUSTOMER RECEIPT] Email dispatched to ${bookingData.guestEmail} for amount ${bookingData.currency.toUpperCase()} ${bookingData.amount}`);
   
-  // You can connect Resend, SendGrid, Postmark, or Firebase Cloud Messaging here
+  // Update Firestore booking status if possible
+  if (db && bookingData.bookingRef) {
+    try {
+      const q = query(collection(db, 'booking_requests'), where('bookingRef', '==', bookingData.bookingRef));
+      const querySnap = await getDocs(q);
+      for (const docSnap of querySnap.docs) {
+        await updateDoc(docSnap.ref, {
+          status: 'confirmed',
+          paymentStatus: 'paid',
+          updatedAt: new Date().toISOString(),
+        });
+      }
+    } catch (dbErr) {
+      console.warn('[STRIPE WEBHOOK] Firestore status update error:', dbErr);
+    }
+  }
+
   return true;
 }
 
@@ -45,7 +63,7 @@ export async function POST(request: NextRequest) {
       try {
         event = stripe.webhooks.constructEvent(rawBody, signature, webhookSecret);
       } catch (err: any) {
-        console.error(`⚠️ Webhook signature verification failed:`, err.message);
+        console.error(`Webhook signature verification failed:`, err.message);
         return NextResponse.json({ error: `Webhook signature verification failed: ${err.message}` }, { status: 400 });
       }
     } else {
@@ -63,7 +81,7 @@ export async function POST(request: NextRequest) {
         const paymentIntent = event.data.object as Stripe.PaymentIntent;
         const meta = paymentIntent.metadata || {};
 
-        console.log(`✅ PaymentIntent succeeded: ${paymentIntent.id} for amount ${paymentIntent.amount} ${paymentIntent.currency}`);
+        console.log(`PaymentIntent succeeded: ${paymentIntent.id} for amount ${paymentIntent.amount} ${paymentIntent.currency}`);
 
         await triggerDispatchNotification({
           bookingRef: meta.bookingRef || paymentIntent.id,
@@ -72,7 +90,7 @@ export async function POST(request: NextRequest) {
           guestName: meta.guestName || 'Valued Guest',
           guestEmail: meta.guestEmail || paymentIntent.receipt_email || '',
           guestPhone: meta.guestPhone || '',
-          destination: meta.destinationId || 'Private Charter',
+          destination: meta.destinationLabel || meta.destinationId || 'Private Charter',
           travelDate: meta.travelDate || '',
           vehicle: meta.vehicle || 'Granace VIP',
           passengers: meta.passengers || '1',
@@ -84,13 +102,13 @@ export async function POST(request: NextRequest) {
 
       case 'payment_intent.payment_failed': {
         const paymentIntent = event.data.object as Stripe.PaymentIntent;
-        console.warn(`❌ Payment failed for PaymentIntent: ${paymentIntent.id}. Reason: ${paymentIntent.last_payment_error?.message}`);
+        console.warn(`Payment failed for PaymentIntent: ${paymentIntent.id}. Reason: ${paymentIntent.last_payment_error?.message}`);
         break;
       }
 
       case 'checkout.session.completed': {
         const session = event.data.object as Stripe.Checkout.Session;
-        console.log(`✅ Checkout session completed: ${session.id}`);
+        console.log(`Checkout session completed: ${session.id}`);
         break;
       }
 

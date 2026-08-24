@@ -23,6 +23,7 @@ import {
   Camera,
   Calendar,
   Lock,
+  X,
 } from 'lucide-react';
 import { Language, TRANSLATIONS } from '@/lib/translations';
 import SiteHeader from '@/components/SiteHeader';
@@ -82,8 +83,8 @@ const TOKYO_DESTINATIONS: DestinationItem[] = [
     nameJa: '箱根温泉・芦ノ湖・大涌谷',
     category: 'Hot Springs & Culture',
     categoryJa: '温泉・大自然・美術館',
-    tag: '♨️ Top Onsen Experience',
-    tagJa: '♨️ 極上の温泉＆絶景',
+    tag: 'Top Onsen Experience',
+    tagJa: '極上の温泉＆絶景',
     duration: '1.5 - 2.0h from Tokyo',
     durationHours: '10h Day Charter',
     recommendedDuration: '1 Day / Overnight',
@@ -103,8 +104,8 @@ const TOKYO_DESTINATIONS: DestinationItem[] = [
     nameJa: '古都鎌倉・湘南江ノ島',
     category: 'Ancient Temples & Coastline',
     categoryJa: '古都歴史・海岸リゾート',
-    tag: '⛩️ Samurai History & Ocean',
-    tagJa: '⛩️ 武士の都と湘南の海',
+    tag: 'Samurai History & Ocean',
+    tagJa: '武士の都と湘南の海',
     duration: '1.0 - 1.5h from Tokyo',
     durationHours: '8-10h Day Charter',
     recommendedDuration: '1 Day (8-10 hrs)',
@@ -124,8 +125,8 @@ const TOKYO_DESTINATIONS: DestinationItem[] = [
     nameJa: '日光東照宮・中禅寺湖・華厳の滝',
     category: 'UNESCO World Heritage',
     categoryJa: '世界遺産・大自然',
-    tag: '🏯 UNESCO Heritage Gold',
-    tagJa: '🏯 国宝・世界遺産',
+    tag: 'UNESCO Heritage Gold',
+    tagJa: '国宝・世界遺産',
     duration: '2.5h from Tokyo',
     durationHours: '10-12h Day Charter',
     recommendedDuration: '1 Full Day',
@@ -145,8 +146,8 @@ const TOKYO_DESTINATIONS: DestinationItem[] = [
     nameJa: '横浜みなとみらい・元町中華街',
     category: 'Modern Port & Dining',
     categoryJa: '港町・美食・夜景',
-    tag: '🌆 Harbor Lights & Cuisine',
-    tagJa: '🌆 港の夜景と本格中華',
+    tag: 'Harbor Lights & Cuisine',
+    tagJa: '港の夜景と本格中華',
     duration: '45m from Tokyo',
     durationHours: '6-8h Day Charter',
     recommendedDuration: 'Half / Full Day',
@@ -166,8 +167,8 @@ const TOKYO_DESTINATIONS: DestinationItem[] = [
     nameJa: '軽井沢・白糸の滝・プリンスショッピング',
     category: 'Alpine Luxury Resort',
     categoryJa: '高原リゾート・避暑地',
-    tag: '🌲 Forest Luxury & Shopping',
-    tagJa: '🌲 高原の清流とショッピング',
+    tag: 'Forest Luxury & Shopping',
+    tagJa: '高原の清流とショッピング',
     duration: '2.5h from Tokyo',
     durationHours: '10-12h Day Charter',
     recommendedDuration: '1 Full Day / Overnight',
@@ -483,10 +484,10 @@ export default function TokyoDestinationsPage() {
               }
             </p>
             <div className="flex items-center justify-center flex-wrap gap-3 pt-1 text-[11px] text-slate-300 font-mono">
-              <span className="bg-[#0A0D14] border border-slate-800 px-2.5 py-1 rounded">💳 Visa / MasterCard</span>
-              <span className="bg-[#0A0D14] border border-slate-800 px-2.5 py-1 rounded">💳 American Express</span>
-              <span className="bg-[#0A0D14] border border-slate-800 px-2.5 py-1 rounded">💳 JCB</span>
-              <span className="bg-[#0A0D14] border border-slate-800 px-2.5 py-1 rounded">🅿️ PayPal</span>
+              <span className="bg-[#0A0D14] border border-slate-800 px-2.5 py-1 rounded">Visa / MasterCard</span>
+              <span className="bg-[#0A0D14] border border-slate-800 px-2.5 py-1 rounded">American Express</span>
+              <span className="bg-[#0A0D14] border border-slate-800 px-2.5 py-1 rounded">JCB</span>
+              <span className="bg-[#0A0D14] border border-slate-800 px-2.5 py-1 rounded">PayPal</span>
             </div>
           </div>
 
@@ -557,11 +558,11 @@ export default function TokyoDestinationsPage() {
             >
               {
                 {
-                  ja: '🎿 冬季スキー送迎を見る',
-                  zh: '🎿 查看冬季滑雪包车',
-                  fr: '🎿 Voir les Transferts Ski',
-                  es: '🎿 Ver Transfers de Esquí',
-                  en: '🎿 View Winter Ski Charters',
+                  ja: '冬季スキー送迎を見る',
+                  zh: '查看冬季滑雪包车',
+                  fr: 'Voir les Transferts Ski',
+                  es: 'Ver Transfers de Esquí',
+                  en: 'View Winter Ski Charters',
                 }[lang]
               }
             </Link>
@@ -589,9 +590,10 @@ export default function TokyoDestinationsPage() {
               </div>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="text-slate-400 hover:text-white text-lg p-1"
+                className="text-slate-400 hover:text-white p-1 transition-colors"
+                aria-label="Close modal"
               >
-                ✕
+                <X className="w-5 h-5" />
               </button>
             </div>
 
@@ -654,11 +656,11 @@ export default function TokyoDestinationsPage() {
                   <div className="grid grid-cols-2 gap-2 text-xs">
                     <label className="flex items-center gap-2 bg-[#0A0D14] border border-[#C5A059]/40 p-2.5 rounded-lg cursor-pointer text-slate-200">
                       <input type="radio" name="paymentMethod" defaultChecked className="accent-[#C5A059]" />
-                      <span>💳 Credit Card</span>
+                      <span>Credit Card</span>
                     </label>
                     <label className="flex items-center gap-2 bg-[#0A0D14] border border-slate-800 p-2.5 rounded-lg cursor-pointer text-slate-200">
                       <input type="radio" name="paymentMethod" className="accent-[#C5A059]" />
-                      <span>🅿️ PayPal</span>
+                      <span>PayPal</span>
                     </label>
                   </div>
                   <p className="text-[10px] text-slate-500 flex items-center gap-1">

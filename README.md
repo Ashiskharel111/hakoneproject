@@ -4,7 +4,7 @@ Official website for **SK Limo** (株式会社SKリモ), offering luxury private
 
 ---
 
-## 🌟 Key Features
+## Key Features
 
 - **Full 5-Language Localization**: English (`en`), Japanese (`ja`), Chinese (`zh`), French (`fr`), and Spanish (`es`) with persistent language selection.
 - **Executive Fleet Showcase**: Toyota Alphard Executive Lounge, Toyota Granace Premium Lounge, and Toyota HiAce Grand Cabin with exterior, interior, and luggage trunk gallery tabs.
@@ -19,7 +19,7 @@ Official website for **SK Limo** (株式会社SKリモ), offering luxury private
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### 1. Install Dependencies
 ```bash
@@ -44,6 +44,6 @@ npm run start
 
 ---
 
-## 📁 Image Assets Catalog
+## Image Assets Catalog
 All images are organized in `public/images/` with exact pixel dimensions in their filenames.  
 Refer to `public/images/README_IMAGE_SPECIFICATIONS.md` for replacement guidelines.

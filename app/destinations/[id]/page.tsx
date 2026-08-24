@@ -17,12 +17,17 @@ import {
   AlertCircle,
   CheckCircle2,
   Compass,
+  X,
+  Lock,
 } from 'lucide-react';
 import { DETAILED_DESTINATIONS, DetailedDestination, MULTILINGUAL_DESTINATIONS } from '@/lib/destinations-data';
 import { TRANSLATIONS } from '@/lib/translations';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import { useLanguage } from '@/context/LanguageContext';
+import StripePaymentModal from '@/components/StripePaymentModal';
+import BookingConfirmationModal from '@/components/BookingConfirmationModal';
+import { saveUserRequest } from '@/lib/firebase';
 
 export default function DestinationDetailPage({
   params,
@@ -53,8 +58,13 @@ export default function DestinationDetailPage({
   });
   const [activeGalleryIndex, setActiveGalleryIndex] = useState<number>(0);
 
-  // Consultation Modal State
+  // Consultation & Stripe Modal State
   const [isConsultModalOpen, setIsConsultModalOpen] = useState(false);
+  const [isStripeModalOpen, setIsStripeModalOpen] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [confirmedBookingRef, setConfirmedBookingRef] = useState('');
+  const [confirmedPaymentIntentId, setConfirmedPaymentIntentId] = useState('');
+
   const [consultName, setConsultName] = useState('');
   const [consultEmail, setConsultEmail] = useState('');
   const [consultPhone, setConsultPhone] = useState('');
@@ -143,14 +153,45 @@ export default function DestinationDetailPage({
   const handleConsultSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsConsultSubmitting(true);
+
+    try {
+      await saveUserRequest({
+        serviceType: 'day_tour',
+        destination: destName,
+        destinationId: destination.id,
+        pickup: consultNotes || 'Central Tokyo Hotel',
+        vehicleType: vehicle.toUpperCase(),
+        passengers: passengers,
+        luggageCount: luggage,
+        travelDate: travelDate,
+        totalPrice: currentVeh.price,
+        currency: 'JPY',
+        clientName: consultName,
+        clientEmail: consultEmail,
+        clientPhone: consultPhone,
+        notes: consultNotes,
+        channel: 'web_inquiry',
+        status: 'new',
+      });
+    } catch (err) {
+      console.warn('Error saving inquiry:', err);
+    }
+
+    setIsConsultSubmitting(false);
+    setConsultSuccess(true);
     setTimeout(() => {
-      setIsConsultSubmitting(false);
-      setConsultSuccess(true);
-      setTimeout(() => {
-        setIsConsultModalOpen(false);
-        setConsultSuccess(false);
-      }, 2500);
-    }, 1000);
+      setIsConsultModalOpen(false);
+      setConsultSuccess(false);
+    }, 2500);
+  };
+
+  const handleProceedToStripe = () => {
+    if (!consultName || !consultEmail) {
+      alert(lang === 'ja' ? 'お名前とメールアドレスをご入力ください。' : 'Please enter your name and email address to proceed.');
+      return;
+    }
+    setIsConsultModalOpen(false);
+    setIsStripeModalOpen(true);
   };
 
   const whatsAppUrl = `https://wa.me/818012345678?text=${encodeURIComponent(
@@ -269,6 +310,7 @@ export default function DestinationDetailPage({
                   src={destination.galleryImages[activeGalleryIndex] || destination.heroImage}
                   alt={destName}
                   fill
+                  sizes="(max-width: 768px) 100vw, 800px"
                   className="object-cover transition-all duration-500"
                   priority
                 />
@@ -284,7 +326,7 @@ export default function DestinationDetailPage({
                         activeGalleryIndex === idx ? 'border-[#C5A059] scale-102' : 'border-transparent opacity-60 hover:opacity-100'
                       }`}
                     >
-                      <Image src={img} alt={`${destName} preview ${idx + 1}`} fill className="object-cover" />
+                      <Image src={img} alt={`${destName} preview ${idx + 1}`} fill sizes="200px" className="object-cover" />
                     </button>
                   ))}
                 </div>
@@ -567,6 +609,15 @@ export default function DestinationDetailPage({
 
               {/* Action Buttons */}
               <div className="space-y-2.5">
+                <button
+                  type="button"
+                  onClick={() => setIsConsultModalOpen(true)}
+                  className="w-full bg-gradient-to-r from-[#C5A059] via-[#d8b46b] to-[#C5A059] hover:opacity-95 text-[#0A0D14] font-extrabold py-4 rounded-2xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl shadow-[#C5A059]/10 transition-all cursor-pointer"
+                >
+                  <Lock className="w-4 h-4" />
+                  <span>{lang === 'ja' ? 'カード事前決済で予約確定 (Stripe)' : 'Instant Card Reserve & Pay (Stripe)'}</span>
+                </button>
+
                 <a
                   href={whatsAppUrl}
                   target="_blank"
@@ -576,14 +627,6 @@ export default function DestinationDetailPage({
                   <MessageSquare className="w-4 h-4 fill-[#0A0D14]" />
                   <span>WhatsApp 24/7 Concierge</span>
                 </a>
-
-                <button
-                  type="button"
-                  onClick={() => setIsConsultModalOpen(true)}
-                  className="w-full bg-[#C5A059] hover:bg-[#d8b46b] text-[#0A0D14] font-bold py-3.5 rounded-2xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer"
-                >
-                  <span>{lang === 'ja' ? 'この内容で無料お見積り・予約' : 'Request Tour Quote & Booking'}</span>
-                </button>
               </div>
 
             </div>
@@ -596,25 +639,26 @@ export default function DestinationDetailPage({
       {/* Official Legal Footer */}
       <SiteFooter />
 
-      {/* Consultation Modal */}
+      {/* Booking & Consultation Modal */}
       {isConsultModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in">
           <div className="bg-[#0E131F] border border-slate-700 rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-5 shadow-2xl relative">
             <button
               type="button"
               onClick={() => setIsConsultModalOpen(false)}
-              className="absolute top-5 right-5 text-slate-400 hover:text-white p-1"
+              className="absolute top-5 right-5 text-slate-400 hover:text-white p-1 transition-colors"
+              aria-label="Close modal"
             >
-              ✕
+              <X className="w-5 h-5" />
             </button>
 
             <div>
               <span className="text-[11px] uppercase font-bold tracking-widest text-[#C5A059] block">
-                {lang === 'ja' ? 'ツアー予約・見積もり' : 'Private Tour Inquiry'}
+                {lang === 'ja' ? 'ツアー予約・決済' : 'Private Tour Reservation'}
               </span>
               <h3 className="text-xl font-bold text-white">{destName}</h3>
               <p className="text-xs text-slate-400 mt-1">
-                {currentVeh.name} • {passengers} Pax • {travelDate}
+                {currentVeh.name} • {passengers} Pax • {travelDate} • <span className="text-[#C5A059] font-bold font-mono">{currentVeh.priceFormatted}</span>
               </p>
             </div>
 
@@ -641,7 +685,7 @@ export default function DestinationDetailPage({
                     required
                     value={consultName}
                     onChange={(e) => setConsultName(e.target.value)}
-                    placeholder="e.g. Taro Kitamura"
+                    placeholder="e.g. Taro Kitamura / John Smith"
                     className="w-full bg-[#0A0D14] border border-slate-800 rounded-xl px-3.5 py-2.5 text-white focus:border-[#C5A059] focus:outline-none"
                   />
                 </div>
@@ -677,7 +721,7 @@ export default function DestinationDetailPage({
 
                 <div className="space-y-1">
                   <label className="block text-slate-300 font-medium">
-                    {lang === 'ja' ? 'ご要望・ホテル送迎先など' : 'Special Requests / Hotel Pickup'}
+                    {lang === 'ja' ? 'ご要望・ホテル送迎先など' : 'Special Requests / Hotel Pickup Address'}
                   </label>
                   <textarea
                     rows={3}
@@ -688,23 +732,88 @@ export default function DestinationDetailPage({
                   />
                 </div>
 
-                <button
-                  type="submit"
-                  disabled={isConsultSubmitting}
-                  className="w-full bg-[#C5A059] hover:bg-[#d8b46b] text-[#0A0D14] font-bold py-3.5 rounded-2xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer disabled:opacity-50"
-                >
-                  {isConsultSubmitting ? (
-                    <span>Submitting...</span>
-                  ) : (
-                    <span>{lang === 'ja' ? 'お見積り依頼を送信' : 'Submit Tour Inquiry'}</span>
-                  )}
-                </button>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2">
+                  <button
+                    type="button"
+                    onClick={handleProceedToStripe}
+                    className="w-full bg-gradient-to-r from-[#C5A059] via-[#d8b46b] to-[#C5A059] hover:opacity-95 text-[#0A0D14] font-extrabold py-3.5 rounded-2xl text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-lg transition-all cursor-pointer"
+                  >
+                    <Lock className="w-4 h-4" />
+                    <span>{lang === 'ja' ? '即時カード決済へ' : 'Proceed to Stripe Pay'}</span>
+                  </button>
+
+                  <button
+                    type="submit"
+                    disabled={isConsultSubmitting}
+                    className="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-3.5 rounded-2xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-50"
+                  >
+                    {isConsultSubmitting ? (
+                      <span>Submitting...</span>
+                    ) : (
+                      <span>{lang === 'ja' ? '見積り依頼のみ送信' : 'Submit Free Inquiry'}</span>
+                    )}
+                  </button>
+                </div>
               </form>
             )}
 
           </div>
         </div>
       )}
+
+      {/* Stripe Payment Modal */}
+      <StripePaymentModal
+        isOpen={isStripeModalOpen}
+        onClose={() => setIsStripeModalOpen(false)}
+        bookingDetails={{
+          bookingType: 'destination',
+          destinationId: destination.id,
+          destinationTitle: destName,
+          vehicle: vehicle,
+          vehicleName: currentVeh.name,
+          passengers: passengers,
+          luggageCount: luggage,
+          travelDate: travelDate,
+          guestName: consultName || 'Valued Guest',
+          guestEmail: consultEmail || 'client@example.com',
+          guestPhone: consultPhone || '',
+          pickupAddress: consultNotes || 'Central Tokyo Hotel',
+          notes: consultNotes,
+          amount: currentVeh.price,
+          currency: 'jpy',
+        }}
+        onSuccess={(ref, piId) => {
+          setIsStripeModalOpen(false);
+          setConfirmedBookingRef(ref);
+          setConfirmedPaymentIntentId(piId);
+          setIsSuccessModalOpen(true);
+        }}
+      />
+
+      {/* Booking Confirmation Receipt */}
+      <BookingConfirmationModal
+        isOpen={isSuccessModalOpen}
+        onClose={() => setIsSuccessModalOpen(false)}
+        bookingRef={confirmedBookingRef}
+        paymentIntentId={confirmedPaymentIntentId}
+        bookingDetails={{
+          bookingType: 'destination',
+          destinationId: destination.id,
+          destinationTitle: destName,
+          vehicle: vehicle,
+          vehicleName: currentVeh.name,
+          passengers: passengers,
+          luggageCount: luggage,
+          travelDate: travelDate,
+          guestName: consultName || 'Valued Guest',
+          guestEmail: consultEmail || 'client@example.com',
+          guestPhone: consultPhone || '',
+          pickupAddress: consultNotes || 'Central Tokyo Hotel',
+          notes: consultNotes,
+          amount: currentVeh.price,
+          currency: 'jpy',
+        }}
+      />
 
     </div>
   );

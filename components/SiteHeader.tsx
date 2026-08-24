@@ -12,12 +12,13 @@ import {
   Compass,
   Car,
   ChevronRight,
-  ShieldCheck,
-  Sparkles,
+  Moon,
+  Sun,
 } from 'lucide-react';
 import { Language } from '@/lib/translations';
 import LanguageSelector from '@/components/LanguageSelector';
 import { useLanguage } from '@/context/LanguageContext';
+import { useTheme } from '@/context/ThemeContext';
 
 interface SiteHeaderProps {
   currentLang?: Language;
@@ -34,411 +35,217 @@ export default function SiteHeader({
   const currentLang = propCurrentLang || contextLang;
   const onLanguageChange = propOnLanguageChange || setContextLang;
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
-  // Lock background page scroll when mobile full-screen menu is open
   useEffect(() => {
     if (isMobileMenuOpen) {
       document.body.style.overflow = 'hidden';
-      document.documentElement.style.overflow = 'hidden';
-      document.body.style.touchAction = 'none';
     } else {
       document.body.style.overflow = '';
-      document.documentElement.style.overflow = '';
-      document.body.style.touchAction = '';
     }
     return () => {
       document.body.style.overflow = '';
-      document.documentElement.style.overflow = '';
-      document.body.style.touchAction = '';
     };
   }, [isMobileMenuOpen]);
 
-  const t = {
-    grandPackages: {
-      ja: 'グランドパッケージ',
-      zh: '尊享套餐',
-      fr: 'Forfaits',
-      es: 'Paquetes',
-      en: 'Grand Packages',
-    }[currentLang],
-    grandPackagesSub: {
-      ja: '全サービス・貸切周遊パッケージ',
-      zh: '全包专属定制专车服务',
-      fr: 'Circuits VIP & Forfaits Sur-Mesure',
-      es: 'Paquetes VIP y Tours a Medida',
-      en: 'All-Inclusive Tailored Charters',
-    }[currentLang],
-    airportTransfer: {
-      ja: '空港送迎',
-      zh: '机场接送',
-      fr: 'Transferts Aéroport',
-      es: 'Traslados Aeropuerto',
-      en: 'Airport Transfers',
-    }[currentLang],
-    airportSub: {
-      ja: '成田・羽田 ⇄ 都内ホテル 完全定額',
-      zh: '成田/羽田机场 ⇄ 酒店 一口价专车',
-      fr: 'Haneda & Narita ⇄ Hôtels de Tokyo',
-      es: 'Haneda y Narita ⇄ Hoteles de Tokio',
-      en: 'Narita & Haneda ⇄ Tokyo Hotels',
-    }[currentLang],
-    sightseeing: {
-      ja: '観光ツアー',
-      zh: '景点包车',
-      fr: 'Excursions',
-      es: 'Excursiones',
-      en: 'Sightseeing',
-    }[currentLang],
-    sightseeingSub: {
-      ja: '富士山・箱根・鎌倉・日光 貸切周遊',
-      zh: '富士山/箱根/镰仓/日光 专属定制游',
-      fr: 'Mont Fuji, Hakone, Kamakura & Nikko',
-      es: 'Monte Fuji, Hakone, Kamakura y Nikko',
-      en: 'Mt. Fuji, Hakone, Kamakura & Nikko',
-    }[currentLang],
-    winterButton: {
-      ja: 'スキー送迎',
-      zh: '滑雪接送',
-      fr: 'Ski Charters',
-      es: 'Transfers Esquí',
-      en: 'Winter Ski',
-    }[currentLang],
-    winterSub: {
-      ja: '白馬・野沢温泉・志賀高原 4WD専用車',
-      zh: '白马/野泽/志贺高原 4WD豪华包车',
-      fr: 'Hakuba, Nozawa & Shiga Kogen 4WD',
-      es: 'Hakuba, Nozawa y Shiga Kogen 4WD',
-      en: 'Hakuba, Nozawa & Shiga Kogen 4WD',
-    }[currentLang],
-    fleetLabel: {
-      ja: 'プレミアムフリート',
-      zh: '尊享车队',
-      fr: 'Flotte Premium',
-      es: 'Flota Premium',
-      en: 'Premium Fleet',
-    }[currentLang],
-    fleetSub: {
-      ja: '最高峰VIPミニバン・大容量ハイヤー',
-      zh: '日本顶级VIP商务座驾与大容量客车',
-      fr: 'Véhicules VIP & Grand Confort',
-      es: 'Vehículos VIP de Gran Confort',
-      en: 'Luxury VIP MPVs & High-Capacity Vans',
-    }[currentLang],
-    whatsAppLabel: {
-      ja: 'WhatsApp 旅程・見積相談 (24時間)',
-      zh: 'WhatsApp 即时咨询定制 (24小时)',
-      fr: 'WhatsApp Conciergerie (24/7)',
-      es: 'WhatsApp Concierge (24/7)',
-      en: 'WhatsApp 24/7 Concierge',
-    }[currentLang],
-    licenseBadge: {
-      ja: '国土交通省認可 一般乗用旅客自動車運送事業（緑ナンバー）',
-      zh: '日本国土交通省正规绿牌营运资质（安心保障）',
-      fr: 'Opérateur Agréé Licence MLIT Plaques Vertes',
-      es: 'Operador Oficial Licencia MLIT Placa Verde',
-      en: '100% Licensed Commercial Green-Plate Operator',
-    }[currentLang],
+  const nav = {
+    allTours: { ja: 'すべてのツアー', zh: '全部行程', fr: 'Tous les Tours', es: 'Todos', en: 'All Tours' }[currentLang],
+    airport: { ja: '空港送迎', zh: '机场接送', fr: 'Aéroports', es: 'Aeropuertos', en: 'Airport Transfers' }[currentLang],
+    sightseeing: { ja: '観光チャーター', zh: '包车游览', fr: 'Excursions', es: 'Excursiones', en: 'Day Charters' }[currentLang],
+    ski: { ja: 'スキー送迎', zh: '滑雪专车', fr: 'Ski', es: 'Esquí', en: 'Ski Transfers' }[currentLang],
+    fleet: { ja: '車両一覧', zh: '车队', fr: 'Véhicules', es: 'Vehículos', en: 'Fleet' }[currentLang],
   };
 
-  const whatsAppGeneralUrl = `https://wa.me/818012345678?text=${encodeURIComponent(
-    `Hello SK Limo! I am inquiring from your website about private luxury chauffeur charters in Japan.`
+  const whatsAppUrl = `https://wa.me/818012345678?text=${encodeURIComponent(
+    `Hello SK Limo! I am inquiring about private chauffeur services in Japan.`
   )}`;
+
+  const navLinks = [
+    { href: '/tours', label: nav.allTours, page: 'home' as const },
+    { href: '/tours/airport-transfer', label: nav.airport, page: 'airport' as const },
+    { href: '/destinations', label: nav.sightseeing, page: 'sightseeing' as const },
+    { href: '/tours/winter', label: nav.ski, page: 'winter' as const, icon: <Snowflake className="w-3.5 h-3.5" /> },
+    { href: '/tours#fleet', label: nav.fleet, page: undefined },
+  ];
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50 bg-[#0A0D14]/95 backdrop-blur-xl border-b border-white/10 shadow-xl transition-all duration-300">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 h-16 sm:h-20 flex items-center justify-between gap-3 sm:gap-4">
-          
-          {/* Official Brand Logo */}
-          <Link href="/tours" className="flex items-center gap-2.5 group shrink-0">
-            <div className="relative h-8 w-24 sm:h-10 sm:w-32">
+      {/* ── Clean Header (Trip.com style with Dark Mode support) ── */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 dark:bg-[#080B11]/95 backdrop-blur-md border-b border-[#E5E8ED] dark:border-slate-800 shadow-sm transition-colors duration-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-4">
+
+          {/* Brand */}
+          <Link href="/tours" className="flex items-center gap-2 shrink-0">
+            <div className="relative h-8 w-20 sm:h-9 sm:w-24">
               <Image
                 src="/images/brand-sklimo-official-logo-250x250.png"
-                alt="SK Limo Official Logo"
+                alt="SK Limo"
                 fill
-                className="object-contain drop-shadow-md group-hover:scale-105 transition-transform duration-300"
+                className="object-contain dark:brightness-110"
                 priority
               />
             </div>
+            <div className="hidden sm:block">
+              <span className="text-[11px] font-bold text-[#1A1A1A] dark:text-white tracking-tight block leading-tight">
+                SK LIMO
+              </span>
+              <span className="text-[9px] text-[#9CA3AF] block leading-tight">
+                Private Chauffeur Japan
+              </span>
+            </div>
           </Link>
 
-          {/* Clean Desktop Navigation Links (xl+) */}
-          <nav className="hidden xl:flex items-center gap-6 text-[12px] uppercase tracking-[0.14em] font-medium text-white/80">
-            <Link
-              href="/tours#packages"
-              className="hover:text-[#C5A059] transition-colors duration-200 py-1"
-            >
-              {t.grandPackages}
-            </Link>
-
-            <Link
-              href="/tours/airport-transfer"
-              className={`hover:text-[#C5A059] transition-colors duration-200 py-1 ${
-                activePage === 'airport' ? 'text-[#C5A059] font-bold border-b border-[#C5A059]' : ''
-              }`}
-            >
-              {t.airportTransfer}
-            </Link>
-
-            <Link
-              href="/destinations"
-              className={`hover:text-[#C5A059] transition-colors duration-200 py-1 ${
-                activePage === 'sightseeing' ? 'text-[#C5A059] font-bold border-b border-[#C5A059]' : ''
-              }`}
-            >
-              {t.sightseeing}
-            </Link>
-
-            {/* Winter Ski standard nav link */}
-            <Link
-              href="/tours/winter"
-              className={`hover:text-[#C5A059] transition-colors duration-200 py-1 ${
-                activePage === 'winter' ? 'text-[#C5A059] font-bold border-b border-[#C5A059]' : ''
-              }`}
-            >
-              {t.winterButton}
-            </Link>
-
-            {/* Premium Fleet */}
-            <Link
-              href="/tours#fleet"
-              className="hover:text-[#C5A059] transition-colors duration-200 py-1 text-slate-400 hover:text-white"
-            >
-              {t.fleetLabel}
-            </Link>
+          {/* Desktop Nav */}
+          <nav className="hidden lg:flex items-center gap-0.5">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`px-3 py-2 rounded-lg text-[13px] font-medium transition-colors ${
+                  link.page && activePage === link.page
+                    ? 'text-[#0068FF] bg-[#E8F1FF] dark:bg-[#0068FF]/15 dark:text-[#3B82F6]'
+                    : 'text-[#4B5563] dark:text-slate-300 hover:text-[#1A1A1A] dark:hover:text-white hover:bg-[#F5F7FA] dark:hover:bg-slate-800/60'
+                }`}
+              >
+                <span className="flex items-center gap-1">
+                  {link.icon}
+                  <span>{link.label}</span>
+                </span>
+              </Link>
+            ))}
           </nav>
 
-          {/* Medium Screen Nav (lg to xl) */}
-          <nav className="hidden lg:flex xl:hidden items-center gap-4 text-[12px] uppercase tracking-wider font-medium text-white/80">
-            <Link href="/tours/airport-transfer" className="hover:text-[#C5A059] transition-colors">
-              {t.airportTransfer}
-            </Link>
-            <Link href="/destinations" className="hover:text-[#C5A059] transition-colors">
-              {t.sightseeing}
-            </Link>
-            <Link
-              href="/tours/winter"
-              className={`hover:text-[#C5A059] transition-colors ${
-                activePage === 'winter' ? 'text-[#C5A059] font-bold' : ''
-              }`}
-            >
-              {t.winterButton}
-            </Link>
-            <Link href="/tours#fleet" className="hover:text-[#C5A059] transition-colors text-[11px] text-slate-400">
-              {t.fleetLabel}
-            </Link>
-          </nav>
-
-          {/* Action Controls: Language & WhatsApp & Mobile Menu */}
-          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          {/* Right actions: Desktop Theme Moon + Language + WhatsApp + Mobile Menu */}
+          <div className="flex items-center gap-2 shrink-0">
             
-            {/* Global Language Selector (Globe + EN without flag) */}
+            {/* Desktop-Only Crescent Moon Dark Mode Toggle */}
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="hidden md:flex items-center justify-center p-2 rounded-lg border border-[#E5E8ED] dark:border-slate-700 bg-white dark:bg-[#0E131F] text-[#4B5563] dark:text-slate-200 hover:bg-[#F5F7FA] dark:hover:bg-slate-800 transition-colors cursor-pointer"
+              aria-label={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+              title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            >
+              {theme === 'dark' ? (
+                <Sun className="w-4 h-4 text-amber-400" />
+              ) : (
+                <Moon className="w-4 h-4 text-[#4B5563]" />
+              )}
+            </button>
+
             <LanguageSelector currentLang={currentLang} onLanguageChange={onLanguageChange} />
 
-            {/* Desktop WhatsApp Action */}
             <a
-              href={whatsAppGeneralUrl}
+              href={whatsAppUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden sm:flex items-center gap-1.5 bg-[#25D366] hover:bg-[#20ba5a] text-[#0A0D14] font-bold px-3.5 py-1.5 sm:py-2 rounded-xl text-[11px] uppercase tracking-wider transition-all duration-300 shadow hover:shadow-[#25D366]/20"
+              className="hidden sm:flex items-center gap-1.5 bg-[#25D366] hover:bg-[#20ba5a] text-white font-semibold px-3 py-1.5 rounded-lg text-xs transition-colors shadow-sm"
             >
-              <MessageSquare className="w-3.5 h-3.5 fill-[#0A0D14]" />
+              <MessageSquare className="w-3.5 h-3.5" />
               <span>WhatsApp</span>
             </a>
 
-            {/* Mobile WhatsApp Quick Button */}
             <a
-              href={whatsAppGeneralUrl}
+              href={whatsAppUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="sm:hidden flex items-center justify-center p-2 rounded-lg bg-[#25D366]/15 border border-[#25D366]/40 text-[#25D366] transition-colors"
-              aria-label="WhatsApp Concierge"
+              className="sm:hidden p-2 rounded-lg text-[#25D366]"
+              aria-label="WhatsApp"
             >
-              <MessageSquare className="w-4 h-4 fill-[#25D366]" />
+              <MessageSquare className="w-5 h-5" />
             </a>
 
-            {/* Mobile Hamburger Toggle Button */}
             <button
               type="button"
               onClick={() => setIsMobileMenuOpen(true)}
-              className="lg:hidden p-2 rounded-lg bg-[#0E131F] border border-slate-800 text-white hover:text-[#C5A059] transition-colors cursor-pointer"
-              aria-label="Open Navigation Menu"
+              className="lg:hidden p-2 rounded-lg hover:bg-[#F5F7FA] dark:hover:bg-slate-800 text-[#4B5563] dark:text-slate-200 transition-colors"
+              aria-label="Open Menu"
             >
               <Menu className="w-5 h-5" />
             </button>
           </div>
-
         </div>
       </header>
 
-      {/* ═══════════════════════════════════════
-          100% FULL-SCREEN MOBILE MENU OVERLAY
-          ═══════════════════════════════════════ */}
+      {/* ── Mobile drawer ── */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 w-full h-[100dvh] bg-[#06080E] z-[100] lg:hidden flex flex-col justify-between overflow-y-auto animate-fade-in">
-          
-          {/* Top Bar inside Fullscreen Menu: Logo on left, prominent X on top-right */}
-          <div className="p-4 sm:p-6 border-b border-slate-800/80 flex items-center justify-between sticky top-0 bg-[#06080E]/95 backdrop-blur-xl z-20">
-            <Link
-              href="/tours"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="flex items-center gap-2"
-            >
-              <div className="relative h-8 w-24">
-                <Image
-                  src="/images/brand-sklimo-official-logo-250x250.png"
-                  alt="SK Limo"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-            </Link>
+        <div className="fixed inset-0 z-[100] lg:hidden">
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
 
-            {/* X Button on Top Right */}
-            <button
-              type="button"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="p-2.5 rounded-xl bg-[#0E131F] border border-slate-700/80 text-slate-200 hover:text-white hover:border-[#C5A059] transition-all cursor-pointer shadow-lg"
-              aria-label="Close Menu"
-            >
-              <X className="w-6 h-6 text-[#C5A059]" />
-            </button>
-          </div>
+          {/* Drawer panel */}
+          <div className="absolute right-0 top-0 bottom-0 w-[85%] max-w-sm bg-white dark:bg-[#0E131F] flex flex-col shadow-2xl transition-colors">
+            {/* Drawer header */}
+            <div className="p-4 border-b border-[#E5E8ED] dark:border-slate-800 flex items-center justify-between">
+              <Link href="/tours" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2">
+                <div className="relative h-7 w-20">
+                  <Image src="/images/brand-sklimo-official-logo-250x250.png" alt="SK Limo" fill className="object-contain dark:brightness-110" />
+                </div>
+              </Link>
+              <button
+                type="button"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="p-2 rounded-lg hover:bg-[#F5F7FA] dark:hover:bg-slate-800 text-[#6B7280] dark:text-slate-300"
+                aria-label="Close"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
 
-          {/* Fullscreen Menu Navigation Cards (Language setting excluded as requested) */}
-          <div className="p-4 sm:p-6 space-y-3 flex-1">
-            
-            {/* 1. Airport Transfers */}
-            <Link
-              href="/tours/airport-transfer"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className={`flex items-center justify-between p-4 rounded-2xl border transition-all ${
-                activePage === 'airport'
-                  ? 'bg-[#C5A059]/15 border-[#C5A059] text-[#E5C378]'
-                  : 'bg-[#0E131F] border-slate-800/80 text-white hover:border-[#C5A059]/60'
-              }`}
-            >
-              <div className="flex items-center gap-3.5">
-                <div className="w-10 h-10 rounded-xl bg-[#0A0D14] border border-slate-800 flex items-center justify-center text-[#C5A059] shrink-0">
-                  <Plane className="w-5 h-5" />
-                </div>
-                <div>
-                  <span className="font-bold text-sm block">{t.airportTransfer}</span>
-                  <span className="text-[11px] text-slate-400 block">{t.airportSub}</span>
-                </div>
-              </div>
-              <ChevronRight className="w-5 h-5 text-[#C5A059] shrink-0" />
-            </Link>
-
-            {/* 2. Sightseeing Tours */}
-            <Link
-              href="/destinations"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className={`flex items-center justify-between p-4 rounded-2xl border transition-all ${
-                activePage === 'sightseeing'
-                  ? 'bg-[#C5A059]/15 border-[#C5A059] text-[#E5C378]'
-                  : 'bg-[#0E131F] border-slate-800/80 text-white hover:border-[#C5A059]/60'
-              }`}
-            >
-              <div className="flex items-center gap-3.5">
-                <div className="w-10 h-10 rounded-xl bg-[#0A0D14] border border-slate-800 flex items-center justify-center text-[#C5A059] shrink-0">
-                  <Compass className="w-5 h-5" />
-                </div>
-                <div>
-                  <span className="font-bold text-sm block">{t.sightseeing}</span>
-                  <span className="text-[11px] text-slate-400 block">{t.sightseeingSub}</span>
-                </div>
-              </div>
-              <ChevronRight className="w-5 h-5 text-[#C5A059] shrink-0" />
-            </Link>
-
-            {/* 3. Winter Ski Charters */}
-            <Link
-              href="/tours/winter"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className={`flex items-center justify-between p-4 rounded-2xl border transition-all ${
-                activePage === 'winter'
-                  ? 'bg-cyan-950/50 border-cyan-500 text-cyan-200 shadow-lg'
-                  : 'bg-[#0E131F] border-cyan-900/50 text-white hover:border-cyan-500/50'
-              }`}
-            >
-              <div className="flex items-center gap-3.5">
-                <div className="w-10 h-10 rounded-xl bg-cyan-950/60 border border-cyan-800/60 flex items-center justify-center text-cyan-400 shrink-0">
-                  <Snowflake className="w-5 h-5 animate-pulse" />
-                </div>
-                <div>
-                  <span className="font-bold text-sm text-white flex items-center gap-2">
-                    {t.winterButton}
-                    <span className="bg-cyan-400/20 text-cyan-300 text-[10px] px-2 py-0.5 rounded font-mono font-bold">4WD</span>
+            {/* Nav links */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-1">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={`flex items-center justify-between p-3 rounded-xl transition-colors ${
+                    link.page && activePage === link.page
+                      ? 'bg-[#E8F1FF] text-[#0068FF] dark:bg-[#0068FF]/15 dark:text-[#3B82F6]'
+                      : 'text-[#1A1A1A] dark:text-slate-100 hover:bg-[#F5F7FA] dark:hover:bg-slate-800/60'
+                  }`}
+                >
+                  <span className="flex items-center gap-3">
+                    {link.icon || <Compass className="w-4 h-4 text-[#9CA3AF]" />}
+                    <span className="font-medium text-sm">{link.label}</span>
                   </span>
-                  <span className="text-[11px] text-slate-400 block">{t.winterSub}</span>
-                </div>
-              </div>
-              <ChevronRight className="w-5 h-5 text-cyan-400 shrink-0" />
-            </Link>
+                  <ChevronRight className="w-4 h-4 text-[#D1D5DB]" />
+                </Link>
+              ))}
 
-            {/* 4. Grand Packages */}
-            <Link
-              href="/tours#packages"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="flex items-center justify-between p-4 rounded-2xl bg-[#0E131F] border border-slate-800/80 text-white hover:border-[#C5A059]/60 transition-all"
-            >
-              <div className="flex items-center gap-3.5">
-                <div className="w-10 h-10 rounded-xl bg-[#0A0D14] border border-slate-800 flex items-center justify-center text-[#C5A059] shrink-0">
-                  <Sparkles className="w-5 h-5" />
-                </div>
-                <div>
-                  <span className="font-bold text-sm block">{t.grandPackages}</span>
-                  <span className="text-[11px] text-slate-400 block">{t.grandPackagesSub}</span>
-                </div>
-              </div>
-              <ChevronRight className="w-5 h-5 text-[#C5A059] shrink-0" />
-            </Link>
+              {/* Mobile Theme Toggle Button */}
+              <button
+                type="button"
+                onClick={toggleTheme}
+                className="w-full flex items-center justify-between p-3 rounded-xl border border-[#E5E8ED] dark:border-slate-700 bg-[#F5F7FA] dark:bg-slate-800 text-[#1A1A1A] dark:text-slate-100 font-medium text-sm transition-colors cursor-pointer mt-2"
+              >
+                <span className="flex items-center gap-3">
+                  {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-[#4B5563]" />}
+                  <span>{theme === 'dark' ? 'Light Mode (明るい表示)' : 'Dark Mode (ダークモード)'}</span>
+                </span>
+                <span className="text-xs text-[#9CA3AF] capitalize">{theme}</span>
+              </button>
 
-            {/* 5. Executive Fleet */}
-            <Link
-              href="/tours#fleet"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="flex items-center justify-between p-4 rounded-2xl bg-[#0E131F] border border-slate-800/80 text-white hover:border-[#C5A059]/60 transition-all"
-            >
-              <div className="flex items-center gap-3.5">
-                <div className="w-10 h-10 rounded-xl bg-[#0A0D14] border border-slate-800 flex items-center justify-center text-[#C5A059] shrink-0">
-                  <Car className="w-5 h-5" />
-                </div>
-                <div>
-                  <span className="font-bold text-sm block">{t.fleetLabel}</span>
-                  <span className="text-[11px] text-slate-400 block">{t.fleetSub}</span>
-                </div>
-              </div>
-              <ChevronRight className="w-5 h-5 text-[#C5A059] shrink-0" />
-            </Link>
-
-            {/* WhatsApp Concierge Action Button */}
-            <div className="pt-3">
               <a
-                href={whatsAppGeneralUrl}
+                href={whatsAppUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full flex items-center justify-center gap-2.5 bg-[#25D366] hover:bg-[#20ba5a] text-[#0A0D14] font-bold py-4 rounded-2xl text-xs uppercase tracking-wider shadow-lg transition-all"
+                className="flex items-center justify-center gap-2 bg-[#25D366] text-white font-semibold py-3 rounded-xl text-sm mt-4 shadow-md"
               >
-                <MessageSquare className="w-4 h-4 fill-[#0A0D14]" />
-                <span>{t.whatsAppLabel}</span>
+                <MessageSquare className="w-4 h-4" />
+                <span>WhatsApp 24/7 Concierge</span>
               </a>
             </div>
 
-          </div>
-
-          {/* Fullscreen Menu Footer */}
-          <div className="p-4 sm:p-6 border-t border-slate-800/80 bg-[#0A0D14] space-y-1.5 text-[11px] text-slate-400 text-center">
-            <div className="flex items-center justify-center gap-1.5 text-[#E5C378] font-medium text-[10px]">
-              <ShieldCheck className="w-3.5 h-3.5 text-[#C5A059]" />
-              <span>{t.licenseBadge}</span>
+            {/* Drawer footer */}
+            <div className="p-4 border-t border-[#E5E8ED] dark:border-slate-800 text-center text-[10px] text-[#9CA3AF]">
+              <span className="block font-medium">MLIT Licensed Green-Plate Operator</span>
+              <span>株式会社SKリモ (SK LIMO Co., Ltd.)</span>
             </div>
-            <p className="text-[10px] text-slate-500">
-              株式会社SKリモ (SK LIMO Co., Ltd.) • 柏レイソル公式スポンサー
-            </p>
           </div>
-
         </div>
       )}
     </>

@@ -51,8 +51,8 @@ export const DETAILED_DESTINATIONS: Record<string, DetailedDestination> = {
     region: 'Yamanashi Prefecture',
     category: 'Mt. Fuji & Lakes',
     categoryJa: '富士山・富士五湖',
-    tag: '🗻 Iconic Japan Classic',
-    tagJa: '🗻 王道・富士山観光',
+    tag: 'Iconic Japan Classic',
+    tagJa: '王道・富士山観光',
     heroImage: '/images/dest-fuji-kawaguchiko-1376x768.jpg',
     galleryImages: [
       '/images/dest-fuji-kawaguchiko-1376x768.jpg',
@@ -171,8 +171,8 @@ export const DETAILED_DESTINATIONS: Record<string, DetailedDestination> = {
     region: 'Kanagawa Prefecture',
     category: 'Hot Springs & Nature',
     categoryJa: '温泉・大自然',
-    tag: '♨️ Hot Springs & Volcano',
-    tagJa: '♨️ 名湯温泉と火山絶景',
+    tag: 'Hot Springs & Volcano',
+    tagJa: '名湯温泉と火山絶景',
     heroImage: '/images/dest-hakone-lake-ashi-1376x768.jpg',
     galleryImages: [
       '/images/dest-hakone-lake-ashi-1376x768.jpg',
@@ -281,8 +281,8 @@ export const DETAILED_DESTINATIONS: Record<string, DetailedDestination> = {
     region: 'Kanagawa Prefecture',
     category: 'Samurai Culture & Coast',
     categoryJa: '歴史・古都・海岸',
-    tag: '⛩️ Samurai & Ocean Coast',
-    tagJa: '⛩️ 古都鎌倉と湘南海岸',
+    tag: 'Samurai & Ocean Coast',
+    tagJa: '古都鎌倉と湘南海岸',
     heroImage: '/images/dest-kamakura-enoshima-1376x768.jpg',
     galleryImages: [
       '/images/dest-kamakura-enoshima-1376x768.jpg',
@@ -391,8 +391,8 @@ export const DETAILED_DESTINATIONS: Record<string, DetailedDestination> = {
     region: 'Tochigi Prefecture',
     category: 'UNESCO World Heritage',
     categoryJa: '世界遺産・大自然',
-    tag: '🏯 UNESCO Gold Shrine & Falls',
-    tagJa: '🏯 世界遺産と壮大な滝',
+    tag: 'UNESCO Gold Shrine & Falls',
+    tagJa: '世界遺産と壮大な滝',
     heroImage: '/images/dest-nikko-unesco-1376x768.jpg',
     galleryImages: [
       '/images/dest-nikko-unesco-1376x768.jpg',
@@ -501,8 +501,8 @@ export const DETAILED_DESTINATIONS: Record<string, DetailedDestination> = {
     region: 'Kanagawa Prefecture',
     category: 'City & Harbor',
     categoryJa: '港町・グルメ・夜景',
-    tag: '🏮 Chinatown & Harbor Skyline',
-    tagJa: '🏮 中華街とハーバー夜景',
+    tag: 'Chinatown & Harbor Skyline',
+    tagJa: '中華街とハーバー夜景',
     heroImage: '/images/dest-yokohama-bay-4662x5828.jpg',
     galleryImages: [
       '/images/dest-yokohama-bay-4662x5828.jpg',
@@ -599,8 +599,8 @@ export const DETAILED_DESTINATIONS: Record<string, DetailedDestination> = {
     region: 'Nagano Prefecture',
     category: 'Highland Resort',
     categoryJa: '高原リゾート・避暑地',
-    tag: '🌲 Forest Luxury & Shopping',
-    tagJa: '🌲 高原の清流とショッピング',
+    tag: 'Forest Luxury & Shopping',
+    tagJa: '高原の清流とショッピング',
     heroImage: '/images/dest-karuizawa-resort-1500x1001.jpg',
     galleryImages: [
       '/images/dest-karuizawa-resort-1500x1001.jpg',
@@ -801,7 +801,7 @@ export const MULTILINGUAL_DESTINATIONS: Record<
     zh: {
       name: '箱根温泉・芦之湖海盗船与大涌谷火山谷',
       subtitle: '富士箱根伊豆国立公园的极致温泉与自然美景之旅',
-      tag: '♨️ 顶级日式温泉与自然秘境',
+      tag: '顶级日式温泉与自然秘境',
       category: '温泉度假与艺术之境',
       overview: '日本最著名的温泉胜地。乘专车打卡芦之湖上的箱根神社水上鸟居、白烟缭绕的大涌谷黑鸡蛋体验，以及静谧奢华的私人日归私汤温泉与雕刻之森美术馆。',
       region: '神奈川县 箱根',
@@ -824,7 +824,7 @@ export const MULTILINGUAL_DESTINATIONS: Record<
     fr: {
       name: 'Hakone Onsen, Lac Ashi & Vallée d’Owakudani',
       subtitle: 'Sources Chaudes Ancestrales et Vues Panoramiques sur le Mont Fuji',
-      tag: '♨️ Expérience Onsen & Nature',
+      tag: 'Expérience Onsen & Nature',
       category: 'Sources Chaudes & Culture',
       overview: 'Célèbre pour ses bains thermaux ancestraux, la porte Torii flottante du sanctuaire de Hakone sur le lac Ashi, la vallée volcanique d’Owakudani et ses musées en plein air renommés.',
       region: 'Préfecture de Kanagawa',
@@ -847,7 +847,7 @@ export const MULTILINGUAL_DESTINATIONS: Record<
     es: {
       name: 'Aguas Termales de Hakone, Lago Ashi y Owakudani',
       subtitle: 'Experiencia Termal de Lujo y Paisajes Naturales Frente al Monte Fuji',
-      tag: '♨️ Experiencia Prémium de Onsen',
+      tag: 'Experiencia Prémium de Onsen',
       category: 'Aguas Termales y Paisajes',
       overview: 'Famoso por sus relajantes baños termales onsen, el Torii flotante del santuario de Hakone en el lago Ashi, el valle volcánico de Owakudani y prestigiosos museos al aire libre.',
       region: 'Prefectura de Kanagawa',
@@ -873,7 +873,7 @@ export const MULTILINGUAL_DESTINATIONS: Record<
     zh: {
       name: '古都镰仓・高德院大佛与湘南江之岛海岸',
       subtitle: '探访武士之都千年古刹与《灌篮高手》湘南海岸',
-      tag: '⛩️ 武士之都与唯美湘南海岸',
+      tag: '武士之都与唯美湘南海岸',
       category: '历史古寺与海滨风光',
       overview: '日本12世纪武家政权发源地。探访国宝镰仓青铜大佛、报国寺幽静竹林与抹茶体验、鹤冈八幡宫，并沿湘南海岸与七里滨漫步至浪漫江之岛。',
       region: '神奈川县 湘南镰仓',
@@ -896,7 +896,7 @@ export const MULTILINGUAL_DESTINATIONS: Record<
     fr: {
       name: 'Kamakura Historique & Côte de Shonan Enoshima',
       subtitle: 'Capitale Féodale des Samouraïs, Grands Bouddhas et Plages de Shonan',
-      tag: '⛩️ Histoire Samouraï & Océan',
+      tag: 'Histoire Samouraï & Océan',
       category: 'Temples Anciens & Littoral',
       overview: 'Ancienne capitale féodale abritant le Grand Bouddha de bronze (Kotoku-in), la bambouseraie sereine d’Hokoku-ji, le sanctuaire Tsurugaoka Hachimangu et la magnifique côte de Shonan.',
       region: 'Préfecture de Kanagawa',
@@ -919,7 +919,7 @@ export const MULTILINGUAL_DESTINATIONS: Record<
     es: {
       name: 'Kamakura Histórica y Costa de Shonan Enoshima',
       subtitle: 'La Cuna del Shogunato, Santuarios Legendarios y la Costa de Shonan',
-      tag: '⛩️ Tradición Samurái y Costa',
+      tag: 'Tradición Samurái y Costa',
       category: 'Templos Antiguos y Playas',
       overview: 'La antigua capital del siglo XII que alberga el Gran Buda de bronce (Kotoku-in), los jardines de bambú de Hokoku-ji, el santuario Tsurugaoka Hachimangu y las playas de Shonan frente a Enoshima.',
       region: 'Prefectura de Kanagawa',
@@ -945,7 +945,7 @@ export const MULTILINGUAL_DESTINATIONS: Record<
     zh: {
       name: '日光东照宫・中禅寺湖与华严瀑布 (世界文化遗产)',
       subtitle: '探访日本德川幕府金碧辉煌的国宝巅峰与原始森林瀑布',
-      tag: '🏯 国宝金碧辉煌世界遗产',
+      tag: '国宝金碧辉煌世界遗产',
       category: '世界遗产与原始自然',
       overview: '供奉德川家康的日本金碧辉煌巅峰之作「日光东照宫」。游览落差近百米的日本三名瀑「华严瀑布」，海拔1269米的中禅寺湖以及著名的伊吕波红叶山道。',
       region: '栃木县 日光国立公园',
@@ -968,7 +968,7 @@ export const MULTILINGUAL_DESTINATIONS: Record<
     fr: {
       name: 'Parc National de Nikko & Sanctuaire Toshogu (UNESCO)',
       subtitle: 'Chefs-d’œuvre Sculptés d’Or des Shoguns et Cascades Majestueuses',
-      tag: '🏯 Patrimoine Mondial de l’UNESCO',
+      tag: 'Patrimoine Mondial de l’UNESCO',
       category: 'Trésors Nationaux & Cascades',
       overview: 'Sanctuaires spectaculaires nichés au cœur de forêts de cèdres millénaires. Visitez le somptueux sanctuaire Toshogu sculpté d’or, les chutes de Kegon et le lac Chuzenji.',
       region: 'Préfecture de Tochigi',
@@ -991,7 +991,7 @@ export const MULTILINGUAL_DESTINATIONS: Record<
     es: {
       name: 'Parque Nacional de Nikko y Santuario Toshogu (UNESCO)',
       subtitle: 'Santuarios Dorados de los Shogunes y Cascadas en el Bosque Milenario',
-      tag: '🏯 Tesoro Patrimonio de la Humanidad',
+      tag: 'Tesoro Patrimonio de la Humanidad',
       category: 'Patrimonio Mundial y Naturaleza',
       overview: 'Espectaculares santuarios rodeados de milenarios bosques de cedro. Admire el dorada santuario Toshogu, la imponente cascada Kegon de 100 metros y el pintoresco lago Chuzenji.',
       region: 'Prefectura de Tochigi',
@@ -1017,7 +1017,7 @@ export const MULTILINGUAL_DESTINATIONS: Record<
     zh: {
       name: '横滨未来港21・元町中华街与三溪园庭园',
       subtitle: '感受东洋与西洋交融的浪漫港湾与璀璨海景夜市',
-      tag: '🌆 港湾璀璨夜景与饕餮美食',
+      tag: '港湾璀璨夜景与饕餮美食',
       category: '现代港都与历史风貌',
       overview: '日本开埠历史的现代化浪漫港湾。在日本最大的横滨中华街品尝正宗点心小笼包，漫步于移筑了京都古建筑的三溪园日本名园，傍晚畅游红砖仓库与未来港无敌海景夜景。',
       region: '神奈川县 横滨港区',
@@ -1039,7 +1039,7 @@ export const MULTILINGUAL_DESTINATIONS: Record<
     fr: {
       name: 'Yokohama Minato Mirai & Quartier Chinois',
       subtitle: 'Élégance Portuaire, Plus Grand Quartier Chinois et Vues Nocturnes',
-      tag: '🌆 Vue Nocturne sur la Baie & Gastronomie',
+      tag: 'Vue Nocturne sur la Baie & Gastronomie',
       category: 'Port Historique & Modernité',
       overview: 'Ville portuaire cosmopolite abritant le plus grand quartier chinois du Japon, le splendide jardin traditionnel Sankeien, les entrepôts historiques en brique rouge et la baie illuminée.',
       region: 'Préfecture de Kanagawa',
@@ -1061,7 +1061,7 @@ export const MULTILINGUAL_DESTINATIONS: Record<
     es: {
       name: 'Yokohama Minato Mirai y Barrio Chino',
       subtitle: 'La Ciudad Portuaria Internacional, Gastronomía y Vistas Iluminadas',
-      tag: '🌆 Luces del Puerto y Gastronomía',
+      tag: 'Luces del Puerto y Gastronomía',
       category: 'Ciudad Portuaria y Vistas',
       overview: 'La emblemática ciudad portuaria internacional de Japón con el barrio chino más grande, el tradicional jardín Sankeien, los almacenes históricos Red Brick y el perfil iluminado de Minato Mirai.',
       region: 'Prefectura de Kanagawa',
@@ -1086,7 +1086,7 @@ export const MULTILINGUAL_DESTINATIONS: Record<
     zh: {
       name: '轻井泽皇家避暑胜地・白丝瀑布与王子购物广场',
       subtitle: '日本皇室御用高原避暑胜地与顶级奥特莱斯名牌购物',
-      tag: '🌲 高原清幽森林与轻奢购物',
+      tag: '高原清幽森林与轻奢购物',
       category: '贵族度假与森林秘境',
       overview: '约翰·列侬与日本皇室深爱的殿堂级高原避暑胜地。游览如白丝般的白丝瀑布、水面如镜的云场池、旧轻井泽银座古街，以及日本顶级轻井泽王子奥特莱斯名牌购物广场。',
       region: '长野县 轻井泽高原',
@@ -1109,7 +1109,7 @@ export const MULTILINGUAL_DESTINATIONS: Record<
     fr: {
       name: 'Karuizawa Retraite Alpine & Centre Commercial Prince',
       subtitle: 'Villégiature Impériale d’Altitude, Cascades et Shopping de Luxe',
-      tag: '🌲 Forêts Luxueuses & Shopping',
+      tag: 'Forêts Luxueuses & Shopping',
       category: 'Station Alpine & Villégiature',
       overview: 'Haut lieu de villégiature privilégié par la royauté et John Lennon. Découvrez la cascade de Shiraito, l’étang Kumoba, la vieille rue de Karuizawa et le grand centre Prince Shopping Plaza.',
       region: 'Préfecture de Nagano',
@@ -1132,7 +1132,7 @@ export const MULTILINGUAL_DESTINATIONS: Record<
     es: {
       name: 'Karuizawa Retiro Alpino y Centro Comercial Prince',
       subtitle: 'El Refugio Imperial de Montaña, Cascadas y Compras de Primer Nivel',
-      tag: '🌲 Bosques de Lujo y Compras',
+      tag: 'Bosques de Lujo y Compras',
       category: 'Resort Alpino y Descanso',
       overview: 'El refugio de montaña predilecto de la realeza y celebridades como John Lennon. Disfrute de la cascada Shiraito, el estanque Kumoba, la histórica calle Ginza de Karuizawa y el centro outlet de lujo.',
       region: 'Prefectura de Nagano',

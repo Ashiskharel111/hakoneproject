@@ -8,15 +8,15 @@ export interface LanguageOption {
   code: Language;
   label: string;
   nativeLabel: string;
-  flag: string;
+  badge: string;
 }
 
 export const LANGUAGE_OPTIONS: LanguageOption[] = [
-  { code: 'en', label: 'English', nativeLabel: 'English', flag: '🇬🇧' },
-  { code: 'ja', label: 'Japanese', nativeLabel: '日本語', flag: '🇯🇵' },
-  { code: 'zh', label: 'Chinese', nativeLabel: '简体中文', flag: '🇨🇳' },
-  { code: 'fr', label: 'French', nativeLabel: 'Français', flag: '🇫🇷' },
-  { code: 'es', label: 'Spanish', nativeLabel: 'Español', flag: '🇪🇸' },
+  { code: 'en', label: 'English', nativeLabel: 'English', badge: 'EN' },
+  { code: 'ja', label: 'Japanese', nativeLabel: '日本語', badge: 'JA' },
+  { code: 'zh', label: 'Chinese', nativeLabel: '简体中文', badge: 'ZH' },
+  { code: 'fr', label: 'French', nativeLabel: 'Français', badge: 'FR' },
+  { code: 'es', label: 'Spanish', nativeLabel: 'Español', badge: 'ES' },
 ];
 
 interface LanguageSelectorProps {
@@ -37,13 +37,13 @@ export default function LanguageSelector({
     LANGUAGE_OPTIONS.find((opt) => opt.code === currentLang) || LANGUAGE_OPTIONS[0];
 
   useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
+    function handleClickOutside(event: MouseEvent | TouchEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
     }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener('pointerdown', handleClickOutside);
+    return () => document.removeEventListener('pointerdown', handleClickOutside);
   }, []);
 
   return (
@@ -51,18 +51,18 @@ export default function LanguageSelector({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-1.5 bg-[#0E131F] hover:bg-[#151d2f] border border-slate-800 hover:border-[#C5A059]/60 px-2.5 py-1.5 rounded-lg text-xs text-slate-200 transition-all cursor-pointer shadow"
+        className="flex items-center gap-1 bg-white dark:bg-[#0E131F] hover:bg-[#F5F7FA] dark:hover:bg-slate-800 border border-[#E5E8ED] dark:border-slate-700 px-2.5 py-1.5 rounded-lg text-xs text-[#4B5563] dark:text-slate-200 transition-colors cursor-pointer"
         aria-label="Select Language"
       >
-        <Globe className="w-3.5 h-3.5 text-[#C5A059]" />
-        <span className="font-bold text-[11px] tracking-wider uppercase text-white">{selectedOption.code.toUpperCase()}</span>
-        <ChevronDown className={`w-3 h-3 text-slate-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        <Globe className="w-3.5 h-3.5 text-[#9CA3AF] dark:text-slate-400" />
+        <span className="font-semibold text-[11px] text-[#1A1A1A] dark:text-white">{selectedOption.badge}</span>
+        <ChevronDown className={`w-3 h-3 text-[#9CA3AF] dark:text-slate-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-full mt-1.5 w-44 bg-[#0E131F] border border-slate-700/80 rounded-xl shadow-2xl z-50 py-1.5 backdrop-blur-xl animate-fade-in">
-          <div className="px-3 py-1 text-[10px] uppercase tracking-wider text-slate-500 font-bold border-b border-slate-800/80 mb-1">
-            Select Language
+        <div className="absolute right-0 top-full mt-1 w-44 bg-white dark:bg-[#0E131F] border border-[#E5E8ED] dark:border-slate-700 rounded-xl shadow-xl z-50 py-1">
+          <div className="px-3 py-1.5 text-[10px] uppercase tracking-wider text-[#9CA3AF] dark:text-slate-400 font-semibold border-b border-[#F0F2F5] dark:border-slate-800 mb-0.5">
+            Language / 言語
           </div>
           {LANGUAGE_OPTIONS.map((opt) => (
             <button
@@ -74,15 +74,15 @@ export default function LanguageSelector({
               }}
               className={`w-full flex items-center justify-between px-3 py-2 text-xs text-left transition-colors cursor-pointer ${
                 currentLang === opt.code
-                  ? 'bg-[#C5A059]/15 text-[#E5C378] font-bold'
-                  : 'text-slate-300 hover:bg-[#161f33] hover:text-white'
+                  ? 'bg-[#E8F1FF] text-[#0068FF] dark:bg-[#0068FF]/15 dark:text-[#3B82F6] font-semibold'
+                  : 'text-[#4B5563] dark:text-slate-200 hover:bg-[#F5F7FA] dark:hover:bg-slate-800 hover:text-[#1A1A1A] dark:hover:text-white'
               }`}
             >
               <div className="flex items-center gap-2">
-                <span>{opt.flag}</span>
+                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#F5F7FA] dark:bg-slate-800 text-[#6B7280] dark:text-slate-300 font-semibold">{opt.badge}</span>
                 <span>{opt.nativeLabel}</span>
               </div>
-              {currentLang === opt.code && <Check className="w-3.5 h-3.5 text-[#C5A059]" />}
+              {currentLang === opt.code && <Check className="w-3.5 h-3.5 text-[#0068FF] dark:text-[#3B82F6]" />}
             </button>
           ))}
         </div>

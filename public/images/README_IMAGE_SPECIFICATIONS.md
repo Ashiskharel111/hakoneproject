@@ -4,7 +4,7 @@ This directory contains all image assets for the SK Limo website. Every file is 
 
 ---
 
-## 📸 Image Catalog & Replacement Guide
+## Image Catalog & Replacement Guide
 
 ### 1. Destinations & Sightseeing Tours (`/destinations` & `/destinations/[id]`)
 
@@ -62,7 +62,7 @@ This directory contains all image assets for the SK Limo website. Every file is 
 
 ---
 
-## 🛠️ How to Replace Images Later:
+## How to Replace Images Later:
 
 1. Prepare your authentic image file with high quality.
 2. Either overwrite the file with the **exact same filename** (e.g., replace `public/images/dest-fuji-kawaguchiko-1376x768.jpg`), OR

@@ -1,13 +1,16 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Allow local network mobile devices to access Next.js dev server assets
   allowedDevOrigins: [
-    '192.168.1.14',
+    'localhost',
+    'localhost:3000',
+    '127.0.0.1',
+    '127.0.0.1:3000',
+    '192.168.1.16',
+    '192.168.1.16:3000',
     '192.168.*',
     '10.*',
-    'localhost',
-    '127.0.0.1',
+    '172.*',
   ],
 };
 

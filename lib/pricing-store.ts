@@ -44,64 +44,58 @@ export interface PricingConfig {
 export const PICKUP_LOCATIONS: PickupLocation[] = [
   { id: 'hnd', name: 'Haneda Airport', nameJa: '羽田空港', code: 'HND', type: 'airport' },
   { id: 'nrt', name: 'Narita Airport', nameJa: '成田空港', code: 'NRT', type: 'airport' },
-  { id: 'tokyo_hotel', name: 'Central Tokyo Hotel', nameJa: '東京都内各ホテル', code: 'TYO', type: 'city' },
+  { id: 'tokyo_hotel', name: 'Central Tokyo Hotel / Residence', nameJa: '東京都内各ホテル・ご自宅', code: 'TYO', type: 'city' },
 ];
 
 export const DESTINATION_LOCATIONS: DestinationLocation[] = [
-  { id: 'tokyo_hotel', name: 'Tokyo Hotel / Residence (Airport Transfer)', nameJa: '東京都内ホテル・ご自宅 (空港送迎)', region: 'Tokyo', distanceKm: 70 },
   { id: 'hakuba', name: 'Hakuba Valley', nameJa: '白馬エリア', region: 'Nagano', distanceKm: 280 },
   { id: 'nozawa', name: 'Nozawa Onsen', nameJa: '野沢温泉', region: 'Nagano', distanceKm: 260 },
   { id: 'shiga_kogen', name: 'Shiga Kogen', nameJa: '志賀高原', region: 'Nagano', distanceKm: 270 },
-  { id: 'madarao', name: 'Madarao Mountain', nameJa: '斑尾高原', region: 'Nagano', distanceKm: 250 },
   { id: 'myoko', name: 'Myoko Kogen', nameJa: '妙高高原', region: 'Niigata', distanceKm: 270 },
+  { id: 'madarao', name: 'Madarao Mountain', nameJa: '斑尾高原', region: 'Nagano', distanceKm: 250 },
   { id: 'karuizawa', name: 'Karuizawa', nameJa: '軽井沢', region: 'Nagano', distanceKm: 170 },
+  { id: 'tokyo_hotel', name: 'Tokyo Hotel / Residence', nameJa: '東京都内ホテル・ご自宅', region: 'Tokyo', distanceKm: 70 },
   { id: 'fuji', name: 'Mt. Fuji & Kawaguchi', nameJa: '富士山・河口湖', region: 'Yamanashi', distanceKm: 120 },
 ];
 
 export const DEFAULT_PRICING_CONFIG: PricingConfig = {
   vehicleBaseRates: {
-    granace: 120000,
-    hiace: 110000,
-    alphard: 100000,
-    crown: 85000,
+    alphard: 150000,
+    granace: 150000,
+    hiace: 130000,
+    crown: 120000,
   },
   surcharges: {
-    extraSuitcaseFee: 2000,
-    extraSkiBagFee: 3000,
+    extraSuitcaseFee: 0,
+    extraSkiBagFee: 0,
     lateNightFee: 10000,
     roundTripDiscountPercent: 5,
-    peakSeasonMultiplier: 1.10,
+    peakSeasonMultiplier: 1.0,
   },
   routePrices: {
-    'hnd_tokyo_hotel': { pickupId: 'hnd', destinationId: 'tokyo_hotel', granacePrice: 35000, hiacePrice: 30000, tollEstimate: 1950, fuelEstimate: 1200 },
-    'nrt_tokyo_hotel': { pickupId: 'nrt', destinationId: 'tokyo_hotel', granacePrice: 48000, hiacePrice: 42000, tollEstimate: 3200, fuelEstimate: 2400 },
-    'hnd_hakuba': { pickupId: 'hnd', destinationId: 'hakuba', granacePrice: 130000, hiacePrice: 120000, tollEstimate: 14800, fuelEstimate: 9500 },
-    'nrt_hakuba': { pickupId: 'nrt', destinationId: 'hakuba', granacePrice: 145000, hiacePrice: 135000, tollEstimate: 17500, fuelEstimate: 11200 },
-    'tokyo_hotel_hakuba': { pickupId: 'tokyo_hotel', destinationId: 'hakuba', granacePrice: 125000, hiacePrice: 115000, tollEstimate: 13900, fuelEstimate: 8900 },
+    'hnd_hakuba': { pickupId: 'hnd', destinationId: 'hakuba', granacePrice: 150000, hiacePrice: 130000, tollEstimate: 14800, fuelEstimate: 9500 },
+    'nrt_hakuba': { pickupId: 'nrt', destinationId: 'hakuba', granacePrice: 150000, hiacePrice: 130000, tollEstimate: 17500, fuelEstimate: 11200 },
+    'tokyo_hotel_hakuba': { pickupId: 'tokyo_hotel', destinationId: 'hakuba', granacePrice: 150000, hiacePrice: 130000, tollEstimate: 13900, fuelEstimate: 8900 },
     
-    'hnd_nozawa': { pickupId: 'hnd', destinationId: 'nozawa', granacePrice: 125000, hiacePrice: 115000, tollEstimate: 13200, fuelEstimate: 8800 },
-    'nrt_nozawa': { pickupId: 'nrt', destinationId: 'nozawa', granacePrice: 140000, hiacePrice: 130000, tollEstimate: 16100, fuelEstimate: 10500 },
-    'tokyo_hotel_nozawa': { pickupId: 'tokyo_hotel', destinationId: 'nozawa', granacePrice: 120000, hiacePrice: 110000, tollEstimate: 12500, fuelEstimate: 8200 },
+    'hnd_nozawa': { pickupId: 'hnd', destinationId: 'nozawa', granacePrice: 150000, hiacePrice: 130000, tollEstimate: 13200, fuelEstimate: 8800 },
+    'nrt_nozawa': { pickupId: 'nrt', destinationId: 'nozawa', granacePrice: 150000, hiacePrice: 130000, tollEstimate: 16100, fuelEstimate: 10500 },
+    'tokyo_hotel_nozawa': { pickupId: 'tokyo_hotel', destinationId: 'nozawa', granacePrice: 150000, hiacePrice: 130000, tollEstimate: 12500, fuelEstimate: 8200 },
 
-    'hnd_shiga_kogen': { pickupId: 'hnd', destinationId: 'shiga_kogen', granacePrice: 128000, hiacePrice: 118000, tollEstimate: 13500, fuelEstimate: 9000 },
-    'nrt_shiga_kogen': { pickupId: 'nrt', destinationId: 'shiga_kogen', granacePrice: 142000, hiacePrice: 132000, tollEstimate: 16400, fuelEstimate: 10800 },
-    'tokyo_hotel_shiga_kogen': { pickupId: 'tokyo_hotel', destinationId: 'shiga_kogen', granacePrice: 122000, hiacePrice: 112000, tollEstimate: 12800, fuelEstimate: 8500 },
+    'hnd_shiga_kogen': { pickupId: 'hnd', destinationId: 'shiga_kogen', granacePrice: 150000, hiacePrice: 130000, tollEstimate: 13500, fuelEstimate: 9000 },
+    'nrt_shiga_kogen': { pickupId: 'nrt', destinationId: 'shiga_kogen', granacePrice: 150000, hiacePrice: 130000, tollEstimate: 16400, fuelEstimate: 10800 },
+    'tokyo_hotel_shiga_kogen': { pickupId: 'tokyo_hotel', destinationId: 'shiga_kogen', granacePrice: 150000, hiacePrice: 130000, tollEstimate: 12800, fuelEstimate: 8500 },
 
-    'hnd_madarao': { pickupId: 'hnd', destinationId: 'madarao', granacePrice: 122000, hiacePrice: 112000, tollEstimate: 12900, fuelEstimate: 8500 },
-    'nrt_madarao': { pickupId: 'nrt', destinationId: 'madarao', granacePrice: 138000, hiacePrice: 128000, tollEstimate: 15800, fuelEstimate: 10200 },
-    'tokyo_hotel_madarao': { pickupId: 'tokyo_hotel', destinationId: 'madarao', granacePrice: 118000, hiacePrice: 108000, tollEstimate: 12200, fuelEstimate: 8000 },
+    'hnd_madarao': { pickupId: 'hnd', destinationId: 'madarao', granacePrice: 150000, hiacePrice: 130000, tollEstimate: 12900, fuelEstimate: 8500 },
+    'nrt_madarao': { pickupId: 'nrt', destinationId: 'madarao', granacePrice: 150000, hiacePrice: 130000, tollEstimate: 15800, fuelEstimate: 10200 },
+    'tokyo_hotel_madarao': { pickupId: 'tokyo_hotel', destinationId: 'madarao', granacePrice: 150000, hiacePrice: 130000, tollEstimate: 12200, fuelEstimate: 8000 },
 
-    'hnd_myoko': { pickupId: 'hnd', destinationId: 'myoko', granacePrice: 130000, hiacePrice: 120000, tollEstimate: 14200, fuelEstimate: 9200 },
-    'nrt_myoko': { pickupId: 'nrt', destinationId: 'myoko', granacePrice: 145000, hiacePrice: 135000, tollEstimate: 17100, fuelEstimate: 11000 },
-    'tokyo_hotel_myoko': { pickupId: 'tokyo_hotel', destinationId: 'myoko', granacePrice: 125000, hiacePrice: 115000, tollEstimate: 13500, fuelEstimate: 8600 },
+    'hnd_myoko': { pickupId: 'hnd', destinationId: 'myoko', granacePrice: 150000, hiacePrice: 130000, tollEstimate: 14200, fuelEstimate: 9200 },
+    'nrt_myoko': { pickupId: 'nrt', destinationId: 'myoko', granacePrice: 150000, hiacePrice: 130000, tollEstimate: 17100, fuelEstimate: 11000 },
+    'tokyo_hotel_myoko': { pickupId: 'tokyo_hotel', destinationId: 'myoko', granacePrice: 150000, hiacePrice: 130000, tollEstimate: 13500, fuelEstimate: 8600 },
 
-    'hnd_karuizawa': { pickupId: 'hnd', destinationId: 'karuizawa', granacePrice: 95000, hiacePrice: 85000, tollEstimate: 8500, fuelEstimate: 5200 },
-    'nrt_karuizawa': { pickupId: 'nrt', destinationId: 'karuizawa', granacePrice: 110000, hiacePrice: 100000, tollEstimate: 11200, fuelEstimate: 6900 },
-    'tokyo_hotel_karuizawa': { pickupId: 'tokyo_hotel', destinationId: 'karuizawa', granacePrice: 90000, hiacePrice: 80000, tollEstimate: 7800, fuelEstimate: 4800 },
-
-    'hnd_fuji': { pickupId: 'hnd', destinationId: 'fuji', granacePrice: 90000, hiacePrice: 80000, tollEstimate: 6800, fuelEstimate: 4500 },
-    'nrt_fuji': { pickupId: 'nrt', destinationId: 'fuji', granacePrice: 105000, hiacePrice: 95000, tollEstimate: 9500, fuelEstimate: 6200 },
-    'tokyo_hotel_fuji': { pickupId: 'tokyo_hotel', destinationId: 'fuji', granacePrice: 85000, hiacePrice: 75000, tollEstimate: 6100, fuelEstimate: 4000 },
+    'hnd_karuizawa': { pickupId: 'hnd', destinationId: 'karuizawa', granacePrice: 150000, hiacePrice: 130000, tollEstimate: 8500, fuelEstimate: 5200 },
+    'nrt_karuizawa': { pickupId: 'nrt', destinationId: 'karuizawa', granacePrice: 150000, hiacePrice: 130000, tollEstimate: 11200, fuelEstimate: 6900 },
+    'tokyo_hotel_karuizawa': { pickupId: 'tokyo_hotel', destinationId: 'karuizawa', granacePrice: 150000, hiacePrice: 130000, tollEstimate: 7800, fuelEstimate: 4800 },
   },
 };
 
@@ -130,6 +124,7 @@ export interface QuoteCalculationResult {
   secondVehicleSurcharge: number;
   vehicleImage: string;
   baseRate: number;
+  extraPaxSurcharge: number;
   routeAdjustment: number;
   luggageSurcharge: number;
   skiBagSurcharge: number;
@@ -223,9 +218,7 @@ export function calculateQuote(
   config: PricingConfig,
   inputs: QuoteInputs
 ): QuoteCalculationResult {
-  const totalBags = inputs.luggageCount + inputs.skiBagCount;
-  
-  // Use selected vehicle preference if provided, otherwise sensible default
+  // Use selected vehicle preference if provided, otherwise default to alphard
   let selectedVehicle: 'alphard' | 'granace' | 'hiace' = inputs.vehiclePreference || 'alphard';
 
   const isAlphard = selectedVehicle === 'alphard';
@@ -268,7 +261,11 @@ export function calculateQuote(
 
   const isExceeded = inputs.passengers > maxPassengers;
 
-  const baseRate = config.vehicleBaseRates[selectedVehicle] || (isAlphard ? 100000 : isGranace ? 120000 : 110000);
+  // Fixed winter rate: Alphard & Granace = 150,000 | HiAce = 130,000
+  const baseRate = isHiace ? 130000 : 150000;
+
+  // Extra Passenger Fee: For HiAce, if passengers > 4, add ¥5,000 per person beyond 4
+  const extraPaxSurcharge = isHiace && inputs.passengers > 4 ? (inputs.passengers - 4) * 5000 : 0;
 
   const routeKey = `${inputs.pickupId}_${inputs.destinationId}`;
   const routeOverride = config.routePrices[routeKey];
@@ -278,11 +275,6 @@ export function calculateQuote(
   let fuelEstimate = 8000;
 
   if (routeOverride) {
-    routeRate = isAlphard
-      ? Math.round(routeOverride.granacePrice * 0.9)
-      : isGranace
-      ? routeOverride.granacePrice
-      : routeOverride.hiacePrice;
     tollEstimate = routeOverride.tollEstimate;
     fuelEstimate = routeOverride.fuelEstimate;
   }
@@ -290,23 +282,23 @@ export function calculateQuote(
   const excessSuitcases = Math.max(0, inputs.luggageCount - maxSuitcases);
   const excessSkiBags = Math.max(0, inputs.skiBagCount - maxSkiBags);
 
-  const luggageSurcharge = excessSuitcases * config.surcharges.extraSuitcaseFee;
-  const skiBagSurcharge = excessSkiBags * config.surcharges.extraSkiBagFee;
-  const lateNightSurcharge = inputs.isLateNight ? config.surcharges.lateNightFee : 0;
+  const luggageSurcharge = excessSuitcases * (config.surcharges?.extraSuitcaseFee || 0);
+  const skiBagSurcharge = excessSkiBags * (config.surcharges?.extraSkiBagFee || 0);
+  const lateNightSurcharge = inputs.isLateNight ? (config.surcharges?.lateNightFee || 0) : 0;
 
-  // Capacity Exceeded Second Vehicle Surcharge Formula
+  // Capacity Exceeded Second Vehicle Surcharge Formula (if exceeding max cap for the vehicle)
   const minPerPerson = Math.round(routeRate / maxPassengers);
   const secondVehicleSurcharge = minPerPerson + 30000;
   const multiVehicleSurcharge = isExceeded && inputs.addSecondVehicle ? secondVehicleSurcharge : 0;
 
-  const subtotalOneWay = routeRate + luggageSurcharge + skiBagSurcharge + lateNightSurcharge + multiVehicleSurcharge;
+  const subtotalOneWay = routeRate + extraPaxSurcharge + luggageSurcharge + skiBagSurcharge + lateNightSurcharge + multiVehicleSurcharge;
 
   let finalTotalPrice = subtotalOneWay;
   let roundTripDiscount = 0;
 
   if (inputs.transferType === 'round_trip') {
     const doublePrice = subtotalOneWay * 2;
-    roundTripDiscount = Math.round(doublePrice * (config.surcharges.roundTripDiscountPercent / 100));
+    roundTripDiscount = Math.round(doublePrice * ((config.surcharges?.roundTripDiscountPercent || 5) / 100));
     finalTotalPrice = doublePrice - roundTripDiscount;
   }
 
@@ -316,15 +308,15 @@ export function calculateQuote(
   const formattedTotalPrice = `¥${finalTotalPrice.toLocaleString('en-US')}`;
 
   const whatsAppText = encodeURIComponent(
-    `Hello SK Limo team / SK Limo配車担当者様\nI would like to book a private ski charter quote:\n\n` +
-    `📍 Pickup: ${pickupObj?.name} (${pickupObj?.nameJa})\n` +
-    `🏔 Destination: ${destObj?.name} (${destObj?.nameJa})\n` +
-    `🚗 Transfer Type: ${inputs.transferType === 'round_trip' ? 'Round Trip / 往復' : 'One Way / 片道'}\n` +
-    `👥 Passengers: ${inputs.passengers} pax\n` +
-    `🧳 Luggage: ${inputs.luggageCount} suitcases, ${inputs.skiBagCount} ski bags\n` +
+    `Hello SK Limo Concierge Desk / SK Limo配車担当者様\n` +
+    `I would like to lock in my private winter ski charter reservation:\n\n` +
+    `📍 Route: ${pickupObj?.name || inputs.pickupId} (${pickupObj?.nameJa || ''}) ➔ ${destObj?.name || inputs.destinationId} (${destObj?.nameJa || ''})\n` +
+    `🔄 Type: ${inputs.transferType === 'round_trip' ? 'Round Trip / 往復' : 'One Way / 片道'}\n` +
     `🚘 Vehicle: ${vehicleName}\n` +
-    `💰 Total Estimated Price: ${formattedTotalPrice} JPY (Included: Tolls, Fuel, Driver Fees)\n\n` +
-    `Please confirm driver & vehicle availability.`
+    `👥 Guests & Gear: ${inputs.passengers} Pax | ${inputs.luggageCount} Suitcases | ${inputs.skiBagCount} Ski Bags\n` +
+    `💰 Guaranteed Total Fare: ${formattedTotalPrice} JPY (All-Inclusive: Tolls, Fuel, Winter 4WD Snow Spec, Luggage Handling)\n` +
+    `🛡️ Payment Terms: Settle after transfer completion via Bank Transfer or Cash (No Advance Deposit)\n\n` +
+    `Please confirm vehicle availability and driver assignment.`
   );
 
   const whatsAppMessage = `https://wa.me/819000000000?text=${whatsAppText}`;
@@ -342,7 +334,8 @@ export function calculateQuote(
     secondVehicleSurcharge,
     vehicleImage,
     baseRate,
-    routeAdjustment: routeRate - baseRate,
+    extraPaxSurcharge,
+    routeAdjustment: 0,
     luggageSurcharge,
     skiBagSurcharge,
     lateNightSurcharge,
