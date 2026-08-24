@@ -354,12 +354,12 @@ export default function TokyoDestinationsPage() {
           ═══════════════════════════════════════ */}
       <section className="bg-[#0E131F]/95 backdrop-blur-xl border-y border-slate-800/60 sticky top-16 sm:top-20 z-30 shadow-md">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between flex-wrap gap-3 sm:gap-4">
-          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar w-full sm:w-auto pb-1 sm:pb-0">
+          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar w-full sm:w-auto pb-1 sm:pb-0 min-w-0">
             {categories.map((cat) => (
               <button
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer ${
+                className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer whitespace-nowrap shrink-0 ${
                   selectedCategory === cat.id
                     ? 'bg-[#C5A059] text-[#0A0D14] shadow-md'
                     : 'bg-[#0A0D14] text-slate-400 border border-slate-800 hover:text-white hover:border-slate-600'

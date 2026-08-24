@@ -274,7 +274,7 @@ export default function WinterSkiToursPage() {
                 <MapPin className="w-3.5 h-3.5 text-[#0068FF]" />
                 <span>2. Departure / Pickup Point</span>
               </label>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                 {[
                   { id: 'hnd' as const, label: 'Haneda (HND)' },
                   { id: 'nrt' as const, label: 'Narita (NRT)' },
@@ -284,7 +284,7 @@ export default function WinterSkiToursPage() {
                     key={item.id}
                     type="button"
                     onClick={() => setPickupPoint(item.id)}
-                    className={`p-2.5 rounded-xl border-2 text-center text-xs font-bold transition-all cursor-pointer ${
+                    className={`p-2.5 rounded-xl border-2 text-center text-xs font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                       pickupPoint === item.id
                         ? 'border-[#0068FF] bg-[#E8F1FF] dark:bg-[#0068FF]/15 text-[#0068FF] dark:text-[#3B82F6]'
                         : 'border-[#E5E8ED] dark:border-slate-700 bg-white dark:bg-[#131b2c] text-[#4B5563] dark:text-slate-300 hover:border-[#D1D5DB]'

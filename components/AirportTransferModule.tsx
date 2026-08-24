@@ -929,12 +929,12 @@ export default function AirportTransferModule({
                       type="button"
                       onClick={() => handleLookupFlight()}
                       disabled={isLookingUpFlight}
-                      className="bg-[#0068FF] hover:bg-[#0050CC] text-white px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-1 shrink-0 transition-colors cursor-pointer"
+                      className="bg-[#0068FF] hover:bg-[#0050CC] text-white px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-1 shrink-0 whitespace-nowrap transition-colors cursor-pointer"
                     >
                       {isLookingUpFlight ? (
                         <span className="animate-spin text-xs">⏳</span>
                       ) : (
-                        <Search className="w-3.5 h-3.5" />
+                        <Search className="w-3.5 h-3.5 shrink-0" />
                       )}
                       <span>{isLookingUpFlight ? t.checkingText : t.checkButton}</span>
                     </button>

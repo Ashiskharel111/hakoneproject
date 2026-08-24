@@ -315,46 +315,48 @@ export default function GrandToursHomePage() {
           {/* Trip.com 3-Tab Booking Widget */}
           <div className="max-w-4xl mx-auto bg-white dark:bg-[#131b2c] border border-[#E5E8ED] dark:border-slate-700/80 rounded-2xl shadow-lg p-4 sm:p-6 space-y-4">
             
-            {/* 3 Tabs */}
-            <div className="flex items-center gap-2 border-b border-[#F0F2F5] dark:border-slate-800 pb-3">
-              <button
-                type="button"
-                onClick={() => setSearchTab('airport')}
-                className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  searchTab === 'airport'
-                    ? 'bg-[#0068FF] text-white shadow-sm'
-                    : 'text-[#4B5563] dark:text-slate-300 hover:bg-[#F5F7FA] dark:hover:bg-slate-800'
-                }`}
-              >
-                <Plane className="w-4 h-4" />
-                <span>Airport Transfers</span>
-              </button>
+            {/* 3 Tabs (Horizontal Slidable Carousel on Mobile) */}
+            <div className="w-full overflow-x-auto no-scrollbar border-b border-[#F0F2F5] dark:border-slate-800 pb-3">
+              <div className="flex items-center gap-2 min-w-max">
+                <button
+                  type="button"
+                  onClick={() => setSearchTab('airport')}
+                  className={`flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 ${
+                    searchTab === 'airport'
+                      ? 'bg-[#0068FF] text-white shadow-sm'
+                      : 'text-[#4B5563] dark:text-slate-300 hover:bg-[#F5F7FA] dark:hover:bg-slate-800'
+                  }`}
+                >
+                  <Plane className="w-4 h-4 shrink-0" />
+                  <span>Airport Transfers</span>
+                </button>
 
-              <button
-                type="button"
-                onClick={() => setSearchTab('sightseeing')}
-                className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  searchTab === 'sightseeing'
-                    ? 'bg-[#0068FF] text-white shadow-sm'
-                    : 'text-[#4B5563] dark:text-slate-300 hover:bg-[#F5F7FA] dark:hover:bg-slate-800'
-                }`}
-              >
-                <Compass className="w-4 h-4" />
-                <span>Day Charters</span>
-              </button>
+                <button
+                  type="button"
+                  onClick={() => setSearchTab('sightseeing')}
+                  className={`flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 ${
+                    searchTab === 'sightseeing'
+                      ? 'bg-[#0068FF] text-white shadow-sm'
+                      : 'text-[#4B5563] dark:text-slate-300 hover:bg-[#F5F7FA] dark:hover:bg-slate-800'
+                  }`}
+                >
+                  <Compass className="w-4 h-4 shrink-0" />
+                  <span>Day Charters</span>
+                </button>
 
-              <button
-                type="button"
-                onClick={() => setSearchTab('ski')}
-                className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  searchTab === 'ski'
-                    ? 'bg-[#0068FF] text-white shadow-sm'
-                    : 'text-[#4B5563] dark:text-slate-300 hover:bg-[#F5F7FA] dark:hover:bg-slate-800'
-                }`}
-              >
-                <Snowflake className="w-4 h-4" />
-                <span>Ski Transfers</span>
-              </button>
+                <button
+                  type="button"
+                  onClick={() => setSearchTab('ski')}
+                  className={`flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 ${
+                    searchTab === 'ski'
+                      ? 'bg-[#0068FF] text-white shadow-sm'
+                      : 'text-[#4B5563] dark:text-slate-300 hover:bg-[#F5F7FA] dark:hover:bg-slate-800'
+                  }`}
+                >
+                  <Snowflake className="w-4 h-4 shrink-0" />
+                  <span>Ski Transfers</span>
+                </button>
+              </div>
             </div>
 
             {/* Form Inputs */}
@@ -558,21 +560,30 @@ export default function GrandToursHomePage() {
                   </p>
                 </div>
 
-                <div className="flex items-center gap-1.5 bg-white dark:bg-[#0E131F] border border-[#E5E8ED] dark:border-slate-800 p-1 rounded-xl">
-                  {(['all', 'airport', 'sightseeing', 'ski'] as ServiceCategory[]).map((cat) => (
-                    <button
-                      key={cat}
-                      type="button"
-                      onClick={() => setActiveCategory(cat)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold capitalize transition-all cursor-pointer ${
-                        activeCategory === cat
-                          ? 'bg-[#0068FF] text-white shadow-sm'
-                          : 'text-[#6B7280] dark:text-slate-400 hover:text-[#1A1A1A] dark:hover:text-white'
-                      }`}
-                    >
-                      {cat === 'all' ? 'All Services' : cat === 'airport' ? 'Airports' : cat === 'sightseeing' ? 'Day Charters' : 'Ski'}
-                    </button>
-                  ))}
+                {/* Category Pills (Slidable on Mobile) */}
+                <div className="w-full sm:w-auto overflow-x-auto no-scrollbar py-1">
+                  <div className="flex items-center gap-1.5 bg-white dark:bg-[#0E131F] border border-[#E5E8ED] dark:border-slate-800 p-1 rounded-xl min-w-max">
+                    {(['all', 'airport', 'sightseeing', 'ski'] as ServiceCategory[]).map((cat) => (
+                      <button
+                        key={cat}
+                        type="button"
+                        onClick={() => setActiveCategory(cat)}
+                        className={`px-3.5 py-2 rounded-lg text-xs font-semibold capitalize transition-all cursor-pointer whitespace-nowrap shrink-0 ${
+                          activeCategory === cat
+                            ? 'bg-[#0068FF] text-white shadow-sm'
+                            : 'text-[#6B7280] dark:text-slate-400 hover:text-[#1A1A1A] dark:hover:text-white'
+                        }`}
+                      >
+                        {cat === 'all'
+                          ? 'All Services'
+                          : cat === 'airport'
+                          ? 'Airport Transfers'
+                          : cat === 'sightseeing'
+                          ? 'Day Charters'
+                          : 'Ski Transfers'}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
 
@@ -636,10 +647,10 @@ export default function GrandToursHomePage() {
 
                       <Link
                         href={tour.link}
-                        className="bg-[#0068FF] hover:bg-[#0050CC] text-white px-3.5 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer flex items-center gap-1"
+                        className="bg-[#0068FF] hover:bg-[#0050CC] text-white px-3.5 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer flex items-center gap-1 shrink-0 whitespace-nowrap"
                       >
                         <span>Book</span>
-                        <ChevronRight className="w-3.5 h-3.5" />
+                        <ChevronRight className="w-3.5 h-3.5 shrink-0" />
                       </Link>
                     </div>
                   </div>
@@ -664,31 +675,33 @@ export default function GrandToursHomePage() {
                   </p>
                 </div>
 
-                {/* Vehicle Tabs */}
-                <div className="flex items-center justify-center flex-wrap gap-2">
-                  {(['alphard', 'granace', 'hiace', 'crown'] as const).map((key) => (
-                    <button
-                      key={key}
-                      type="button"
-                      onClick={() => {
-                        setSelectedFleet(key);
-                        setFleetPhotoView('exterior');
-                      }}
-                      className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                        selectedFleet === key
-                          ? 'bg-[#0068FF] text-white shadow-sm'
-                          : 'bg-[#F5F7FA] dark:bg-slate-800 text-[#4B5563] dark:text-slate-300 hover:bg-[#E5E8ED] dark:hover:bg-slate-700'
-                      }`}
-                    >
-                      {key === 'alphard'
-                        ? 'Toyota Alphard (1-4 Pax)'
-                        : key === 'granace'
-                        ? 'Toyota Granace 4WD (1-5 Pax)'
-                        : key === 'hiace'
-                        ? 'HiAce Grand Cabin (1-9 Pax)'
-                        : 'Crown Majesta Sedan (1-3 Pax)'}
-                    </button>
-                  ))}
+                {/* Vehicle Tabs (Horizontal Slidable Slider on Mobile, Centered on Desktop) */}
+                <div className="w-full overflow-x-auto no-scrollbar py-2 -mx-2 px-2 sm:mx-0 sm:px-0">
+                  <div className="flex items-center gap-2 sm:justify-center min-w-max px-1">
+                    {(['alphard', 'granace', 'hiace', 'crown'] as const).map((key) => (
+                      <button
+                        key={key}
+                        type="button"
+                        onClick={() => {
+                          setSelectedFleet(key);
+                          setFleetPhotoView('exterior');
+                        }}
+                        className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 ${
+                          selectedFleet === key
+                            ? 'bg-[#0068FF] text-white shadow-sm'
+                            : 'bg-[#F5F7FA] dark:bg-slate-800 text-[#4B5563] dark:text-slate-300 hover:bg-[#E5E8ED] dark:hover:bg-slate-700'
+                        }`}
+                      >
+                        {key === 'alphard'
+                          ? 'Toyota Alphard (1-4 Pax)'
+                          : key === 'granace'
+                          ? 'Toyota Granace 4WD (1-5 Pax)'
+                          : key === 'hiace'
+                          ? 'HiAce Grand Cabin (1-9 Pax)'
+                          : 'Crown Majesta Sedan (1-3 Pax)'}
+                      </button>
+                    ))}
+                  </div>
                 </div>
 
                 {/* Vehicle Details Card */}
