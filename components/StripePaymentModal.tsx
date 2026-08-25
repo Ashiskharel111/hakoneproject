@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { loadStripe, Stripe, StripeElementsOptions } from '@stripe/stripe-js';
-import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { Elements, PaymentElement, ExpressCheckoutElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { ShieldCheck, Lock, X, Loader2, CheckCircle2, AlertCircle, Sparkles, CreditCard, Smartphone, Check } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 
@@ -56,6 +56,31 @@ function CheckoutForm({
   const [lang] = useLanguage();
   const [isProcessing, setIsProcessing] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const handleExpressConfirm = async () => {
+    if (!stripe || !elements) return;
+    setIsProcessing(true);
+    setErrorMessage(null);
+
+    const { error, paymentIntent } = await stripe.confirmPayment({
+      elements,
+      redirect: 'if_required',
+      confirmParams: {
+        receipt_email: bookingDetails.guestEmail,
+      },
+    });
+
+    if (error) {
+      setErrorMessage(error.message || 'Express checkout payment failed.');
+      setIsProcessing(false);
+    } else if (paymentIntent && paymentIntent.status === 'succeeded') {
+      setIsProcessing(false);
+      onSuccess(bookingRef, paymentIntent.id);
+    } else {
+      setIsProcessing(false);
+      onSuccess(bookingRef, paymentIntent?.id || bookingRef);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -178,18 +203,48 @@ function CheckoutForm({
           </div>
         </div>
       ) : (
-        <div className="bg-[#0A0D14] border border-slate-800 rounded-2xl p-4 min-h-[240px]">
+        <div className="bg-[#0A0D14] border border-slate-800 rounded-2xl p-4 space-y-4">
+          {/* 1-Click Express Checkout Buttons (Apple Pay & Google Pay) */}
+          <div className="space-y-2">
+            <ExpressCheckoutElement
+              onConfirm={handleExpressConfirm}
+              options={{
+                buttonHeight: 46,
+                buttonTheme: {
+                  applePay: 'black',
+                  googlePay: 'black',
+                },
+                paymentMethods: {
+                  applePay: 'auto',
+                  googlePay: 'auto',
+                  link: 'auto',
+                },
+              }}
+            />
+          </div>
+
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-slate-800/80" />
+            </div>
+            <div className="relative flex justify-center text-[10px] uppercase font-bold tracking-wider">
+              <span className="bg-[#0A0D14] px-2 text-slate-400">Payment Options</span>
+            </div>
+          </div>
+
+          {/* Full Payment Element: Credit Cards, Alipay, WeChat Pay, PayPay */}
           <PaymentElement
             options={{
               layout: {
-                type: 'tabs',
+                type: 'accordion',
                 defaultCollapsed: false,
+                radios: 'always',
+                spacedAccordionItems: true,
               },
               wallets: {
                 applePay: 'auto',
                 googlePay: 'auto',
               },
-              paymentMethodOrder: ['apple_pay', 'google_pay', 'card', 'alipay', 'wechat_pay', 'paypay'],
             }}
           />
         </div>
