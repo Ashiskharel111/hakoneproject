@@ -185,11 +185,25 @@ export default function DestinationDetailPage({
     }, 2500);
   };
 
+  const [isConfirmedAgreement, setIsConfirmedAgreement] = useState(false);
+  const [validationError, setValidationError] = useState<string | null>(null);
+
   const handleProceedToStripe = () => {
-    if (!consultName || !consultEmail) {
-      alert(lang === 'ja' ? 'お名前とメールアドレスをご入力ください。' : 'Please enter your name and email address to proceed.');
+    if (!consultName.trim() || !consultEmail.trim()) {
+      setValidationError(
+        lang === 'ja' ? 'お名前とメールアドレスをご入力ください。' : 'Please enter your name and email address to proceed.'
+      );
       return;
     }
+    if (!isConfirmedAgreement) {
+      setValidationError(
+        lang === 'ja'
+          ? 'お支払い前に同意のチェックボックスを選択してください。'
+          : 'Please check the mandatory confirmation box below before proceeding.'
+      );
+      return;
+    }
+    setValidationError(null);
     setIsConsultModalOpen(false);
     setIsStripeModalOpen(true);
   };
@@ -730,6 +744,33 @@ export default function DestinationDetailPage({
                     placeholder={lang === 'ja' ? 'お迎え先ホテル名、立ち寄りたい場所などご記入ください' : 'Hotel name for pickup, custom stops, baby seat requests...'}
                     className="w-full bg-[#0A0D14] border border-slate-800 rounded-xl px-3.5 py-2.5 text-white focus:border-[#C5A059] focus:outline-none resize-none"
                   />
+                </div>
+
+                {/* Mandatory Confirmation Checkbox */}
+                <div className="space-y-2 pt-1">
+                  <label className="flex items-start gap-2.5 p-3 rounded-xl bg-[#0A0D14] border border-slate-800 cursor-pointer select-none">
+                    <input
+                      type="checkbox"
+                      checked={isConfirmedAgreement}
+                      onChange={(e) => {
+                        setIsConfirmedAgreement(e.target.checked);
+                        if (validationError) setValidationError(null);
+                      }}
+                      className="mt-0.5 w-4 h-4 rounded border-slate-700 text-[#C5A059] focus:ring-[#C5A059] cursor-pointer shrink-0"
+                    />
+                    <span className="text-[11px] text-slate-300 leading-tight">
+                      {lang === 'ja'
+                        ? '旅程内容、ご乗車人数、ホテル住所を確認し、利用規約およびキャンセルポリシーに同意します。'
+                        : 'I confirm my tour details, passenger count, and hotel pickup address are correct, and I accept the MLIT licensed charter terms & cancellation policy.'}
+                    </span>
+                  </label>
+
+                  {validationError && (
+                    <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-xs font-semibold flex items-center gap-2">
+                      <span className="shrink-0 text-sm">⚠️</span>
+                      <span>{validationError}</span>
+                    </div>
+                  )}
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2">

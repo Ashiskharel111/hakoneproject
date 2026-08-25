@@ -31,21 +31,23 @@ import SiteFooter from '@/components/SiteFooter';
 import StripePaymentModal, { BookingPaymentDetails } from '@/components/StripePaymentModal';
 import BookingConfirmationModal from '@/components/BookingConfirmationModal';
 import AirportTransferModule, { TransferDirection } from '@/components/AirportTransferModule';
+import DayTourBookingModule from '@/components/DayTourBookingModule';
+import SkiTransferBookingModule from '@/components/SkiTransferBookingModule';
 import { useLanguage } from '@/context/LanguageContext';
 import { Airport } from '@/lib/airport-pricing';
 
 type ServiceCategory = 'all' | 'airport' | 'sightseeing' | 'ski';
 
 export default function GrandToursHomePage() {
-  const router = useRouter();
   const [lang] = useLanguage();
+  const router = useRouter();
   const resultsRef = useRef<HTMLDivElement>(null);
 
-  // Search & Filter State
-  const [activeCategory, setActiveCategory] = useState<ServiceCategory>('all');
+  // Search Filter State
   const [searchTab, setSearchTab] = useState<'airport' | 'sightseeing' | 'ski'>('airport');
+  const [activeCategory, setActiveCategory] = useState<ServiceCategory>('all');
   
-  // Airport Transfer Direction: Airport to Hotel vs Hotel to Airport
+  // Airport state
   const [transferDirection, setTransferDirection] = useState<TransferDirection>('airport_to_hotel');
   const [pickupAirport, setPickupAirport] = useState<Airport>('HND');
   const [hotelDestination, setHotelDestination] = useState<string>('Grand Hyatt Tokyo (Roppongi)');
@@ -61,8 +63,10 @@ export default function GrandToursHomePage() {
     return d.toISOString().split('T')[0];
   });
 
-  // State to replace catalog below with Airport Transfer Wizard
-  const [showInlineTransferModule, setShowInlineTransferModule] = useState<boolean>(false);
+  // State to replace catalog below with interactive Booking Module ('none' | 'airport' | 'sightseeing' | 'ski')
+  const [activeBookingModule, setActiveBookingModule] = useState<'none' | 'airport' | 'sightseeing' | 'ski'>('none');
+  const [selectedCharterDest, setSelectedCharterDest] = useState<string>('fuji-kawaguchiko');
+  const [selectedSkiResort, setSelectedSkiResort] = useState<string>('hakuba');
 
   // Stripe Checkout Modal State
   const [isStripeModalOpen, setIsStripeModalOpen] = useState(false);
@@ -77,18 +81,18 @@ export default function GrandToursHomePage() {
   const handleQuickSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchTab === 'airport') {
-      // Inline replacement of curated transfers with full airport transfer wizard
-      setShowInlineTransferModule(true);
-      setTimeout(() => {
-        resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 100);
+      setActiveBookingModule('airport');
     } else if (searchTab === 'sightseeing') {
-      setShowInlineTransferModule(false);
-      router.push(`/destinations/${destinationLocation}`);
+      setSelectedCharterDest(destinationLocation);
+      setActiveBookingModule('sightseeing');
     } else if (searchTab === 'ski') {
-      setShowInlineTransferModule(false);
-      router.push(`/tours/winter?dest=${destinationLocation}&pickup=${pickupLocation}&date=${travelDate}`);
+      setSelectedSkiResort(destinationLocation);
+      setActiveBookingModule('ski');
     }
+
+    setTimeout(() => {
+      resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
   };
 
   // Multilingual Catalog Data
@@ -364,17 +368,17 @@ export default function GrandToursHomePage() {
               
               {/* Airport Transfer Options */}
               {searchTab === 'airport' && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-end">
                   
                   {/* Route Direction Selector */}
-                  <div>
-                    <label className="text-[11px] font-semibold text-[#6B7280] dark:text-slate-400 block mb-1">
+                  <div className="flex flex-col">
+                    <label className="text-[11px] font-semibold text-[#6B7280] dark:text-slate-400 block mb-1.5 truncate">
                       Route Direction
                     </label>
                     <select
                       value={transferDirection}
                       onChange={(e) => setTransferDirection(e.target.value as TransferDirection)}
-                      className="w-full bg-[#F5F7FA] dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none focus:border-[#0068FF]"
+                      className="w-full h-11 bg-[#F5F7FA] dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-xl px-3 text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none focus:border-[#0068FF] cursor-pointer"
                     >
                       <option value="airport_to_hotel">Airport ➔ Hotel (Arrival)</option>
                       <option value="hotel_to_airport">Hotel ➔ Airport (Departure)</option>
@@ -382,14 +386,14 @@ export default function GrandToursHomePage() {
                   </div>
 
                   {/* Airport Selection */}
-                  <div>
-                    <label className="text-[11px] font-semibold text-[#6B7280] dark:text-slate-400 block mb-1">
+                  <div className="flex flex-col">
+                    <label className="text-[11px] font-semibold text-[#6B7280] dark:text-slate-400 block mb-1.5 truncate">
                       Airport
                     </label>
                     <select
                       value={pickupAirport}
                       onChange={(e) => setPickupAirport(e.target.value as Airport)}
-                      className="w-full bg-[#F5F7FA] dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none focus:border-[#0068FF]"
+                      className="w-full h-11 bg-[#F5F7FA] dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-xl px-3 text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none focus:border-[#0068FF] cursor-pointer"
                     >
                       <option value="HND">Haneda Airport (HND)</option>
                       <option value="NRT">Narita Airport (NRT)</option>
@@ -397,26 +401,26 @@ export default function GrandToursHomePage() {
                   </div>
 
                   {/* Travel Date */}
-                  <div>
-                    <label className="text-[11px] font-semibold text-[#6B7280] dark:text-slate-400 block mb-1">
+                  <div className="flex flex-col">
+                    <label className="text-[11px] font-semibold text-[#6B7280] dark:text-slate-400 block mb-1.5 truncate">
                       {transferDirection === 'airport_to_hotel' ? 'Arrival Date' : 'Pickup Date'}
                     </label>
                     <input
                       type="date"
                       value={travelDate}
                       onChange={(e) => setTravelDate(e.target.value)}
-                      className="w-full bg-[#F5F7FA] dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none focus:border-[#0068FF]"
+                      className="w-full h-11 bg-[#F5F7FA] dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-xl px-3 text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none focus:border-[#0068FF]"
                     />
                   </div>
 
                   {/* Check Button */}
-                  <div className="flex items-end">
+                  <div className="flex flex-col justify-end">
                     <button
                       type="submit"
-                      className="w-full bg-[#0068FF] hover:bg-[#0050CC] text-white font-bold py-2.5 px-4 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-sm transition-colors cursor-pointer"
+                      className="w-full h-11 bg-[#0068FF] hover:bg-[#0050CC] text-white font-bold px-4 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-sm transition-colors cursor-pointer shrink-0"
                     >
-                      <Search className="w-3.5 h-3.5" />
-                      <span>Check Availability</span>
+                      <Search className="w-4 h-4 shrink-0" />
+                      <span className="truncate">Check Availability</span>
                     </button>
                   </div>
 
@@ -425,48 +429,48 @@ export default function GrandToursHomePage() {
 
               {/* Day Charter Options */}
               {searchTab === 'sightseeing' && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                  <div>
-                    <label className="text-[11px] font-semibold text-[#6B7280] dark:text-slate-400 block mb-1">Destination</label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-end">
+                  <div className="flex flex-col">
+                    <label className="text-[11px] font-semibold text-[#6B7280] dark:text-slate-400 block mb-1.5 truncate">Destination</label>
                     <select
                       value={destinationLocation}
                       onChange={(e) => setDestinationLocation(e.target.value)}
-                      className="w-full bg-[#F5F7FA] dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none focus:border-[#0068FF]"
+                      className="w-full h-11 bg-[#F5F7FA] dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-xl px-3 text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none focus:border-[#0068FF] cursor-pointer"
                     >
                       <option value="fuji-kawaguchiko">Mt. Fuji &amp; Lake Kawaguchiko (10h)</option>
-                      <option value="hakone-lake-ashi">Hakone Onsen &amp; Lake Ashi (10h)</option>
-                      <option value="nikko-unesco">Nikko UNESCO World Heritage (10h)</option>
-                      <option value="kamakura-enoshima">Kamakura Great Buddha &amp; Enoshima (10h)</option>
+                      <option value="hakone-luxury">Hakone Onsen &amp; Lake Ashi (10h)</option>
+                      <option value="nikko-unesco">Nikko UNESCO World Heritage (11h)</option>
+                      <option value="kamakura-enoshima">Kamakura Great Buddha &amp; Enoshima (9h)</option>
                     </select>
                   </div>
-                  <div>
-                    <label className="text-[11px] font-semibold text-[#6B7280] dark:text-slate-400 block mb-1">Pickup Area</label>
+                  <div className="flex flex-col">
+                    <label className="text-[11px] font-semibold text-[#6B7280] dark:text-slate-400 block mb-1.5 truncate">Pickup Area</label>
                     <select
                       value={pickupLocation}
                       onChange={(e) => setPickupLocation(e.target.value)}
-                      className="w-full bg-[#F5F7FA] dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none focus:border-[#0068FF]"
+                      className="w-full h-11 bg-[#F5F7FA] dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-xl px-3 text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none focus:border-[#0068FF] cursor-pointer"
                     >
                       <option value="tokyo_hotel">Tokyo Hotel Door-to-Door</option>
-                      <option value="hnd">Haneda Airport</option>
-                      <option value="nrt">Narita Airport</option>
+                      <option value="hnd">Haneda Airport (HND)</option>
+                      <option value="nrt">Narita Airport (NRT)</option>
                     </select>
                   </div>
-                  <div>
-                    <label className="text-[11px] font-semibold text-[#6B7280] dark:text-slate-400 block mb-1">Travel Date</label>
+                  <div className="flex flex-col">
+                    <label className="text-[11px] font-semibold text-[#6B7280] dark:text-slate-400 block mb-1.5 truncate">Travel Date</label>
                     <input
                       type="date"
                       value={travelDate}
                       onChange={(e) => setTravelDate(e.target.value)}
-                      className="w-full bg-[#F5F7FA] dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none focus:border-[#0068FF]"
+                      className="w-full h-11 bg-[#F5F7FA] dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-xl px-3 text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none focus:border-[#0068FF]"
                     />
                   </div>
-                  <div className="flex items-end">
+                  <div className="flex flex-col justify-end">
                     <button
                       type="submit"
-                      className="w-full bg-[#0068FF] hover:bg-[#0050CC] text-white font-bold py-2.5 px-4 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-sm transition-colors cursor-pointer"
+                      className="w-full h-11 bg-[#0068FF] hover:bg-[#0050CC] text-white font-bold px-4 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-sm transition-colors cursor-pointer shrink-0"
                     >
-                      <Search className="w-3.5 h-3.5" />
-                      <span>Check Availability</span>
+                      <Search className="w-4 h-4 shrink-0" />
+                      <span className="truncate">Check Availability</span>
                     </button>
                   </div>
                 </div>
@@ -474,48 +478,50 @@ export default function GrandToursHomePage() {
 
               {/* Ski Options */}
               {searchTab === 'ski' && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                  <div>
-                    <label className="text-[11px] font-semibold text-[#6B7280] dark:text-slate-400 block mb-1">Ski Resort</label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-end">
+                  <div className="flex flex-col">
+                    <label className="text-[11px] font-semibold text-[#6B7280] dark:text-slate-400 block mb-1.5 truncate">Ski Resort</label>
                     <select
                       value={destinationLocation}
                       onChange={(e) => setDestinationLocation(e.target.value)}
-                      className="w-full bg-[#F5F7FA] dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none focus:border-[#0068FF]"
+                      className="w-full h-11 bg-[#F5F7FA] dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-xl px-3 text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none focus:border-[#0068FF] cursor-pointer"
                     >
                       <option value="hakuba">Hakuba Valley (Nagano)</option>
                       <option value="nozawa">Nozawa Onsen (Nagano)</option>
                       <option value="shigakogen">Shiga Kogen (Nagano)</option>
+                      <option value="yuzawa">Yuzawa &amp; Naeba (Niigata)</option>
                       <option value="myoko">Myoko Kogen (Niigata)</option>
+                      <option value="karuizawa">Karuizawa Prince (Nagano)</option>
                     </select>
                   </div>
-                  <div>
-                    <label className="text-[11px] font-semibold text-[#6B7280] dark:text-slate-400 block mb-1">Origin</label>
+                  <div className="flex flex-col">
+                    <label className="text-[11px] font-semibold text-[#6B7280] dark:text-slate-400 block mb-1.5 truncate">Departure Point</label>
                     <select
                       value={pickupLocation}
                       onChange={(e) => setPickupLocation(e.target.value)}
-                      className="w-full bg-[#F5F7FA] dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none focus:border-[#0068FF]"
+                      className="w-full h-11 bg-[#F5F7FA] dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-xl px-3 text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none focus:border-[#0068FF] cursor-pointer"
                     >
                       <option value="hnd">Haneda Airport (HND)</option>
                       <option value="nrt">Narita Airport (NRT)</option>
-                      <option value="tokyo">Tokyo Downtown</option>
+                      <option value="tokyo">Tokyo Downtown Hotel</option>
                     </select>
                   </div>
-                  <div>
-                    <label className="text-[11px] font-semibold text-[#6B7280] dark:text-slate-400 block mb-1">Travel Date</label>
+                  <div className="flex flex-col">
+                    <label className="text-[11px] font-semibold text-[#6B7280] dark:text-slate-400 block mb-1.5 truncate">Travel Date</label>
                     <input
                       type="date"
                       value={travelDate}
                       onChange={(e) => setTravelDate(e.target.value)}
-                      className="w-full bg-[#F5F7FA] dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none focus:border-[#0068FF]"
+                      className="w-full h-11 bg-[#F5F7FA] dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-xl px-3 text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none focus:border-[#0068FF]"
                     />
                   </div>
-                  <div className="flex items-end">
+                  <div className="flex flex-col justify-end">
                     <button
                       type="submit"
-                      className="w-full bg-[#0068FF] hover:bg-[#0050CC] text-white font-bold py-2.5 px-4 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-sm transition-colors cursor-pointer"
+                      className="w-full h-11 bg-[#0068FF] hover:bg-[#0050CC] text-white font-bold px-4 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-sm transition-colors cursor-pointer shrink-0"
                     >
-                      <Search className="w-3.5 h-3.5" />
-                      <span>Check Availability</span>
+                      <Search className="w-4 h-4 shrink-0" />
+                      <span className="truncate">Check Availability</span>
                     </button>
                   </div>
                 </div>
@@ -533,18 +539,37 @@ export default function GrandToursHomePage() {
           ══════════════════════════════════════════════════ */}
       <div ref={resultsRef}>
 
-        {/* CASE 1: When user presses "Check Availability" on Airport Transfers */}
-        {showInlineTransferModule ? (
+        {/* CASE 1: When user selects Airport Transfers */}
+        {activeBookingModule === 'airport' ? (
           <section className="py-6 border-b border-[#E5E8ED] dark:border-slate-800">
             <AirportTransferModule
               initialAirport={pickupAirport}
               initialDate={travelDate}
               initialDirection={transferDirection}
-              onBackToCatalog={() => setShowInlineTransferModule(false)}
+              onBackToCatalog={() => setActiveBookingModule('none')}
+            />
+          </section>
+        ) : activeBookingModule === 'sightseeing' ? (
+          /* CASE 2: When user selects Day Tours & Sightseeing Charters */
+          <section className="py-6 border-b border-[#E5E8ED] dark:border-slate-800">
+            <DayTourBookingModule
+              initialDestination={selectedCharterDest}
+              initialDate={travelDate}
+              onBackToCatalog={() => setActiveBookingModule('none')}
+            />
+          </section>
+        ) : activeBookingModule === 'ski' ? (
+          /* CASE 3: When user selects 4WD Ski Direct Transfers */
+          <section className="py-6 border-b border-[#E5E8ED] dark:border-slate-800">
+            <SkiTransferBookingModule
+              initialResort={selectedSkiResort}
+              initialPickup={pickupLocation}
+              initialDate={travelDate}
+              onBackToCatalog={() => setActiveBookingModule('none')}
             />
           </section>
         ) : (
-          /* CASE 2: Default Curated Private Charters & Fleet Showcase */
+          /* CASE 4: Default Curated Private Charters & Fleet Showcase */
           <>
             {/* Curated Charters Catalog */}
             <section className="py-10 sm:py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
@@ -645,13 +670,32 @@ export default function GrandToursHomePage() {
                         </span>
                       </div>
 
-                      <Link
-                        href={tour.link}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (tour.category === 'airport') {
+                            setActiveBookingModule('airport');
+                          } else if (tour.category === 'ski') {
+                            setSelectedSkiResort('hakuba');
+                            setActiveBookingModule('ski');
+                          } else {
+                            const destMap: Record<string, string> = {
+                              'fuji-tour': 'fuji-kawaguchiko',
+                              'hakone-tour': 'hakone-luxury',
+                              'kamakura-tour': 'kamakura-enoshima',
+                            };
+                            setSelectedCharterDest(destMap[tour.id] || 'fuji-kawaguchiko');
+                            setActiveBookingModule('sightseeing');
+                          }
+                          setTimeout(() => {
+                            resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                          }, 100);
+                        }}
                         className="bg-[#0068FF] hover:bg-[#0050CC] text-white px-3.5 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer flex items-center gap-1 shrink-0 whitespace-nowrap"
                       >
                         <span>Book</span>
                         <ChevronRight className="w-3.5 h-3.5 shrink-0" />
-                      </Link>
+                      </button>
                     </div>
                   </div>
                 ))}
@@ -788,7 +832,7 @@ export default function GrandToursHomePage() {
                         type="button"
                         onClick={() => {
                           setSearchTab('airport');
-                          setShowInlineTransferModule(true);
+                          setActiveBookingModule('airport');
                           resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                         }}
                         className="inline-flex items-center gap-2 bg-[#0068FF] hover:bg-[#0050CC] text-white px-5 py-2.5 rounded-xl text-xs font-bold transition-colors cursor-pointer shadow-sm"

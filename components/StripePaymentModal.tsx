@@ -107,15 +107,15 @@ function CheckoutForm({
           </span>
         </div>
 
-        <div className="flex items-center justify-between flex-wrap gap-2 pt-1">
+        <div className="flex items-center flex-wrap gap-1.5 pt-1">
           {/* Apple Pay */}
-          <div className="bg-black border border-slate-700/80 rounded-lg px-2.5 py-1.5 flex items-center gap-1.5 shadow-sm">
-            <span className="text-white text-xs font-semibold tracking-tight"> Pay</span>
+          <div className="bg-black border border-slate-700/80 rounded-lg px-2 py-1 flex items-center gap-1 shadow-sm">
+            <span className="text-white text-[11px] font-semibold tracking-tight"> Pay</span>
           </div>
 
           {/* Google Pay */}
-          <div className="bg-slate-900 border border-slate-700/80 rounded-lg px-2.5 py-1.5 flex items-center gap-1 shadow-sm">
-            <span className="text-white text-xs font-bold tracking-tight">
+          <div className="bg-slate-900 border border-slate-700/80 rounded-lg px-2 py-1 flex items-center gap-1 shadow-sm">
+            <span className="text-white text-[11px] font-bold tracking-tight">
               <span className="text-[#4285F4]">G</span>
               <span className="text-[#EA4335]">o</span>
               <span className="text-[#FBBC05]">o</span>
@@ -125,12 +125,28 @@ function CheckoutForm({
             </span>
           </div>
 
+          {/* WeChat Pay */}
+          <div className="bg-[#07C160]/15 border border-[#07C160]/40 rounded-lg px-2 py-1 flex items-center gap-1 shadow-sm">
+            <span className="text-[#07C160] text-[11px] font-bold">微信支付</span>
+          </div>
+
+          {/* Alipay */}
+          <div className="bg-[#1677FF]/15 border border-[#1677FF]/40 rounded-lg px-2 py-1 flex items-center gap-1 shadow-sm">
+            <span className="text-[#1677FF] text-[11px] font-bold">支付宝</span>
+          </div>
+
+          {/* PayPay */}
+          <div className="bg-[#FF0033]/15 border border-[#FF0033]/40 rounded-lg px-2 py-1 flex items-center gap-1 shadow-sm">
+            <span className="text-[#FF0033] text-[11px] font-bold">PayPay</span>
+          </div>
+
           {/* Major Cards */}
-          <div className="flex items-center gap-1.5 bg-[#0E131F] border border-slate-800 rounded-lg px-2.5 py-1.5 text-[11px] font-bold">
-            <span className="text-[#1A1F71] bg-white px-1 rounded text-[10px]">VISA</span>
-            <span className="text-[#EB001B] font-extrabold text-[10px]">MC</span>
-            <span className="text-[#006FCF] font-extrabold text-[10px]">AMEX</span>
-            <span className="text-[#005BAC] font-extrabold text-[10px]">JCB</span>
+          <div className="flex items-center gap-1 bg-[#0E131F] border border-slate-800 rounded-lg px-2 py-1 text-[10px] font-bold">
+            <span className="text-[#1A1F71] bg-white px-1 rounded text-[9px]">VISA</span>
+            <span className="text-[#EB001B] font-extrabold text-[9px]">MC</span>
+            <span className="text-[#006FCF] font-extrabold text-[9px]">AMEX</span>
+            <span className="text-[#005BAC] font-extrabold text-[9px]">JCB</span>
+            <span className="text-[#D92D20] bg-white px-1 rounded text-[9px]">银联</span>
           </div>
         </div>
       </div>
@@ -143,8 +159,8 @@ function CheckoutForm({
           </div>
           <p className="text-xs text-slate-300">
             {lang === 'ja'
-              ? '本番APIキー設定前の安全なテスト環境です。Apple Pay、Google Pay、各種クレジットカード決済のシミュレーションが可能です。'
-              : 'Stripe test environment active. Live Apple Pay, Google Pay, and Credit Cards will seamlessly process once live API keys are added in .env.local.'}
+              ? '本番APIキー設定前の安全なテスト環境です。Apple Pay、Google Pay、WeChat Pay、Alipay、PayPay、各種クレジットカード決済のシミュレーションが可能です。'
+              : 'Stripe test environment active. Live Apple Pay, Google Pay, WeChat Pay, Alipay, PayPay, and Credit Cards will seamlessly process once live API keys are added in .env.local.'}
           </p>
           <div className="bg-[#0A0D14] rounded-xl p-3 text-[11px] text-slate-400 space-y-1.5 font-mono">
             <div className="flex justify-between">
@@ -152,8 +168,8 @@ function CheckoutForm({
               <span className="text-white font-bold">{bookingDetails.guestName}</span>
             </div>
             <div className="flex justify-between">
-              <span>Card / Digital Wallet:</span>
-              <span className="text-emerald-400 font-bold">Apple Pay / Google Pay / Card (TEST)</span>
+              <span>Payment Methods:</span>
+              <span className="text-emerald-400 font-bold">Cards / Apple Pay / WeChat / Alipay / PayPay (TEST)</span>
             </div>
             <div className="flex justify-between">
               <span>Amount:</span>
@@ -173,6 +189,7 @@ function CheckoutForm({
                 applePay: 'auto',
                 googlePay: 'auto',
               },
+              paymentMethodOrder: ['apple_pay', 'google_pay', 'card', 'alipay', 'wechat_pay', 'paypay'],
             }}
           />
         </div>
@@ -428,27 +445,7 @@ export default function StripePaymentModal({
               Back to Trip Details
             </button>
           </div>
-        ) : isSandbox || (clientSecret && stripePromise) ? (
-          isSandbox ? (
-            <CheckoutForm
-              bookingDetails={bookingDetails}
-              clientSecret={clientSecret || ''}
-              bookingRef={bookingRef}
-              isSandbox={true}
-              onSuccess={onSuccess}
-            />
-          ) : (
-            <Elements stripe={stripePromise} options={elementsOptions}>
-              <CheckoutForm
-                bookingDetails={bookingDetails}
-                clientSecret={clientSecret!}
-                bookingRef={bookingRef}
-                isSandbox={false}
-                onSuccess={onSuccess}
-              />
-            </Elements>
-          )
-        ) : (
+        ) : isSandbox ? (
           <CheckoutForm
             bookingDetails={bookingDetails}
             clientSecret={clientSecret || ''}
@@ -456,7 +453,17 @@ export default function StripePaymentModal({
             isSandbox={true}
             onSuccess={onSuccess}
           />
-        )}
+        ) : clientSecret && stripePromise ? (
+          <Elements key={clientSecret} stripe={stripePromise} options={elementsOptions}>
+            <CheckoutForm
+              bookingDetails={bookingDetails}
+              clientSecret={clientSecret}
+              bookingRef={bookingRef}
+              isSandbox={false}
+              onSuccess={onSuccess}
+            />
+          </Elements>
+        ) : null}
       </div>
     </div>
   );
