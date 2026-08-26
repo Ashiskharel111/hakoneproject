@@ -51,12 +51,12 @@ export default function LanguageSelector({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-1 bg-white dark:bg-[#0E131F] hover:bg-[#F5F7FA] dark:hover:bg-slate-800 border border-[#E5E8ED] dark:border-slate-700 px-2.5 py-1.5 rounded-lg text-xs text-[#4B5563] dark:text-slate-200 transition-colors cursor-pointer"
+        className="h-9 flex items-center gap-1.5 bg-white dark:bg-[#0E131F] hover:bg-[#F5F7FA] dark:hover:bg-slate-800 border border-[#E5E8ED] dark:border-slate-700 px-3 rounded-xl text-xs text-[#4B5563] dark:text-slate-200 transition-colors cursor-pointer"
         aria-label="Select Language"
       >
         <Globe className="w-3.5 h-3.5 text-[#9CA3AF] dark:text-slate-400" />
-        <span className="font-semibold text-[11px] text-[#1A1A1A] dark:text-white">{selectedOption.badge}</span>
-        <ChevronDown className={`w-3 h-3 text-[#9CA3AF] dark:text-slate-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        <span className="font-bold text-[11px] text-[#1A1A1A] dark:text-white uppercase tracking-wider">{selectedOption.badge}</span>
+        <ChevronDown className={`w-3.5 h-3.5 text-[#9CA3AF] dark:text-slate-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
       {isOpen && (

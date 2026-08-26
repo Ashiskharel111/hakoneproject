@@ -49,14 +49,12 @@ export default function SiteHeader({
   }, [isMobileMenuOpen]);
 
   const nav = {
-    explore: { ja: '探索', zh: '探索行程', fr: 'Explorer', es: 'Explorar', en: 'Explore' }[currentLang],
-    booking: { ja: '予約する', zh: '在线预订', fr: 'Réserver', es: 'Reservar', en: 'Start Booking' }[currentLang],
-    services: { ja: 'サービス', zh: '服务项目', fr: 'Services', es: 'Servicios', en: 'Services' }[currentLang],
-    airport: { ja: '空港送迎', zh: '机场接送', fr: 'Aéroports', es: 'Aeropuertos', en: 'Airport Transfers' }[currentLang],
-    sightseeing: { ja: '観光チャーター', zh: '包车游览', fr: 'Excursions', es: 'Excursiones', en: 'Day Charters' }[currentLang],
-    ski: { ja: 'スキー送迎', zh: '滑雪专车', fr: 'Ski', es: 'Esquí', en: 'Ski Transfers' }[currentLang],
-    blog: { ja: 'ブログ', zh: '专栏指南', fr: 'Blog', es: 'Blog', en: 'Blog' }[currentLang],
-    contact: { ja: 'お問い合わせ', zh: '联系我们', fr: 'Contact', es: 'Contacto', en: 'Contact' }[currentLang],
+    explore: { ja: '探索', zh: '探索', fr: 'Explorer', es: 'Explorar', en: 'Explore' }[currentLang],
+    services: { ja: 'サービス', zh: '服务', fr: 'Services', es: 'Servicios', en: 'Services' }[currentLang],
+    airports: { ja: '空港送迎', zh: '机场接送', fr: 'Aéroports', es: 'Aeropuertos', en: 'Airports' }[currentLang],
+    ski: { ja: 'スキー', zh: '滑雪专车', fr: 'Ski 4x4', es: 'Esquí 4x4', en: 'Ski 4WD' }[currentLang],
+    blog: { ja: 'ブログ', zh: '专栏', fr: 'Blog', es: 'Blog', en: 'Blog' }[currentLang],
+    contact: { ja: 'お問い合わせ', zh: '联系', fr: 'Contact', es: 'Contacto', en: 'Contact' }[currentLang],
   };
 
   const whatsAppUrl = `https://wa.me/818012345678?text=${encodeURIComponent(
@@ -65,9 +63,8 @@ export default function SiteHeader({
 
   const navLinks = [
     { href: '/explore', label: nav.explore, page: 'home' as const },
-    { href: '/booking', label: nav.booking, page: undefined },
     { href: '/services', label: nav.services, page: undefined },
-    { href: '/tours/airport-transfer', label: nav.airport, page: 'airport' as const },
+    { href: '/tours/airport-transfer', label: nav.airports, page: 'airport' as const },
     { href: '/tours/winter', label: nav.ski, page: 'winter' as const, icon: <Snowflake className="w-3.5 h-3.5" /> },
     { href: '/blog', label: nav.blog, page: undefined },
     { href: '/contact', label: nav.contact, page: undefined },
@@ -77,10 +74,10 @@ export default function SiteHeader({
     <>
       {/* ── Clean Header (Trip.com & RydAgent style with Dark Mode support) ── */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 dark:bg-[#080B11]/95 backdrop-blur-md border-b border-[#E5E8ED] dark:border-slate-800 shadow-sm transition-colors duration-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
 
           {/* Brand */}
-          <Link href="/explore" className="flex items-center gap-2 shrink-0">
+          <Link href="/explore" className="flex items-center gap-2.5 shrink-0">
             <div className="relative h-8 w-20 sm:h-9 sm:w-24">
               <Image
                 src="/images/brand-sklimo-official-logo-250x250.png"
@@ -100,19 +97,19 @@ export default function SiteHeader({
             </div>
           </Link>
 
-          {/* Desktop Nav */}
-          <nav className="hidden lg:flex items-center gap-0.5">
+          {/* Desktop Nav - Clean Single-Line Items */}
+          <nav className="hidden lg:flex items-center gap-1">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`px-3 py-2 rounded-lg text-[13px] font-medium transition-colors ${
+                className={`h-9 px-3.5 rounded-xl text-[13px] font-semibold transition-colors flex items-center whitespace-nowrap ${
                   link.page && activePage === link.page
                     ? 'text-[#0068FF] bg-[#E8F1FF] dark:bg-[#0068FF]/15 dark:text-[#3B82F6]'
                     : 'text-[#4B5563] dark:text-slate-300 hover:text-[#1A1A1A] dark:hover:text-white hover:bg-[#F5F7FA] dark:hover:bg-slate-800/60'
                 }`}
               >
-                <span className="flex items-center gap-1">
+                <span className="flex items-center gap-1.5">
                   {link.icon}
                   <span>{link.label}</span>
                 </span>
@@ -120,14 +117,14 @@ export default function SiteHeader({
             ))}
           </nav>
 
-          {/* Right actions: Desktop Theme Moon + Language + Book Now Gold Button + WhatsApp */}
-          <div className="flex items-center gap-2 shrink-0">
+          {/* Right actions: Desktop Theme Moon + Language + Book Now Gold Button + WhatsApp - Evenly Spaced & Same Height */}
+          <div className="flex items-center gap-2.5 shrink-0">
             
-            {/* Desktop-Only Crescent Moon Dark Mode Toggle */}
+            {/* Desktop-Only Crescent Moon Dark Mode Toggle (h-9) */}
             <button
               type="button"
               onClick={toggleTheme}
-              className="hidden md:flex items-center justify-center p-2 rounded-lg border border-[#E5E8ED] dark:border-slate-700 bg-white dark:bg-[#0E131F] text-[#4B5563] dark:text-slate-200 hover:bg-[#F5F7FA] dark:hover:bg-slate-800 transition-colors cursor-pointer"
+              className="hidden md:flex h-9 w-9 items-center justify-center rounded-xl border border-[#E5E8ED] dark:border-slate-700 bg-white dark:bg-[#0E131F] text-[#4B5563] dark:text-slate-200 hover:bg-[#F5F7FA] dark:hover:bg-slate-800 transition-colors cursor-pointer"
               aria-label={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
               title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
             >
@@ -138,43 +135,47 @@ export default function SiteHeader({
               )}
             </button>
 
+            {/* Language Selector (h-9) */}
             <LanguageSelector currentLang={currentLang} onLanguageChange={onLanguageChange} />
 
-            {/* RydAgent Gold Book Now CTA in Header */}
+            {/* RydAgent Gold Book Now CTA (h-9) */}
             <Link
               href="/booking"
-              className="hidden sm:inline-flex items-center gap-1.5 bg-[#C5A059] hover:bg-[#d8b46b] text-[#0A0D14] font-extrabold px-4 py-2 rounded-lg text-xs uppercase tracking-wider shadow-sm transition-all"
+              className="hidden sm:inline-flex h-9 items-center justify-center bg-[#C5A059] hover:bg-[#d8b46b] text-[#0A0D14] font-extrabold px-4 rounded-xl text-xs uppercase tracking-wider shadow-sm transition-all whitespace-nowrap"
             >
               <span>Book Now</span>
             </Link>
 
+            {/* WhatsApp CTA (h-9) */}
             <a
               href={whatsAppUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden sm:inline-flex items-center gap-1.5 bg-[#25D366] hover:bg-[#20ba5a] text-white px-3 py-1.5 rounded-lg text-xs font-semibold shadow-sm transition-colors"
+              className="hidden sm:inline-flex h-9 items-center justify-center gap-1.5 bg-[#25D366] hover:bg-[#20ba5a] text-white px-3.5 rounded-xl text-xs font-bold shadow-sm transition-colors whitespace-nowrap"
             >
               <MessageSquare className="w-3.5 h-3.5" />
               <span>WhatsApp</span>
             </a>
 
+            {/* Mobile WhatsApp Icon Button (h-9) */}
             <a
               href={whatsAppUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="sm:hidden p-2 rounded-lg text-[#25D366]"
+              className="sm:hidden h-9 w-9 flex items-center justify-center rounded-xl bg-[#25D366]/10 border border-[#25D366]/20 text-[#25D366]"
               aria-label="WhatsApp"
             >
-              <MessageSquare className="w-5 h-5" />
+              <MessageSquare className="w-4 h-4" />
             </a>
 
+            {/* Mobile Menu Hamburger (h-9) */}
             <button
               type="button"
               onClick={() => setIsMobileMenuOpen(true)}
-              className="lg:hidden p-2 rounded-lg hover:bg-[#F5F7FA] dark:hover:bg-slate-800 text-[#4B5563] dark:text-slate-200 transition-colors"
+              className="lg:hidden h-9 w-9 flex items-center justify-center rounded-xl border border-[#E5E8ED] dark:border-slate-700 bg-white dark:bg-[#0E131F] hover:bg-[#F5F7FA] dark:hover:bg-slate-800 text-[#4B5563] dark:text-slate-200 transition-colors"
               aria-label="Open Menu"
             >
-              <Menu className="w-5 h-5" />
+              <Menu className="w-4 h-4" />
             </button>
           </div>
         </div>
