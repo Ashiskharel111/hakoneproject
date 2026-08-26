@@ -192,6 +192,7 @@ export async function POST(request: NextRequest) {
 
     // 4. Create Stripe PaymentIntent if secret key configured
     if (stripe) {
+      const paymentMethodConfig = process.env.STRIPE_PAYMENT_METHOD_CONFIGURATION?.trim();
       const paymentIntent = await stripe.paymentIntents.create({
         amount: calculatedAmount,
         currency: currency.toLowerCase(),
@@ -213,6 +214,7 @@ export async function POST(request: NextRequest) {
           pickupAddress: pickupAddress || '',
           flightNumber: flightNumber || '',
         },
+        ...(paymentMethodConfig ? { payment_method_configuration: paymentMethodConfig } : {}),
         automatic_payment_methods: {
           enabled: true,
           allow_redirects: 'always',
