@@ -18,7 +18,8 @@ import {
   Car,
   Compass,
   Star,
-  Check
+  Check,
+  AlertTriangle
 } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import StripePaymentModal, { BookingPaymentDetails } from '@/components/StripePaymentModal';
@@ -127,6 +128,39 @@ const TOUR_DESTINATIONS: TourDestination[] = [
   },
 ];
 
+const TOUR_VEHICLES = [
+  {
+    id: 'hiace' as const,
+    name: 'HiAce Grand Cabin',
+    tier: 'Standard',
+    goldBadge: 'STANDARD',
+    cap: '1-9 Pax',
+    maxPax: 9,
+    tag: 'Spacious Group Standard',
+    img: '/images/fleet-toyota-hiace-exterior-1477x1108.jpg'
+  },
+  {
+    id: 'alphard' as const,
+    name: 'Toyota Alphard Executive',
+    tier: 'Premium',
+    goldBadge: 'PREMIUM',
+    cap: '1-4 Pax',
+    maxPax: 4,
+    tag: 'VIP Ottoman Captains',
+    img: '/images/fleet-toyota-alphard-exterior-1477x1108.jpg'
+  },
+  {
+    id: 'granace' as const,
+    name: 'Toyota Granace 4WD VIP',
+    tier: 'Ultra Premium Vehicle',
+    goldBadge: 'ULTRA PREMIUM',
+    cap: '1-5 Pax',
+    maxPax: 5,
+    tag: 'Flagship 6-Seater Lounge',
+    img: '/images/fleet-toyota-granace-exterior-4032x3024.jpg'
+  },
+];
+
 export default function DayTourBookingModule({
   initialDestination = 'fuji-kawaguchiko',
   initialDate,
@@ -135,7 +169,7 @@ export default function DayTourBookingModule({
   const [lang] = useLanguage();
 
   const [selectedDestId, setSelectedDestId] = useState<string>(initialDestination);
-  const [selectedVehicle, setSelectedVehicle] = useState<'alphard' | 'granace' | 'hiace' | 'crown'>('alphard');
+  const [selectedVehicle, setSelectedVehicle] = useState<'alphard' | 'granace' | 'hiace'>('alphard');
   const [passengers, setPassengers] = useState<number>(3);
   const [travelDate, setTravelDate] = useState<string>(() => {
     if (initialDate) return initialDate;
@@ -159,6 +193,8 @@ export default function DayTourBookingModule({
   const [confirmedPaymentIntentId, setConfirmedPaymentIntentId] = useState('');
 
   const currentDest = TOUR_DESTINATIONS.find((d) => d.id === selectedDestId) || TOUR_DESTINATIONS[0];
+  const maxCap = selectedVehicle === 'alphard' ? 4 : selectedVehicle === 'granace' ? 5 : 9;
+  const isOverCapacity = passengers > maxCap;
 
   // Dynamic Pricing Calculation
   const vehiclePrice = useMemo(() => {
@@ -166,24 +202,21 @@ export default function DayTourBookingModule({
     let fee = base;
     if (selectedVehicle === 'granace') fee = base + 5000;
     if (selectedVehicle === 'hiace') fee = base + 3000;
-    if (selectedVehicle === 'crown') fee = base - 5000;
     return fee;
   }, [currentDest, selectedVehicle]);
 
   const vehicleName =
     selectedVehicle === 'alphard'
-      ? 'Toyota Alphard Executive Lounge (1-4 Pax)'
+      ? 'Toyota Alphard (Premium - 1-4 Pax)'
       : selectedVehicle === 'granace'
-      ? 'Toyota Granace 4WD VIP (1-5 Pax)'
-      : selectedVehicle === 'hiace'
-      ? 'Toyota HiAce Grand Cabin (1-9 Pax)'
-      : 'Toyota Crown Majesta Sedan (1-3 Pax)';
+      ? 'Toyota Granace (Ultra Premium - 1-5 Pax)'
+      : 'HiAce Grand Cabin (Standard - 1-9 Pax)';
 
   const bookingDetails: BookingPaymentDetails = {
     bookingType: 'destination',
     destinationId: currentDest.id,
     destinationTitle: `${currentDest.name.en} (${currentDest.charterHours} Private Charter)`,
-    vehicle: selectedVehicle === 'crown' ? 'alphard' : selectedVehicle,
+    vehicle: selectedVehicle,
     vehicleName,
     passengers,
     luggageCount: Math.max(passengers, 2),
@@ -198,6 +231,14 @@ export default function DayTourBookingModule({
   };
 
   const handleInitiateCheckout = () => {
+    if (isOverCapacity) {
+      setValidationError(
+        lang === 'ja'
+          ? `選択中の車両定員は最大${maxCap}名です（現在${passengers}名）。車両クラスを「Ultra Premium (5名)」または「Standard (9名)」に変更してください。`
+          : `${selectedVehicle === 'alphard' ? 'Toyota Alphard (Premium)' : 'Toyota Granace (Ultra Premium)'} capacity is max ${maxCap} guests. You have selected ${passengers} guests. Please choose a larger vehicle.`
+      );
+      return;
+    }
     if (!pickupHotel.trim()) {
       setValidationError(
         lang === 'ja'
@@ -227,7 +268,16 @@ export default function DayTourBookingModule({
   };
 
   const whatsAppCharterUrl = `https://wa.me/818012345678?text=${encodeURIComponent(
-    `Hello SK Limo! I am booking a Private Day Tour: ${currentDest.name.en} (${currentDest.charterHours}) on ${travelDate} for ${passengers} guests. Vehicle: ${vehicleName}. Hotel: ${pickupHotel || 'Tokyo Hotel'}. Quoted: ¥${vehiclePrice.toLocaleString()} JPY.`
+    `✨ *SK LIMO DAY CHARTER INQUIRY*\n\n` +
+    `• Destination: ${currentDest.name.en} (${currentDest.charterHours})\n` +
+    `• Vehicle: ${vehicleName}\n` +
+    `• Date: ${travelDate}\n` +
+    `• Guests: ${passengers} Pax\n` +
+    `• Hotel: ${pickupHotel || 'Tokyo Hotel'}\n` +
+    `• Lead Guest: ${guestName || 'Valued Guest'}\n` +
+    (specialRequests ? `• Requests: ${specialRequests}\n` : '') +
+    `• Quoted Fare: ¥${vehiclePrice.toLocaleString()} JPY\n\n` +
+    `Please confirm vehicle availability.`
   )}`;
 
   return (
@@ -242,7 +292,7 @@ export default function DayTourBookingModule({
             className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0068FF] dark:text-[#3B82F6] hover:underline cursor-pointer bg-white dark:bg-[#0E131F] border border-[#E5E8ED] dark:border-slate-800 px-3 py-1.5 rounded-xl shadow-sm"
           >
             <span>←</span>
-            <span>{lang === 'ja' ? 'すべてのツアー一覧に戻る' : lang === 'zh' ? '返回全部行程列表' : 'Back to All Charters & Tours'}</span>
+            <span>{lang === 'ja' ? 'すべてのツアー一覧に戻る' : lang === 'zh' ? '返回全部行程列表' : 'Back to Explore & Catalog'}</span>
           </button>
         )}
         <div className="inline-flex items-center gap-1.5 bg-[#E8F1FF] dark:bg-[#0068FF]/15 text-[#0068FF] dark:text-[#3B82F6] text-[11px] font-semibold px-3 py-1 rounded-full ml-auto">
@@ -300,7 +350,7 @@ export default function DayTourBookingModule({
               </div>
             </div>
 
-            {/* 2. Select Executive Fleet */}
+            {/* 2. Select Executive Fleet (Standard, Premium, Ultra Premium with Gold Badges) */}
             <div className="bg-white dark:bg-[#0E131F] rounded-2xl border border-[#E5E8ED] dark:border-slate-800 p-4 sm:p-6 space-y-4 shadow-sm transition-colors">
               <div className="flex items-center justify-between pb-2 border-b border-[#F0F2F5] dark:border-slate-800">
                 <div className="flex items-center gap-2">
@@ -314,38 +364,68 @@ export default function DayTourBookingModule({
                 <span className="text-[11px] text-[#00B37E] font-semibold">Green-Plate Insured</span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {[
-                  { id: 'alphard' as const, name: 'Toyota Alphard Executive', cap: '1-4 Pax', tag: 'VIP Ottoman Captains', img: '/images/fleet-toyota-alphard-exterior-1477x1108.jpg' },
-                  { id: 'granace' as const, name: 'Toyota Granace 4WD VIP', cap: '1-5 Pax', tag: 'Flagship 4WD Lounge', img: '/images/fleet-toyota-granace-exterior-4032x3024.jpg' },
-                  { id: 'hiace' as const, name: 'HiAce Grand Cabin', cap: '1-9 Pax', tag: 'High-Capacity Van', img: '/images/fleet-toyota-hiace-exterior-1477x1108.jpg' },
-                  { id: 'crown' as const, name: 'Crown Majesta Sedan', cap: '1-3 Pax', tag: 'Executive VIP Sedan', img: '/images/fleet-toyota-crown-exterior-1477x1108.jpg' },
-                ].map((v) => {
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {TOUR_VEHICLES.map((v) => {
                   const isSelected = selectedVehicle === v.id;
+                  const isExceededForThis = passengers > v.maxPax;
                   return (
                     <button
                       key={v.id}
                       type="button"
-                      onClick={() => setSelectedVehicle(v.id)}
-                      className={`p-3 rounded-xl border-2 text-left transition-all cursor-pointer flex items-center gap-3 ${
+                      onClick={() => {
+                        setSelectedVehicle(v.id);
+                        if (validationError) setValidationError(null);
+                      }}
+                      className={`p-3 rounded-xl border-2 text-left transition-all cursor-pointer flex flex-col justify-between space-y-2 relative ${
                         isSelected
-                          ? 'border-[#0068FF] bg-[#E8F1FF] dark:bg-[#0068FF]/15'
+                          ? 'border-[#0068FF] bg-[#E8F1FF] dark:bg-[#0068FF]/15 ring-1 ring-[#0068FF]'
                           : 'border-[#E5E8ED] dark:border-slate-700 bg-white dark:bg-[#131b2c] hover:border-[#D1D5DB]'
                       }`}
                     >
-                      <div className="relative w-14 h-12 rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-900 shrink-0">
+                      <div className="relative w-full h-20 rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-900">
                         <Image src={v.img} alt={v.name} fill className="object-cover" />
+                        {/* Gold Badge on Top-Right */}
+                        <div className="absolute top-2 right-2 bg-black/80 backdrop-blur-md px-2 py-0.5 rounded border border-[#C5A059]/40 shadow">
+                          <span className="text-[#C5A059] font-extrabold text-[9px] tracking-wider uppercase">
+                            {v.goldBadge}
+                          </span>
+                        </div>
                       </div>
-                      <div className="min-w-0">
+                      <div>
                         <span className={`font-bold text-xs block truncate ${isSelected ? 'text-[#0068FF] dark:text-[#3B82F6]' : 'text-[#1A1A1A] dark:text-white'}`}>
                           {v.name}
                         </span>
-                        <span className="text-[10px] text-[#6B7280] dark:text-slate-400 block">{v.cap} · {v.tag}</span>
+                        <span className="text-[10px] text-[#6B7280] dark:text-slate-400 block">
+                          {v.tier} · Max {v.cap}
+                        </span>
+                        {isExceededForThis && (
+                          <span className="text-[10px] text-amber-500 font-semibold flex items-center gap-1 mt-1">
+                            <AlertTriangle className="w-3 h-3 shrink-0" />
+                            Over {v.maxPax} Pax cap
+                          </span>
+                        )}
                       </div>
                     </button>
                   );
                 })}
               </div>
+
+              {/* Over-Capacity Warning Banner */}
+              {isOverCapacity && (
+                <div className="p-3.5 bg-amber-500/10 border border-amber-500/30 rounded-xl space-y-1.5 animate-fade-in">
+                  <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400 font-bold text-xs">
+                    <AlertTriangle className="w-4 h-4 shrink-0" />
+                    <span>
+                      {selectedVehicle === 'alphard'
+                        ? 'Toyota Alphard (Premium) capacity is max 4 passengers.'
+                        : 'Toyota Granace (Ultra Premium) capacity is max 5 passengers.'}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
+                    You have selected <strong>{passengers} guests</strong>. Please switch to <strong>HiAce Grand Cabin (Standard - up to 9 pax)</strong>.
+                  </p>
+                </div>
+              )}
             </div>
 
             {/* 3. Passengers & Pickup Hotel */}
@@ -384,15 +464,21 @@ export default function DayTourBookingModule({
                       <div className="flex items-center gap-1.5">
                         <button
                           type="button"
-                          onClick={() => setPassengers(Math.max(1, passengers - 1))}
-                          className="w-7 h-7 bg-white dark:bg-slate-700 border border-[#E5E8ED] dark:border-slate-600 rounded-lg text-xs font-bold"
+                          onClick={() => {
+                            setPassengers(Math.max(1, passengers - 1));
+                            if (validationError) setValidationError(null);
+                          }}
+                          className="w-7 h-7 bg-white dark:bg-slate-700 border border-[#E5E8ED] dark:border-slate-600 rounded-lg text-xs font-bold cursor-pointer"
                         >
                           −
                         </button>
                         <button
                           type="button"
-                          onClick={() => setPassengers(Math.min(9, passengers + 1))}
-                          className="w-7 h-7 bg-white dark:bg-slate-700 border border-[#E5E8ED] dark:border-slate-600 rounded-lg text-xs font-bold"
+                          onClick={() => {
+                            setPassengers(Math.min(9, passengers + 1));
+                            if (validationError) setValidationError(null);
+                          }}
+                          className="w-7 h-7 bg-white dark:bg-slate-700 border border-[#E5E8ED] dark:border-slate-600 rounded-lg text-xs font-bold cursor-pointer"
                         >
                           +
                         </button>

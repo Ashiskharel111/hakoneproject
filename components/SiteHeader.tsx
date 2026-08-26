@@ -49,11 +49,13 @@ export default function SiteHeader({
   }, [isMobileMenuOpen]);
 
   const nav = {
-    allTours: { ja: 'すべてのツアー', zh: '全部行程', fr: 'Tous les Tours', es: 'Todos', en: 'All Tours' }[currentLang],
+    explore: { ja: '探索', zh: '探索行程', fr: 'Explorer', es: 'Explorar', en: 'Explore' }[currentLang],
+    services: { ja: 'サービス', zh: '服务项目', fr: 'Services', es: 'Servicios', en: 'Services' }[currentLang],
     airport: { ja: '空港送迎', zh: '机场接送', fr: 'Aéroports', es: 'Aeropuertos', en: 'Airport Transfers' }[currentLang],
     sightseeing: { ja: '観光チャーター', zh: '包车游览', fr: 'Excursions', es: 'Excursiones', en: 'Day Charters' }[currentLang],
     ski: { ja: 'スキー送迎', zh: '滑雪专车', fr: 'Ski', es: 'Esquí', en: 'Ski Transfers' }[currentLang],
-    fleet: { ja: '車両一覧', zh: '车队', fr: 'Véhicules', es: 'Vehículos', en: 'Fleet' }[currentLang],
+    blog: { ja: 'ブログ', zh: '专栏指南', fr: 'Blog', es: 'Blog', en: 'Blog' }[currentLang],
+    contact: { ja: 'お問い合わせ', zh: '联系我们', fr: 'Contact', es: 'Contacto', en: 'Contact' }[currentLang],
   };
 
   const whatsAppUrl = `https://wa.me/818012345678?text=${encodeURIComponent(
@@ -61,11 +63,13 @@ export default function SiteHeader({
   )}`;
 
   const navLinks = [
-    { href: '/tours', label: nav.allTours, page: 'home' as const },
+    { href: '/tours', label: nav.explore, page: 'home' as const },
+    { href: '/services', label: nav.services, page: undefined },
     { href: '/tours/airport-transfer', label: nav.airport, page: 'airport' as const },
     { href: '/destinations', label: nav.sightseeing, page: 'sightseeing' as const },
     { href: '/tours/winter', label: nav.ski, page: 'winter' as const, icon: <Snowflake className="w-3.5 h-3.5" /> },
-    { href: '/tours#fleet', label: nav.fleet, page: undefined },
+    { href: '/blog', label: nav.blog, page: undefined },
+    { href: '/contact', label: nav.contact, page: undefined },
   ];
 
   return (

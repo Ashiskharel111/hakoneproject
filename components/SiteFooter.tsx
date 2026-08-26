@@ -62,12 +62,15 @@ export default function SiteFooter() {
           </div>
 
           <div className="md:col-span-3 space-y-2">
-            <span className="text-[11px] uppercase font-semibold text-[#1A1A1A] dark:text-white tracking-wider block">Services</span>
+            <span className="text-[11px] uppercase font-semibold text-[#1A1A1A] dark:text-white tracking-wider block">Quick Links</span>
             <ul className="space-y-1.5 text-xs text-[#6B7280] dark:text-slate-400">
+              <li><Link href="/tours" className="hover:text-[#0068FF] dark:hover:text-[#3B82F6] transition-colors">Explore All Charters</Link></li>
+              <li><Link href="/services" className="hover:text-[#0068FF] dark:hover:text-[#3B82F6] transition-colors">Services Overview</Link></li>
               <li><Link href="/tours/airport-transfer" className="hover:text-[#0068FF] dark:hover:text-[#3B82F6] transition-colors">Airport Transfers</Link></li>
               <li><Link href="/destinations" className="hover:text-[#0068FF] dark:hover:text-[#3B82F6] transition-colors">Sightseeing Charters</Link></li>
               <li><Link href="/tours/winter" className="hover:text-[#0068FF] dark:hover:text-[#3B82F6] transition-colors">Ski Transfers</Link></li>
-              <li><Link href="/tours#fleet" className="hover:text-[#0068FF] dark:hover:text-[#3B82F6] transition-colors">Our Fleet</Link></li>
+              <li><Link href="/blog" className="hover:text-[#0068FF] dark:hover:text-[#3B82F6] transition-colors">Travel Journal &amp; Guides</Link></li>
+              <li><Link href="/contact" className="hover:text-[#0068FF] dark:hover:text-[#3B82F6] transition-colors">Contact Concierge</Link></li>
             </ul>
           </div>
 

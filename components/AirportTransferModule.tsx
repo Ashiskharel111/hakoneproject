@@ -655,14 +655,19 @@ export default function AirportTransferModule({
                   >
                     <div className="flex items-center justify-between">
                       <span className={`font-bold text-sm ${vehicleType === 'Foreign Large' && !isMultiVehicle ? 'text-[#0068FF] dark:text-[#3B82F6]' : 'text-[#1A1A1A] dark:text-white'}`}>
-                        Foreign Large
+                        Toyota Alphard
                       </span>
-                      <span className="text-[10px] bg-white dark:bg-slate-800 border border-[#E5E8ED] dark:border-slate-700 px-2 py-0.5 rounded text-[#4B5563] dark:text-slate-300 font-medium">
-                        1–4 Pax
-                      </span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[10px] bg-white dark:bg-slate-800 border border-[#E5E8ED] dark:border-slate-700 px-2 py-0.5 rounded text-[#4B5563] dark:text-slate-300 font-medium">
+                          1–4 Pax
+                        </span>
+                        <span className="text-[#C5A059] font-extrabold text-[9px] tracking-wider uppercase bg-[#C5A059]/10 px-1.5 py-0.5 rounded border border-[#C5A059]/30">
+                          PREMIUM
+                        </span>
+                      </div>
                     </div>
                     <span className="text-[11px] text-[#6B7280] dark:text-slate-400 block mt-1">
-                      Toyota Alphard / Luxury MPV
+                      VIP First-Class Captain Seats
                     </span>
                     <div className="flex items-baseline justify-between mt-2 pt-2 border-t border-[#E5E8ED]/60 dark:border-slate-700/60">
                       <span className="text-[10px] text-[#9CA3AF] dark:text-slate-400">Base Fare:</span>
@@ -686,14 +691,19 @@ export default function AirportTransferModule({
                   >
                     <div className="flex items-center justify-between">
                       <span className={`font-bold text-sm ${vehicleType === 'Wagon' && !isMultiVehicle ? 'text-[#0068FF] dark:text-[#3B82F6]' : 'text-[#1A1A1A] dark:text-white'}`}>
-                        Wagon
+                        HiAce Grand Cabin
                       </span>
-                      <span className="text-[10px] bg-white dark:bg-slate-800 border border-[#E5E8ED] dark:border-slate-700 px-2 py-0.5 rounded text-[#4B5563] dark:text-slate-300 font-medium">
-                        1–9 Pax
-                      </span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[10px] bg-white dark:bg-slate-800 border border-[#E5E8ED] dark:border-slate-700 px-2 py-0.5 rounded text-[#4B5563] dark:text-slate-300 font-medium">
+                          1–9 Pax
+                        </span>
+                        <span className="text-[#C5A059] font-extrabold text-[9px] tracking-wider uppercase bg-[#C5A059]/10 px-1.5 py-0.5 rounded border border-[#C5A059]/30">
+                          STANDARD
+                        </span>
+                      </div>
                     </div>
                     <span className="text-[11px] text-[#6B7280] dark:text-slate-400 block mt-1">
-                      Toyota HiAce Grand Cabin / High-Roof Van
+                      High-Capacity Group Van (Up to 9 Pax)
                     </span>
                     <div className="flex items-baseline justify-between mt-2 pt-2 border-t border-[#E5E8ED]/60 dark:border-slate-700/60">
                       <span className="text-[10px] text-[#9CA3AF] dark:text-slate-400">Base Fare:</span>

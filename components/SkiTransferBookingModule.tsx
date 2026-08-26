@@ -15,7 +15,9 @@ import {
   Sparkles,
   ChevronRight,
   Car,
-  Check
+  Check,
+  AlertTriangle,
+  FileText
 } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import StripePaymentModal, { BookingPaymentDetails } from '@/components/StripePaymentModal';
@@ -102,6 +104,12 @@ const SKI_RESORTS: SkiResort[] = [
   },
 ];
 
+const VEHICLE_MAX_CAP: Record<string, number> = {
+  alphard: 4,
+  granace: 5,
+  hiace: 9,
+};
+
 export default function SkiTransferBookingModule({
   initialResort = 'hakuba',
   initialPickup = 'hnd',
@@ -115,6 +123,7 @@ export default function SkiTransferBookingModule({
   const [selectedVehicle, setSelectedVehicle] = useState<'alphard' | 'granace' | 'hiace'>('granace');
   const [passengers, setPassengers] = useState<number>(4);
   const [skiGearCount, setSkiGearCount] = useState<number>(4);
+  const [addSecondVehicle, setAddSecondVehicle] = useState<boolean>(false);
   const [travelDate, setTravelDate] = useState<string>(() => {
     if (initialDate) return initialDate;
     const d = new Date();
@@ -125,6 +134,7 @@ export default function SkiTransferBookingModule({
   const [guestName, setGuestName] = useState<string>('');
   const [guestEmail, setGuestEmail] = useState<string>('');
   const [guestPhone, setGuestPhone] = useState<string>('');
+  const [vehicleMemo, setVehicleMemo] = useState<string>('');
 
   const [isConfirmedAgreement, setIsConfirmedAgreement] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
@@ -136,6 +146,8 @@ export default function SkiTransferBookingModule({
   const [confirmedPaymentIntentId, setConfirmedPaymentIntentId] = useState('');
 
   const currentResort = SKI_RESORTS.find((r) => r.id === selectedResortId) || SKI_RESORTS[0];
+  const maxCap = VEHICLE_MAX_CAP[selectedVehicle] || 5;
+  const isOverCapacity = passengers > maxCap;
 
   // Price Calculation
   const quote = useMemo(() => {
@@ -147,14 +159,16 @@ export default function SkiTransferBookingModule({
         : currentResort.basePriceHiace;
 
     const airportSurcharge = pickupPoint === 'nrt' ? 12000 : pickupPoint === 'hnd' ? 5000 : 0;
-    const finalTotalPrice = basePrice + airportSurcharge;
+    const secondVehiclePrice = addSecondVehicle ? basePrice * 0.9 : 0;
+    const finalTotalPrice = basePrice + airportSurcharge + secondVehiclePrice;
 
     return {
       basePrice,
       airportSurcharge,
+      secondVehiclePrice,
       finalTotalPrice,
     };
-  }, [currentResort, selectedVehicle, pickupPoint]);
+  }, [currentResort, selectedVehicle, pickupPoint, addSecondVehicle]);
 
   const pickupLabel =
     pickupPoint === 'nrt'
@@ -165,10 +179,10 @@ export default function SkiTransferBookingModule({
 
   const vehicleName =
     selectedVehicle === 'alphard'
-      ? 'Toyota Alphard Executive (1-4 Pax)'
+      ? 'Toyota Alphard (Premium - 1-4 Pax)'
       : selectedVehicle === 'granace'
-      ? 'Toyota Granace 4WD VIP (1-5 Pax)'
-      : 'Toyota HiAce Grand Cabin (1-9 Pax)';
+      ? 'Toyota Granace (Ultra Premium - 1-5 Pax)'
+      : 'HiAce Grand Cabin (Standard - 1-9 Pax)';
 
   const bookingDetails: BookingPaymentDetails = {
     bookingType: 'winter_transfer',
@@ -179,16 +193,29 @@ export default function SkiTransferBookingModule({
     passengers,
     luggageCount: Math.max(passengers, 4),
     skiBagCount: skiGearCount,
+    addSecondVehicle,
     travelDate,
     guestName: guestName.trim() || 'Valued Guest',
     guestEmail: guestEmail.trim() || 'client@example.com',
     guestPhone: guestPhone.trim() || '+81 80 1234 5678',
     pickupAddress: chaletAddress || 'Destination Chalet',
+    notes: [
+      vehicleMemo ? `Vehicle Memo: ${vehicleMemo}` : null,
+      addSecondVehicle ? 'Added 2nd Support Vehicle' : null,
+    ].filter(Boolean).join(' | '),
     amount: quote.finalTotalPrice,
     currency: 'jpy',
   };
 
   const handleInitiatePayment = () => {
+    if (isOverCapacity && !addSecondVehicle) {
+      setValidationError(
+        lang === 'ja'
+          ? `選択中の車両定員は最大${maxCap}名です（現在${passengers}名）。車両クラスを「Ultra Premium (5名)」または「Standard (9名)」に変更するか、2台目サポート車両を追加してください。`
+          : `${selectedVehicle === 'alphard' ? 'Toyota Alphard (Premium)' : 'Toyota Granace (Ultra Premium)'} capacity is max ${maxCap} guests. You have selected ${passengers} guests. Please choose a larger vehicle or add a 2nd support vehicle.`
+      );
+      return;
+    }
     if (!chaletAddress.trim()) {
       setValidationError(
         lang === 'ja'
@@ -218,7 +245,17 @@ export default function SkiTransferBookingModule({
   };
 
   const whatsAppSkiUrl = `https://wa.me/818012345678?text=${encodeURIComponent(
-    `Hello SK Limo! I am booking a 4WD Winter Ski Transfer: ${pickupLabel} ⇄ ${currentResort.name.en} for ${passengers} guests with ${skiGearCount} ski bags. Vehicle: ${vehicleName}. Quoted: ¥${quote.finalTotalPrice.toLocaleString()} JPY on ${travelDate}.`
+    `✨ *SK LIMO 4WD SKI CHARTER RESERVATION*\n\n` +
+    `• Resort: ${currentResort.name.en}\n` +
+    `• Departure: ${pickupLabel}\n` +
+    `• Vehicle: ${vehicleName}${addSecondVehicle ? ' (+ 2nd Support Vehicle)' : ''}\n` +
+    `• Date: ${travelDate}\n` +
+    `• Guests: ${passengers} Pax | Ski Bags: ${skiGearCount}\n` +
+    `• Lead Guest: ${guestName || 'Valued Guest'}\n` +
+    `• Destination: ${chaletAddress || 'Chalet/Hotel'}\n` +
+    (vehicleMemo ? `• Memo: ${vehicleMemo}\n` : '') +
+    `• Quoted Fare: ¥${quote.finalTotalPrice.toLocaleString()} JPY\n\n` +
+    `Please confirm 4WD vehicle dispatch and chauffeur assignment.`
   )}`;
 
   return (
@@ -233,7 +270,7 @@ export default function SkiTransferBookingModule({
             className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0068FF] dark:text-[#3B82F6] hover:underline cursor-pointer bg-white dark:bg-[#0E131F] border border-[#E5E8ED] dark:border-slate-800 px-3 py-1.5 rounded-xl shadow-sm"
           >
             <span>←</span>
-            <span>{lang === 'ja' ? 'すべてのツアー一覧に戻る' : lang === 'zh' ? '返回全部行程列表' : 'Back to All Charters & Tours'}</span>
+            <span>{lang === 'ja' ? 'すべてのツアー一覧に戻る' : lang === 'zh' ? '返回全部行程列表' : 'Back to Explore & Catalog'}</span>
           </button>
         )}
         <div className="inline-flex items-center gap-1.5 bg-[#E8F1FF] dark:bg-[#0068FF]/15 text-[#0068FF] dark:text-[#3B82F6] text-[11px] font-semibold px-3 py-1 rounded-full ml-auto">
@@ -323,7 +360,7 @@ export default function SkiTransferBookingModule({
               </div>
             </div>
 
-            {/* 3. Vehicle Class */}
+            {/* 3. Vehicle Class (Standard, Premium, Ultra Premium with Gold Badges) */}
             <div className="bg-white dark:bg-[#0E131F] rounded-2xl border border-[#E5E8ED] dark:border-slate-800 p-4 sm:p-6 space-y-4 shadow-sm transition-colors">
               <div className="flex items-center justify-between pb-2 border-b border-[#F0F2F5] dark:border-slate-800">
                 <div className="flex items-center gap-2">
@@ -339,35 +376,96 @@ export default function SkiTransferBookingModule({
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {[
-                  { id: 'alphard' as const, name: 'Toyota Alphard', cap: '1-4 Pax', tag: 'Luxury 4WD MPV', img: '/images/fleet-toyota-alphard-exterior-1477x1108.jpg' },
-                  { id: 'granace' as const, name: 'Granace 4WD VIP', cap: '1-5 Pax', tag: 'Flagship 4WD Lounge', img: '/images/fleet-toyota-granace-exterior-4032x3024.jpg' },
-                  { id: 'hiace' as const, name: 'HiAce Grand Cabin', cap: '1-9 Pax', tag: 'High-Capacity 4WD', img: '/images/fleet-toyota-hiace-exterior-1477x1108.jpg' },
+                  {
+                    id: 'hiace' as const,
+                    name: 'HiAce Grand Cabin',
+                    tier: 'Standard',
+                    goldBadge: 'STANDARD',
+                    cap: '1-9 Pax',
+                    maxPax: 9,
+                    img: '/images/fleet-toyota-hiace-exterior-1477x1108.jpg'
+                  },
+                  {
+                    id: 'alphard' as const,
+                    name: 'Toyota Alphard 4WD',
+                    tier: 'Premium',
+                    goldBadge: 'PREMIUM',
+                    cap: '1-4 Pax',
+                    maxPax: 4,
+                    img: '/images/fleet-toyota-alphard-exterior-1477x1108.jpg'
+                  },
+                  {
+                    id: 'granace' as const,
+                    name: 'Toyota Granace 4WD',
+                    tier: 'Ultra Premium Vehicle',
+                    goldBadge: 'ULTRA PREMIUM',
+                    cap: '1-5 Pax',
+                    maxPax: 5,
+                    img: '/images/fleet-toyota-granace-exterior-4032x3024.jpg'
+                  },
                 ].map((v) => {
                   const isSelected = selectedVehicle === v.id;
+                  const isExceededForThis = passengers > v.maxPax;
                   return (
                     <button
                       key={v.id}
                       type="button"
-                      onClick={() => setSelectedVehicle(v.id)}
-                      className={`p-3 rounded-xl border-2 text-left transition-all cursor-pointer flex flex-col justify-between space-y-2 ${
+                      onClick={() => {
+                        setSelectedVehicle(v.id);
+                        if (validationError) setValidationError(null);
+                      }}
+                      className={`p-3 rounded-xl border-2 text-left transition-all cursor-pointer flex flex-col justify-between space-y-2 relative ${
                         isSelected
-                          ? 'border-[#0068FF] bg-[#E8F1FF] dark:bg-[#0068FF]/15'
+                          ? 'border-[#0068FF] bg-[#E8F1FF] dark:bg-[#0068FF]/15 ring-1 ring-[#0068FF]'
                           : 'border-[#E5E8ED] dark:border-slate-700 bg-white dark:bg-[#131b2c] hover:border-[#D1D5DB]'
                       }`}
                     >
                       <div className="relative w-full h-20 rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-900">
                         <Image src={v.img} alt={v.name} fill className="object-cover" />
+                        {/* Gold Badge on Top-Right of Vehicle Box */}
+                        <div className="absolute top-2 right-2 bg-black/80 backdrop-blur-md px-2 py-0.5 rounded border border-[#C5A059]/40 shadow">
+                          <span className="text-[#C5A059] font-extrabold text-[9px] tracking-wider uppercase">
+                            {v.goldBadge}
+                          </span>
+                        </div>
                       </div>
                       <div>
-                        <span className={`font-bold text-xs block ${isSelected ? 'text-[#0068FF] dark:text-[#3B82F6]' : 'text-[#1A1A1A] dark:text-white'}`}>
-                          {v.name}
+                        <div className="flex items-center justify-between gap-1">
+                          <span className={`font-bold text-xs block truncate ${isSelected ? 'text-[#0068FF] dark:text-[#3B82F6]' : 'text-[#1A1A1A] dark:text-white'}`}>
+                            {v.name}
+                          </span>
+                        </div>
+                        <span className="text-[10px] text-[#6B7280] dark:text-slate-400 block">
+                          {v.tier} · Max {v.cap}
                         </span>
-                        <span className="text-[10px] text-[#6B7280] dark:text-slate-400 block">{v.cap} · {v.tag}</span>
+                        {isExceededForThis && (
+                          <span className="text-[10px] text-amber-500 font-semibold flex items-center gap-1 mt-1">
+                            <AlertTriangle className="w-3 h-3 shrink-0" />
+                            Over {v.maxPax} Pax cap
+                          </span>
+                        )}
                       </div>
                     </button>
                   );
                 })}
               </div>
+
+              {/* Over-Capacity Warning Banner */}
+              {isOverCapacity && (
+                <div className="p-3.5 bg-amber-500/10 border border-amber-500/30 rounded-xl space-y-1.5 animate-fade-in">
+                  <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400 font-bold text-xs">
+                    <AlertTriangle className="w-4 h-4 shrink-0" />
+                    <span>
+                      {selectedVehicle === 'alphard'
+                        ? 'Toyota Alphard (Premium) capacity is max 4 passengers.'
+                        : 'Toyota Granace (Ultra Premium) capacity is max 5 passengers.'}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
+                    You have selected <strong>{passengers} guests</strong>. Please switch vehicle to <strong>HiAce Grand Cabin (Standard - up to 9 pax)</strong>, or select the option below to add a 2nd support vehicle.
+                  </p>
+                </div>
+              )}
             </div>
 
             {/* 4. Destination Chalet / Hotel & Guest Details */}
@@ -406,15 +504,21 @@ export default function SkiTransferBookingModule({
                       <div className="flex items-center gap-1.5">
                         <button
                           type="button"
-                          onClick={() => setPassengers(Math.max(1, passengers - 1))}
-                          className="w-7 h-7 bg-white dark:bg-slate-700 border border-[#E5E8ED] dark:border-slate-600 rounded-lg text-xs font-bold"
+                          onClick={() => {
+                            setPassengers(Math.max(1, passengers - 1));
+                            if (validationError) setValidationError(null);
+                          }}
+                          className="w-7 h-7 bg-white dark:bg-slate-700 border border-[#E5E8ED] dark:border-slate-600 rounded-lg text-xs font-bold cursor-pointer"
                         >
                           −
                         </button>
                         <button
                           type="button"
-                          onClick={() => setPassengers(Math.min(9, passengers + 1))}
-                          className="w-7 h-7 bg-white dark:bg-slate-700 border border-[#E5E8ED] dark:border-slate-600 rounded-lg text-xs font-bold"
+                          onClick={() => {
+                            setPassengers(Math.min(18, passengers + 1));
+                            if (validationError) setValidationError(null);
+                          }}
+                          className="w-7 h-7 bg-white dark:bg-slate-700 border border-[#E5E8ED] dark:border-slate-600 rounded-lg text-xs font-bold cursor-pointer"
                         >
                           +
                         </button>
@@ -471,6 +575,47 @@ export default function SkiTransferBookingModule({
                       className="w-full bg-[#F5F7FA] dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none focus:border-[#0068FF]"
                     />
                   </div>
+                </div>
+
+                {/* 2nd Support Vehicle Option Toggle */}
+                <div className="pt-1">
+                  <label className="flex items-center justify-between p-3 rounded-xl bg-[#F5F7FA] dark:bg-[#131b2c] border border-[#E5E8ED] dark:border-slate-700 cursor-pointer">
+                    <div className="flex items-center gap-2.5">
+                      <Car className="w-4 h-4 text-[#0068FF]" />
+                      <div>
+                        <span className="text-xs font-bold text-[#1A1A1A] dark:text-white block">
+                          Add 2nd Support Vehicle (Luggage &amp; Large Group)
+                        </span>
+                        <span className="text-[10px] text-[#6B7280] dark:text-slate-400">
+                          Dual 4WD convoy for excess ski bags, snowboards, or groups over 9 guests.
+                        </span>
+                      </div>
+                    </div>
+                    <input
+                      type="checkbox"
+                      checked={addSecondVehicle}
+                      onChange={(e) => {
+                        setAddSecondVehicle(e.target.checked);
+                        if (validationError) setValidationError(null);
+                      }}
+                      className="w-4 h-4 rounded border-[#D1D5DB] text-[#0068FF] focus:ring-[#0068FF] cursor-pointer"
+                    />
+                  </label>
+                </div>
+
+                {/* Additional Memo Section */}
+                <div>
+                  <label className="text-xs font-semibold text-[#4B5563] dark:text-slate-300 block mb-1 flex items-center gap-1.5">
+                    <FileText className="w-3.5 h-3.5 text-[#0068FF]" />
+                    <span>{lang === 'ja' ? '追加車両・特記事項メモ' : 'Additional Vehicle Memo & Special Requests'}</span>
+                  </label>
+                  <textarea
+                    rows={2}
+                    placeholder="e.g. Extra ski bag volume, child safety seats required, request 2nd vehicle for gear, or specific rest stop preferences."
+                    value={vehicleMemo}
+                    onChange={(e) => setVehicleMemo(e.target.value)}
+                    className="w-full bg-[#F5F7FA] dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none focus:border-[#0068FF] resize-none"
+                  />
                 </div>
 
                 {/* Mandatory Confirmation Checkbox */}
@@ -536,6 +681,12 @@ export default function SkiTransferBookingModule({
                   <span className="text-slate-500">Vehicle:</span>
                   <span className="font-bold text-[#1A1A1A] dark:text-white">{vehicleName}</span>
                 </div>
+                {addSecondVehicle && (
+                  <div className="flex justify-between text-emerald-500 font-semibold">
+                    <span>Support Vehicle:</span>
+                    <span>+ 2nd 4WD Convoy Vehicle</span>
+                  </div>
+                )}
               </div>
 
               {/* Inclusions */}
@@ -587,7 +738,7 @@ export default function SkiTransferBookingModule({
                     className="w-full bg-[#25D366] hover:bg-[#20ba5a] text-white font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-colors shadow-sm"
                   >
                     <MessageSquare className="w-4 h-4" />
-                    <span>WhatsApp Concierge</span>
+                    <span>WhatsApp Concierge (Auto-Fill Details)</span>
                   </a>
                 </div>
               </div>

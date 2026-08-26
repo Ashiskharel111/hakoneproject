@@ -76,7 +76,7 @@ export default function GrandToursHomePage() {
   const [selectedTourForCheckout, setSelectedTourForCheckout] = useState<BookingPaymentDetails | null>(null);
 
   // Fleet Tab
-  const [selectedFleet, setSelectedFleet] = useState<'alphard' | 'granace' | 'hiace' | 'crown'>('alphard');
+  const [selectedFleet, setSelectedFleet] = useState<'alphard' | 'granace' | 'hiace'>('alphard');
 
   const handleQuickSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -215,41 +215,12 @@ export default function GrandToursHomePage() {
     ? toursCatalog
     : toursCatalog.filter((t) => t.category === activeCategory);
 
+  // Fleet Specs Data (Standard, Premium, Ultra Premium)
   const fleetData = {
-    alphard: {
-      name: 'Toyota Alphard Executive Lounge',
-      badge: 'First-Class VIP MPV',
-      capacity: '1–4 Guests',
-      luggage: '3–4 Large Suitcases',
-      exteriorImage: '/images/fleet-toyota-alphard-exterior-1477x1108.jpg',
-      interiorImage: '/images/fleet-toyota-alphard-interior-1477x1108.jpg',
-      trunkImage: '/images/fleet-toyota-alphard-trunk-1477x1108.jpg',
-      desc: {
-        ja: 'オットマン付き電動リクライニングシート、温熱・ベンチレーション、最高峰の静粛性を誇るプライベート空間。1〜4名様に最適。',
-        zh: '配备电动航空头等舱座椅、腿托调节、座椅通风加热及顶级静音舱室，尊享极速舒适。适合1-4位贵宾。',
-        fr: 'Sièges capitaine Ottoman tout électriques, ventilation/chauffage et insonorisation de première classe. Idéal pour 1 à 4 personnes.',
-        es: 'Asientos ejecutivos eléctricos con reposapiés, cuero premium y máximo confort acústico. Ideal para 1 a 4 personas.',
-        en: 'Power-reclining Ottoman captain seats with heated/ventilated premium leather and ultra-quiet cabin. Perfect for 1 to 4 VIPs.',
-      }[lang],
-    },
-    granace: {
-      name: 'Toyota Granace 4WD VIP Lounge',
-      badge: 'Executive 6-Seater Flagship',
-      capacity: '1–5 Guests',
-      luggage: '4–5 Large Suitcases',
-      exteriorImage: '/images/fleet-toyota-granace-exterior-4032x3024.jpg',
-      interiorImage: '/images/fleet-toyota-granace-interior-1477x1108.jpg',
-      trunkImage: '/images/fleet-toyota-granace-trunk-1477x1108.jpg',
-      desc: {
-        ja: '堂々たるボディサイズに4WDを搭載。2列目・3列目ともに独立キャプテンシートを備え、雪道や長距離観光でも圧倒的な快適性を誇ります。',
-        zh: '全时四驱旗舰大空间，第二排与第三排均配备独立真皮头等舱航空座椅。长途旅行与雪季出行首选。',
-        fr: 'Grand monospace 4x4 avec 4 sièges capitaine indépendants. Confort souverain pour les longs trajets et la montagne enneigée.',
-        es: 'Monovolumen ejecutivo 4x4 con 4 asientos VIP independientes. Máximo confort en largos recorridos y puertos de montaña.',
-        en: 'Commanding full-size 4WD luxury transporter with 4 independent captain chairs across 2nd & 3rd rows. Unrivaled stability.',
-      }[lang],
-    },
     hiace: {
-      name: 'Toyota HiAce Grand Cabin VIP',
+      name: 'HiAce Grand Cabin',
+      tier: 'Standard',
+      goldBadge: 'STANDARD',
       badge: 'High-Capacity Group Van',
       capacity: '1–9 Guests',
       luggage: '9–10 Large Bags',
@@ -264,20 +235,40 @@ export default function GrandToursHomePage() {
         en: 'Spacious high-roof wide-body van accommodating up to 9 guests with huge luggage bay for suitcases and ski gear.',
       }[lang],
     },
-    crown: {
-      name: 'Toyota Crown Majesta VIP Sedan',
-      badge: 'Flagship Executive Sedan',
-      capacity: '1–3 Guests',
-      luggage: '2–3 Medium Suitcases',
-      exteriorImage: '/images/fleet-toyota-crown-exterior-1477x1108.jpg',
+    alphard: {
+      name: 'Toyota Alphard Executive Lounge',
+      tier: 'Premium',
+      goldBadge: 'PREMIUM',
+      badge: 'VIP First-Class Captain Seats',
+      capacity: '1–4 Guests',
+      luggage: '3–4 Large Suitcases',
+      exteriorImage: '/images/fleet-toyota-alphard-exterior-1477x1108.jpg',
       interiorImage: '/images/fleet-toyota-alphard-interior-1477x1108.jpg',
-      trunkImage: '/images/fleet-toyota-crown-trunk-1477x1108.jpg',
+      trunkImage: '/images/fleet-toyota-alphard-trunk-1477x1108.jpg',
       desc: {
-        ja: '伝統と品格を誇るトヨタ最高峰VIPセダン。ビジネス送迎、政府要人、少人数での極上プライベートツアーに最適。',
-        zh: '丰田顶级旗舰行政轿车，静谧平稳，至臻尊贵。专为高端商务接待及1-3位贵宾专属定制。',
-        fr: 'Berline de prestige japonaise par excellence. Silence absolu et confort d\'exception pour 1 à 3 personnes.',
-        es: 'Sedán ejecutivo de máxima categoría. Confort supremo y discreción para traslados VIP y reuniones de negocios.',
-        en: 'Toyota\'s flagship executive sedan offering whisper-quiet luxury ride. Ideal for VIP executives and couples.',
+        ja: '電動オットマン付きキャプテンシート、シートベンチレーション/ヒーター、極上の静粛性を誇るエグゼクティブMPV。1〜4名様に最適。',
+        zh: '尊享头等舱级电动航空座椅，配备通风加热与静谧空间。1-4位贵宾商务出行与私享观光的典范座驾。',
+        fr: 'Sièges capitaine Ottoman tout électriques, ventilation/chauffage et insonorisation de première classe. Idéal pour 1 à 4 personnes.',
+        es: 'Asientos ejecutivos eléctricos con reposapiés, cuero premium y máximo confort acústico. Ideal para 1 a 4 personas.',
+        en: 'Power-reclining Ottoman captain seats with heated/ventilated premium leather and ultra-quiet cabin. Perfect for 1 to 4 VIPs.',
+      }[lang],
+    },
+    granace: {
+      name: 'Toyota Granace 4WD VIP Lounge',
+      tier: 'Ultra Premium Vehicle',
+      goldBadge: 'ULTRA PREMIUM',
+      badge: 'Executive 6-Seater Flagship',
+      capacity: '1–5 Guests',
+      luggage: '4–5 Large Suitcases',
+      exteriorImage: '/images/fleet-toyota-granace-exterior-4032x3024.jpg',
+      interiorImage: '/images/fleet-toyota-granace-interior-1477x1108.jpg',
+      trunkImage: '/images/fleet-toyota-granace-trunk-1477x1108.jpg',
+      desc: {
+        ja: '堂々たるボディサイズに4WDを搭載。2列目・3列目ともに独立キャプテンシートを備え、雪道や長距離観光でも圧倒的な快適性を誇ります。',
+        zh: '全时四驱旗舰大空间，第二排与第三排均配备独立真皮头等舱航空座椅。长途旅行与雪季出行首选。',
+        fr: 'Grand monospace 4x4 avec 4 sièges capitaine indépendants. Confort souverain pour les longs trajets et la montagne enneigée.',
+        es: 'Monovolumen ejecutivo 4x4 con 4 asientos VIP independientes. Máximo confort en largos recorridos y puertos de montaña.',
+        en: 'Commanding full-size 4WD luxury transporter with 4 independent captain chairs across 2nd & 3rd rows. Unrivaled stability.',
       }[lang],
     },
   };
@@ -722,7 +713,7 @@ export default function GrandToursHomePage() {
                 {/* Vehicle Tabs (Horizontal Slidable Slider on Mobile, Centered on Desktop) */}
                 <div className="w-full overflow-x-auto no-scrollbar py-2 -mx-2 px-2 sm:mx-0 sm:px-0">
                   <div className="flex items-center gap-2 sm:justify-center min-w-max px-1">
-                    {(['alphard', 'granace', 'hiace', 'crown'] as const).map((key) => (
+                    {(['hiace', 'alphard', 'granace'] as const).map((key) => (
                       <button
                         key={key}
                         type="button"
@@ -730,19 +721,26 @@ export default function GrandToursHomePage() {
                           setSelectedFleet(key);
                           setFleetPhotoView('exterior');
                         }}
-                        className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 ${
+                        className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 flex items-center gap-2 ${
                           selectedFleet === key
                             ? 'bg-[#0068FF] text-white shadow-sm'
                             : 'bg-[#F5F7FA] dark:bg-slate-800 text-[#4B5563] dark:text-slate-300 hover:bg-[#E5E8ED] dark:hover:bg-slate-700'
                         }`}
                       >
-                        {key === 'alphard'
-                          ? 'Toyota Alphard (1-4 Pax)'
-                          : key === 'granace'
-                          ? 'Toyota Granace 4WD (1-5 Pax)'
-                          : key === 'hiace'
-                          ? 'HiAce Grand Cabin (1-9 Pax)'
-                          : 'Crown Majesta Sedan (1-3 Pax)'}
+                        <span>
+                          {key === 'hiace'
+                            ? 'HiAce Grand Cabin (1-9 Pax)'
+                            : key === 'alphard'
+                            ? 'Toyota Alphard (1-4 Pax)'
+                            : 'Toyota Granace (1-5 Pax)'}
+                        </span>
+                        <span className={`font-extrabold text-[9px] tracking-wider uppercase px-1.5 py-0.5 rounded border ${
+                          selectedFleet === key
+                            ? 'bg-black/30 text-[#E5C378] border-[#E5C378]/50'
+                            : 'bg-[#C5A059]/10 text-[#C5A059] border-[#C5A059]/30'
+                        }`}>
+                          {key === 'hiace' ? 'STANDARD' : key === 'alphard' ? 'PREMIUM' : 'ULTRA PREMIUM'}
+                        </span>
                       </button>
                     ))}
                   </div>
