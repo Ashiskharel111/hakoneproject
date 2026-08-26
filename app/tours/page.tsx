@@ -147,8 +147,8 @@ export default function GrandToursHomePage() {
         { ja: '忍野八海 湧水池散策', zh: '忍野八海清澈涌泉古民家', fr: 'Sources pures Oshino Hakkai', es: 'Manantiales sagrados Oshino Hakkai', en: 'Oshino Hakkai Sacred Springs' }[lang],
         { ja: '大石公園 湖畔ラベンダー・コキア', zh: '大石公园湖畔花海四季美景', fr: 'Parc Oishi au bord du lac', es: 'Parque Oishi junto al lago', en: 'Lake Oishi Seasonal Flowers' }[lang],
       ],
-      priceFormatted: '¥85,000〜',
-      priceNum: 85000,
+      priceFormatted: '¥75,000〜',
+      priceNum: 75000,
       link: '/destinations/fuji-kawaguchiko',
       vehicleType: 'granace' as const,
       vehicleName: 'Toyota Granace VIP 4WD',
@@ -175,11 +175,123 @@ export default function GrandToursHomePage() {
         { ja: '箱根神社 平和の鳥居参拝', zh: '箱根神社湖中平和之鸟居打卡', fr: 'Torii rouge flottant sur le lac', es: 'Torii flotante del santuario', en: 'Hakone Shrine Floating Water Torii' }[lang],
         { ja: '名湯 箱根日帰り貸切温泉立ち寄り', zh: '可自由安排顶级日归温泉体验', fr: 'Arrêt source thermale privée', es: 'Parada en onsen tradicional', en: 'Optional Private Luxury Onsen Stop' }[lang],
       ],
-      priceFormatted: '¥85,000〜',
-      priceNum: 85000,
+      priceFormatted: '¥78,000〜',
+      priceNum: 78000,
       link: '/destinations/hakone-lake-ashi',
       vehicleType: 'alphard' as const,
       vehicleName: 'Toyota Alphard Executive',
+    },
+    {
+      id: 'kamakura-enoshima',
+      category: 'sightseeing' as const,
+      categoryType: 'destination' as const,
+      categoryBadge: 'DAY CHARTER',
+      title: {
+        ja: '古都鎌倉 大仏・報国寺竹林・江の島・湘南海岸 貸切ツアー',
+        zh: '古都镰仓 大佛・报国寺竹林・江之岛・湘南海岸 经典包车',
+        fr: 'Kamakura, Grand Bouddha, Forêt de Bambous & Enoshima (9h)',
+        es: 'Kamakura, Gran Buda, Bambudal y Costa de Enoshima (9h)',
+        en: 'Kamakura Great Buddha, Bamboo Grove & Enoshima Coastal Tour',
+      }[lang],
+      image: '/images/dest-kamakura-enoshima-1376x768.jpg',
+      badge: { ja: '🏯 古都と海岸', zh: '🏯 古都海风', fr: '🏯 Histoire & Côte', es: '🏯 Historia y Costa', en: '🏯 Samurai & Coast' }[lang],
+      rating: '4.96',
+      reviewCount: 290,
+      duration: '9 Hours',
+      highlights: [
+        { ja: '高徳院 国宝鎌倉大仏拝観', zh: '高德院日本国宝镰仓大佛', fr: 'Grand Bouddha de Kotoku-in', es: 'Gran Buda de Kotoku-in', en: 'Kotoku-in Great Bronze Buddha' }[lang],
+        { ja: '報国寺 幽玄な竹林と抹茶席', zh: '报国寺清幽竹林与现刷抹茶', fr: 'Bambouseraie de Hokoku-ji & matcha', es: 'Bambudal de Hokoku-ji y té matcha', en: 'Hokoku-ji Bamboo Grove & Matcha' }[lang],
+        { ja: '湘南海岸ドライブ・江ノ島遠望', zh: '湘南海岸灌篮高手经典巡礼', fr: 'Route côtière de Shonan', es: 'Carretera costera de Shonan', en: 'Shonan Coastline & Enoshima Views' }[lang],
+      ],
+      priceFormatted: '¥68,000〜',
+      priceNum: 68000,
+      link: '/destinations/kamakura-enoshima',
+      vehicleType: 'alphard' as const,
+      vehicleName: 'Toyota Alphard Executive',
+    },
+    {
+      id: 'nikko-unesco',
+      category: 'sightseeing' as const,
+      categoryType: 'destination' as const,
+      categoryBadge: 'DAY CHARTER',
+      title: {
+        ja: '世界遺産 日光東照宮・華厳の滝・中禅寺湖・いろは坂 貸切ツアー',
+        zh: '世界遗产 日光东照宫・华严瀑布・中禅寺湖 专属包车',
+        fr: 'Nikko Toshogu UNESCO, Cascade de Kegon & Lac Chuzenji (11h)',
+        es: 'Nikko Toshogu UNESCO, Cascada Kegon y Lago Chuzenji (11h)',
+        en: 'Nikko UNESCO Toshogu Shrine, Kegon Falls & Lake Chuzenji Tour',
+      }[lang],
+      image: '/images/dest-nikko-unesco-1376x768.jpg',
+      badge: { ja: '⛩️ 世界遺産ゴールド', zh: '⛩️ 世界遗产', fr: '⛩️ Patrimoine UNESCO', es: '⛩️ Patrimonio UNESCO', en: '⛩️ UNESCO Gold' }[lang],
+      rating: '4.98',
+      reviewCount: 310,
+      duration: '11 Hours',
+      highlights: [
+        { ja: '国宝 陽明門・三猿・眠り猫', zh: '国宝金箔阳明门与三猿木雕', fr: 'Porte Yomeimon dorée & 3 singes', es: 'Puerta dorada Yomeimon y 3 monos', en: 'UNESCO Toshogu Gold Shrines' }[lang],
+        { ja: '落差97m 日本三大名瀑 華厳の滝', zh: '落差97米华严瀑布轰鸣名景', fr: 'Cascade de Kegon de 97 mètres', es: 'Cascada de Kegon de 97 metros', en: 'Kegon Waterfall 100m Gorge' }[lang],
+        { ja: 'いろは坂パノラマ・中禅寺湖畔', zh: '伊吕波坂48弯道与高山湖景', fr: 'Col d\'Irohazaka & Lac Chuzenji', es: 'Paso Irohazaka y Lago Chuzenji', en: 'Irohazaka Winding Pass & Lake' }[lang],
+      ],
+      priceFormatted: '¥88,000〜',
+      priceNum: 88000,
+      link: '/destinations/nikko-unesco',
+      vehicleType: 'granace' as const,
+      vehicleName: 'Toyota Granace VIP 4WD',
+    },
+    {
+      id: 'yokohama-bay',
+      category: 'sightseeing' as const,
+      categoryType: 'destination' as const,
+      categoryBadge: 'DAY CHARTER',
+      title: {
+        ja: '横浜みなとみらい・中華街飲茶・三溪園・赤レンガ 貸切ツアー',
+        zh: '横滨未来港・中华街饮茶・名胜三溪园・红砖仓库 专属包车',
+        fr: 'Yokohama Minato Mirai, Chinatown & Jardin Sankeien (8h)',
+        es: 'Yokohama Minato Mirai, Barrio Chino y Jardín Sankeien (8h)',
+        en: 'Yokohama Minato Mirai, Chinatown Dim Sum & Sankeien Garden Tour',
+      }[lang],
+      image: '/images/dest-yokohama-bay-4662x5828.jpg',
+      badge: { ja: '🎡 港町と美食夜景', zh: '🎡 港湾夜景美食', fr: '🎡 Port & Gastronomie', es: '🎡 Puerto y Gastronomía', en: '🎡 Port & Harbor' }[lang],
+      rating: '4.95',
+      reviewCount: 240,
+      duration: '8 Hours',
+      highlights: [
+        { ja: '日本最大 横浜中華街 本格飲茶', zh: '日本最大横滨中华街正宗小笼包', fr: 'Déjeuner Dim Sum à Chinatown', es: 'Almuerzo Dim Sum en Barrio Chino', en: 'Chinatown Gourmet Dim Sum Lunch' }[lang],
+        { ja: '名勝 三溪園の広大な日本庭園', zh: '古典名胜三溪园移筑古建筑群', fr: 'Jardin traditionnel Sankeien', es: 'Jardín tradicional Sankeien', en: 'Sankeien Traditional Japanese Gardens' }[lang],
+        { ja: 'みなとみらい＆ベイブリッジ夜景', zh: '横滨海湾大桥与港未来摩天轮夜景', fr: 'Skyline illuminée & Pont de la Baie', es: 'Skyline iluminado y Puente de la Bahía', en: 'Minato Mirai Skyline & Bay Bridge' }[lang],
+      ],
+      priceFormatted: '¥60,000〜',
+      priceNum: 60000,
+      link: '/destinations/yokohama-bay',
+      vehicleType: 'alphard' as const,
+      vehicleName: 'Toyota Alphard Executive',
+    },
+    {
+      id: 'karuizawa-retreat',
+      category: 'sightseeing' as const,
+      categoryType: 'destination' as const,
+      categoryBadge: 'DAY CHARTER',
+      title: {
+        ja: '軽井沢 白糸の滝・雲場池・旧軽井沢銀座・アウトレット 貸切ツアー',
+        zh: '轻井泽 白丝瀑布・云场池水镜・旧轻银座・名品奥莱 专属包车',
+        fr: 'Karuizawa Retraite Royale, Cascades & Shopping Outlet (10h)',
+        es: 'Karuizawa Retiro Real, Cascadas y Compras Outlet (10h)',
+        en: 'Karuizawa Royal Alpine Retreat, Waterfalls & Luxury Outlet Tour',
+      }[lang],
+      image: '/images/dest-karuizawa-resort-1500x1001.jpg',
+      badge: { ja: '🌲 高原リゾート', zh: '🌲 避暑购物胜地', fr: '🌲 Retraite Alpine', es: '🌲 Retiro Alpino', en: '🌲 Alpine Retreat' }[lang],
+      rating: '4.97',
+      reviewCount: 260,
+      duration: '10 Hours',
+      highlights: [
+        { ja: '幅70m 白糸の滝 清流のカーテン', zh: '幅宽70米白丝瀑布清凉水帘', fr: 'Voile d\'eau des cascades Shiraito', es: 'Cascadas de Shiraito de 70m', en: 'Shiraito Waterfall 70m Veil' }[lang],
+        { ja: 'スワンレイク 雲場池の四季水鏡', zh: '云场池如镜水面倒影与林道', fr: 'Étang miroir Kumoba Swan Lake', es: 'Estanque espejo Kumoba Swan Lake', en: 'Kumoba Pond Mirror Waters' }[lang],
+        { ja: '日本最大級 プリンスショッピング免税', zh: '王子名品购物广场240+品牌免税', fr: 'Shopping détaxé Prince Outlet Plaza', es: 'Compras libres de impuestos Prince Plaza', en: 'Karuizawa Prince Luxury Outlet Shopping' }[lang],
+      ],
+      priceFormatted: '¥90,000〜',
+      priceNum: 90000,
+      link: '/destinations/karuizawa-retreat',
+      vehicleType: 'granace' as const,
+      vehicleName: 'Toyota Granace VIP 4WD',
     },
     {
       id: 'winter-hakuba',
@@ -430,8 +542,10 @@ export default function GrandToursHomePage() {
                     >
                       <option value="fuji-kawaguchiko">Mt. Fuji &amp; Lake Kawaguchiko (10h)</option>
                       <option value="hakone-luxury">Hakone Onsen &amp; Lake Ashi (10h)</option>
-                      <option value="nikko-unesco">Nikko UNESCO World Heritage (11h)</option>
                       <option value="kamakura-enoshima">Kamakura Great Buddha &amp; Enoshima (9h)</option>
+                      <option value="nikko-unesco">Nikko UNESCO World Heritage (11h)</option>
+                      <option value="yokohama-bay">Yokohama Minato Mirai &amp; Chinatown (8h)</option>
+                      <option value="karuizawa-retreat">Karuizawa Alpine Summer Resort (10h)</option>
                     </select>
                   </div>
                   <div className="flex flex-col">
@@ -672,10 +786,16 @@ export default function GrandToursHomePage() {
                           } else {
                             const destMap: Record<string, string> = {
                               'fuji-tour': 'fuji-kawaguchiko',
+                              'fuji-kawaguchiko': 'fuji-kawaguchiko',
                               'hakone-tour': 'hakone-luxury',
+                              'hakone-lake-ashi': 'hakone-luxury',
                               'kamakura-tour': 'kamakura-enoshima',
+                              'kamakura-enoshima': 'kamakura-enoshima',
+                              'nikko-unesco': 'nikko-unesco',
+                              'yokohama-bay': 'yokohama-bay',
+                              'karuizawa-retreat': 'karuizawa-retreat',
                             };
-                            setSelectedCharterDest(destMap[tour.id] || 'fuji-kawaguchiko');
+                            setSelectedCharterDest(destMap[tour.id] || tour.id || 'fuji-kawaguchiko');
                             setActiveBookingModule('sightseeing');
                           }
                           setTimeout(() => {
