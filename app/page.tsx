@@ -1,6 +1,5 @@
-import { redirect } from 'next/navigation';
+import ExplorePage from '@/app/explore/page';
 
 export default function HomePage() {
-  redirect('/tours');
+  return <ExplorePage />;
 }
-
