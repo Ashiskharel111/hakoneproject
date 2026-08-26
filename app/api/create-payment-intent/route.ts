@@ -5,7 +5,8 @@ import { DEFAULT_PRICING_CONFIG, calculateQuote, QuoteInputs } from '@/lib/prici
 import { calculateAirportTransferPrice, Airport, VehicleType, TimeOfDay } from '@/lib/airport-pricing';
 import { saveUserRequest } from '@/lib/firebase';
 
-const stripeApiKey = process.env.STRIPE_SECRET_KEY;
+const rawStripeApiKey = process.env.STRIPE_SECRET_KEY || '';
+const stripeApiKey = rawStripeApiKey.trim().split('#')[0].trim().split(/\s+/)[0].replace(/^["']|["']$/g, '');
 const stripe = stripeApiKey
   ? new Stripe(stripeApiKey, {
       apiVersion: '2025-02-24.acacia' as any,

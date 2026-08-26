@@ -6,7 +6,8 @@ import { Elements, PaymentElement, ExpressCheckoutElement, useStripe, useElement
 import { ShieldCheck, Lock, X, Loader2, CheckCircle2, AlertCircle, Sparkles, CreditCard, Smartphone, Check } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 
-const publishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '';
+const rawPublishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '';
+const publishableKey = rawPublishableKey.trim().split('#')[0].trim().split(/\s+/)[0].replace(/^["']|["']$/g, '');
 const stripePromise = publishableKey ? loadStripe(publishableKey) : null;
 
 export interface BookingPaymentDetails {
@@ -166,6 +167,8 @@ function CheckoutForm({
     vaultDesc: { ja: 'Stripe 暗号化保管', zh: 'Stripe 国际金库托管', fr: 'Coffre-fort Stripe', es: 'Bóveda Cifrada Stripe', en: 'Encrypted Stripe Vault' }[lang],
   };
 
+  const [hasExpressWallets, setHasExpressWallets] = useState<boolean>(false);
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {/* Supported Payment Methods Ribbon */}
@@ -253,9 +256,19 @@ function CheckoutForm({
       ) : (
         <div className="bg-[#0A0D14] border border-slate-800 rounded-2xl p-4 space-y-4">
           {/* 1-Click Express Checkout Buttons (Apple Pay & Google Pay) */}
-          <div className="space-y-2">
+          <div>
             <ExpressCheckoutElement
               onConfirm={handleExpressConfirm}
+              onReady={({ availablePaymentMethods }) => {
+                if (availablePaymentMethods) {
+                  const hasAny = Boolean(
+                    availablePaymentMethods.applePay ||
+                    availablePaymentMethods.googlePay ||
+                    availablePaymentMethods.link
+                  );
+                  setHasExpressWallets(hasAny);
+                }
+              }}
               options={{
                 buttonHeight: 46,
                 buttonTheme: {
@@ -271,14 +284,16 @@ function CheckoutForm({
             />
           </div>
 
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-slate-800/80" />
+          {hasExpressWallets && (
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-slate-800/80" />
+              </div>
+              <div className="relative flex justify-center text-[10px] uppercase font-bold tracking-wider">
+                <span className="bg-[#0A0D14] px-2 text-slate-400">{t.paymentOptions}</span>
+              </div>
             </div>
-            <div className="relative flex justify-center text-[10px] uppercase font-bold tracking-wider">
-              <span className="bg-[#0A0D14] px-2 text-slate-400">{t.paymentOptions}</span>
-            </div>
-          </div>
+          )}
 
           {/* Full Payment Element: Credit Cards, Alipay, WeChat Pay, PayPay */}
           <PaymentElement
