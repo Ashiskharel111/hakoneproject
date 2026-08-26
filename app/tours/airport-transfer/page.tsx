@@ -53,7 +53,7 @@ export default function AirportTransferDedicatedPage() {
               </div>
 
               <div className="space-y-3">
-                <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#1A1A1A] dark:text-white tracking-tight leading-tight">
+                <h1 className="text-3xl sm:text-F4xl md:text-5xl font-extrabold text-[#1A1A1A] dark:text-white tracking-tight leading-tight">
                   Tokyo Airport Executive Chauffeur
                 </h1>
                 <p className="text-sm sm:text-base text-[#4B5563] dark:text-slate-300 max-w-xl leading-relaxed">
@@ -165,7 +165,7 @@ export default function AirportTransferDedicatedPage() {
               Real-Time Flight Tracking
             </h3>
             <p className="text-xs text-[#6B7280] dark:text-slate-400 leading-relaxed">
-              Your chauffeur monitors your inbound aircraft via live radar API. If your flight arrives early or is delayed, pickup timing adjusts automatically with zero stress.
+              Your chauffeur monitors your inbound aircraft live. If your flight arrives early or is delayed, pickup timing adjusts automatically with zero stress.
             </p>
           </div>
 

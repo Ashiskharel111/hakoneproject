@@ -170,7 +170,7 @@ const CORRIDOR_ROUTES: RouteItem[] = [
     durationMins: '3 hr 45 min',
     expressway: 'Kan-etsu & Joshin-etsu & Nagano Expressway',
     scenicStops: ['Kamisato Service Area', 'Chikuma River Rest Point', 'North Alps Mountain View'],
-    startingPrice: 110000,
+    startingPrice: 115000,
     embedMapQuery: 'Hakuba+Nagano+Japan',
     image: '/images/ski-hakuba-hero-4032x3024.jpg',
   },
