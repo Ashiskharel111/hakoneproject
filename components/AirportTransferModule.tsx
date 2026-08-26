@@ -32,6 +32,7 @@ import { useLanguage } from '@/context/LanguageContext';
 import StripePaymentModal, { BookingPaymentDetails } from '@/components/StripePaymentModal';
 import BookingConfirmationModal from '@/components/BookingConfirmationModal';
 import GooglePlacesAutocomplete from '@/components/GooglePlacesAutocomplete';
+import AirportRouteVisualizer from '@/components/AirportRouteVisualizer';
 import {
   calculateAirportTransferPrice,
   Airport,
@@ -621,6 +622,13 @@ export default function AirportTransferModule({
                 </div>
               </div>
             </div>
+
+            {/* Instant Zero-API Airport Highway Route Visualizer */}
+            <AirportRouteVisualizer
+              selectedAirport={airport}
+              direction={direction}
+              hotelAddress={hotelAddress}
+            />
 
             {/* STEP 2: Available Vehicles */}
             <div className="bg-white dark:bg-[#0E131F] rounded-2xl border border-[#E5E8ED] dark:border-slate-800 p-4 sm:p-6 space-y-4 shadow-sm transition-colors">
