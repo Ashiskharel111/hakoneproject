@@ -31,6 +31,7 @@ import {
 import { useLanguage } from '@/context/LanguageContext';
 import StripePaymentModal, { BookingPaymentDetails } from '@/components/StripePaymentModal';
 import BookingConfirmationModal from '@/components/BookingConfirmationModal';
+import GooglePlacesAutocomplete from '@/components/GooglePlacesAutocomplete';
 import {
   calculateAirportTransferPrice,
   Airport,
@@ -804,21 +805,24 @@ export default function AirportTransferModule({
                 <span className="text-[11px] text-red-500 font-semibold">* Required</span>
               </div>
 
-              {/* Hotel Name Input */}
+              {/* Hotel Name Input with Google Places Autocomplete */}
               <div>
-                <label className="text-xs font-semibold text-[#4B5563] dark:text-slate-300 block mb-1 flex items-center gap-1">
-                  <MapPin className="w-3.5 h-3.5 text-[#0068FF]" />
-                  <span>{t.hotelLabel} <span className="text-red-500">*</span></span>
+                <label className="text-xs font-semibold text-[#4B5563] dark:text-slate-300 block mb-1 flex items-center justify-between">
+                  <span className="flex items-center gap-1">
+                    <MapPin className="w-3.5 h-3.5 text-[#0068FF]" />
+                    <span>{t.hotelLabel} <span className="text-red-500">*</span></span>
+                  </span>
+                  <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold">
+                    Google Maps Places Verified
+                  </span>
                 </label>
-                <input
-                  type="text"
-                  placeholder="e.g. Grand Hyatt Tokyo (Roppongi), Aman Tokyo, or Tokyo Hotel Address"
+                <GooglePlacesAutocomplete
                   value={hotelAddress}
-                  onChange={(e) => {
-                    setHotelAddress(e.target.value);
+                  onChange={(val) => {
+                    setHotelAddress(val);
                     if (validationError) setValidationError(null);
                   }}
-                  className="w-full bg-[#F5F7FA] dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none focus:border-[#0068FF]"
+                  placeholder="Search hotel (e.g. Grand Hyatt, Aman, Ritz-Carlton) or Tokyo address..."
                 />
               </div>
 

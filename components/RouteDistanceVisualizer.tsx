@@ -300,23 +300,29 @@ export default function RouteDistanceVisualizer() {
 
           {/* Google Maps Interactive Frame */}
           <div className="relative aspect-[16/9] w-full rounded-xl overflow-hidden border border-[#E5E8ED] dark:border-slate-800 shadow-inner bg-slate-200 dark:bg-slate-900">
-            <iframe
-              title={`Map of ${currentRoute.name.en}`}
-              width="100%"
-              height="100%"
-              style={{ border: 0 }}
-              loading="lazy"
-              allowFullScreen
-              referrerPolicy="no-referrer-when-downgrade"
-              src={`https://www.google.com/maps/embed/v1/place?key=&q=${encodeURIComponent(currentRoute.embedMapQuery)}`}
-              className="w-full h-full grayscale-[25%] contrast-[1.05] dark:invert-[90%] dark:hue-rotate-180"
-              onError={(e) => {
-                // Fallback handled smoothly
-              }}
-            />
+            {(() => {
+              const googleMapsKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || '';
+              const mapSrc = googleMapsKey
+                ? `https://www.google.com/maps/embed/v1/directions?key=${googleMapsKey}&origin=${encodeURIComponent(currentRoute.origin)}&destination=${encodeURIComponent(currentRoute.destination)}&mode=driving`
+                : `https://maps.google.com/maps?q=${encodeURIComponent(currentRoute.destination + ' Japan')}&t=&z=10&ie=UTF8&iwloc=&output=embed`;
+
+              return (
+                <iframe
+                  title={`Google Map Route of ${currentRoute.name.en}`}
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  loading="lazy"
+                  allowFullScreen
+                  referrerPolicy="no-referrer-when-downgrade"
+                  src={mapSrc}
+                  className="w-full h-full grayscale-[15%] contrast-[1.05] dark:invert-[90%] dark:hue-rotate-180"
+                />
+              );
+            })()}
             {/* Overlay Banner */}
             <div className="absolute top-3 left-3 bg-black/75 backdrop-blur-md text-white px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow">
-              <MapPin className="w-3.5 h-3.5 text-[#0068FF]" />
+              <MapPin className="w-3.5 h-3.5 text-[#C5A059]" />
               <span>{currentRoute.destination}</span>
             </div>
           </div>
