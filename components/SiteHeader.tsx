@@ -61,6 +61,14 @@ export default function SiteHeader({
     `Hello SK Limo! I am inquiring about private chauffeur services in Japan.`
   )}`;
 
+  const ui = {
+    bookNow: { ja: '今すぐ予約', zh: '在线预订', fr: 'Réserver', es: 'Reservar', en: 'Book Now' }[currentLang],
+    whatsAppConcierge: { ja: 'WhatsApp 24時間コンシェルジュ', zh: 'WhatsApp 24小时专属管家', fr: 'Conciergerie WhatsApp 24/7', es: 'Conserjería WhatsApp 24/7', en: 'WhatsApp 24/7 Concierge' }[currentLang],
+    lightMode: { ja: 'ライトモード (明るい表示)', zh: '浅色明亮模式', fr: 'Mode Clair', es: 'Modo Claro', en: 'Light Mode' }[currentLang],
+    darkMode: { ja: 'ダークモード (夜間表示)', zh: '深色夜间模式', fr: 'Mode Sombre', es: 'Modo Oscuro', en: 'Dark Mode' }[currentLang],
+    mlitLicensed: { ja: '国土交通省許可 緑ナンバー正規運行', zh: '日本国土交通省正规绿牌认证', fr: 'Opérateur Agréé MLIT Plaque Verte', es: 'Operador Oficial Licenciado MLIT', en: 'MLIT Licensed Green-Plate Operator' }[currentLang],
+  };
+
   const navLinks = [
     { href: '/explore', label: nav.explore, page: 'home' as const },
     { href: '/services', label: nav.services, page: undefined },
@@ -143,7 +151,7 @@ export default function SiteHeader({
               href="/booking"
               className="hidden sm:inline-flex h-9 items-center justify-center bg-[#C5A059] hover:bg-[#d8b46b] text-[#0A0D14] font-extrabold px-4 rounded-xl text-xs uppercase tracking-wider shadow-sm transition-all whitespace-nowrap"
             >
-              <span>Book Now</span>
+              <span>{ui.bookNow}</span>
             </Link>
 
             {/* WhatsApp CTA (h-9) */}
@@ -230,6 +238,15 @@ export default function SiteHeader({
                 </Link>
               ))}
 
+              {/* Mobile Book Now Link */}
+              <Link
+                href="/booking"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="w-full flex items-center justify-center p-3 rounded-xl bg-[#C5A059] text-[#0A0D14] font-extrabold text-sm uppercase tracking-wider shadow-sm mt-3"
+              >
+                <span>{ui.bookNow}</span>
+              </Link>
+
               {/* Mobile Theme Toggle Button */}
               <button
                 type="button"
@@ -238,7 +255,7 @@ export default function SiteHeader({
               >
                 <span className="flex items-center gap-3">
                   {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-[#4B5563]" />}
-                  <span>{theme === 'dark' ? 'Light Mode (明るい表示)' : 'Dark Mode (ダークモード)'}</span>
+                  <span>{theme === 'dark' ? ui.lightMode : ui.darkMode}</span>
                 </span>
                 <span className="text-xs text-[#9CA3AF] capitalize">{theme}</span>
               </button>
@@ -250,13 +267,13 @@ export default function SiteHeader({
                 className="flex items-center justify-center gap-2 bg-[#25D366] text-white font-semibold py-3 rounded-xl text-sm mt-4 shadow-md"
               >
                 <MessageSquare className="w-4 h-4" />
-                <span>WhatsApp 24/7 Concierge</span>
+                <span>{ui.whatsAppConcierge}</span>
               </a>
             </div>
 
             {/* Drawer footer */}
             <div className="p-4 border-t border-[#E5E8ED] dark:border-slate-800 text-center text-[10px] text-[#9CA3AF]">
-              <span className="block font-medium">MLIT Licensed Green-Plate Operator</span>
+              <span className="block font-medium">{ui.mlitLicensed}</span>
               <span>株式会社SKリモ (SK LIMO Co., Ltd.)</span>
             </div>
           </div>

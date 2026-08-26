@@ -118,13 +118,61 @@ function CheckoutForm({
     }
   };
 
+  const t = {
+    acceptedMethods: {
+      ja: '対応決済方法 (即時・安全)',
+      zh: '支持的安全即时支付方式',
+      fr: 'Moyens de Paiement Acceptés',
+      es: 'Métodos de Pago Aceptados',
+      en: 'Accepted Payment Methods',
+    }[lang],
+    sandboxTitle: {
+      ja: 'Stripe サンドボックス・デモ決済',
+      zh: 'Stripe 演示安全测试环境',
+      fr: 'Mode Sandbox Sécurisé Stripe',
+      es: 'Modo Sandbox Seguro Stripe',
+      en: 'Stripe Secure Sandbox Mode',
+    }[lang],
+    sandboxDesc: {
+      ja: '本番環境と同等の暗号化決済シミュレーションです。Apple Pay、Google Pay、WeChat Pay、Alipay、PayPay、クレジットカード決済を安全にお試しいただけます。',
+      zh: '当前为安全的支付模拟环境。支持 Apple Pay、Google Pay、微信支付、支付宝、PayPay 以及国际主流信用卡的安全预订测试。',
+      fr: 'Environnement de test sécurisé Stripe. Simulation instantanée pour Apple Pay, Google Pay, WeChat Pay, Alipay, PayPay et cartes bancaires.',
+      es: 'Entorno de prueba seguro Stripe. Simulación para Apple Pay, Google Pay, WeChat Pay, Alipay, PayPay y tarjetas bancarias.',
+      en: 'Stripe test environment active. Live Apple Pay, Google Pay, WeChat Pay, Alipay, PayPay, and Credit Cards will seamlessly process.',
+    }[lang],
+    cardHolder: { ja: '代表者名:', zh: '持卡人姓名:', fr: 'Titulaire :', es: 'Titular:', en: 'Card Holder:' }[lang],
+    paymentMethodsLabel: { ja: '対応方法:', zh: '支付渠道:', fr: 'Moyens :', es: 'Métodos:', en: 'Payment Methods:' }[lang],
+    amountLabel: { ja: '決済金額:', zh: '实付金额:', fr: 'Montant :', es: 'Importe:', en: 'Amount:' }[lang],
+    paymentOptions: { ja: 'その他の決済方法', zh: '其他支付方式', fr: 'Options de Paiement', es: 'Opciones de Pago', en: 'Payment Options' }[lang],
+    processing: {
+      ja: '安全に決済処理中...',
+      zh: '正在安全处理支付...',
+      fr: 'Autorisation du paiement sécurisé...',
+      es: 'Procesando pago seguro...',
+      en: 'Authorizing Secure Payment...',
+    }[lang],
+    payButton: {
+      ja: `¥${bookingDetails.amount.toLocaleString()} を支払って予約確定`,
+      zh: `支付 ¥${bookingDetails.amount.toLocaleString()} 并锁定预约`,
+      fr: `Autoriser & Payer ¥${bookingDetails.amount.toLocaleString()}`,
+      es: `Autorizar y Pagar ¥${bookingDetails.amount.toLocaleString()}`,
+      en: `Authorize & Pay ¥${bookingDetails.amount.toLocaleString()}`,
+    }[lang],
+    sslTitle: { ja: '256-Bit SSL', zh: '256位 SSL 加密', fr: 'SSL 256-Bit', es: 'SSL 256-Bit', en: '256-Bit SSL' }[lang],
+    sslDesc: { ja: '銀行水準の暗号化', zh: '银行级数据安全', fr: 'Cryptage Bancaire', es: 'Cifrado Bancario', en: 'Bank-Grade Encryption' }[lang],
+    secure3dTitle: { ja: '3Dセキュア 2.0', zh: '3D Secure 2.0', fr: '3D Secure 2.0', es: '3D Secure 2.0', en: '3D Secure 2.0' }[lang],
+    secure3dDesc: { ja: '生体認証・ワンタイム保護', zh: '生物识别与动态验证', fr: 'Protection Biométrique & OTP', es: 'Protección Biométrica y OTP', en: 'Biometric & OTP Guard' }[lang],
+    vaultTitle: { ja: 'カード情報非保持', zh: '零卡号本地留存', fr: 'Zéro Stockage', es: 'Cero Almacenamiento', en: 'Zero Storage' }[lang],
+    vaultDesc: { ja: 'Stripe 暗号化保管', zh: 'Stripe 国际金库托管', fr: 'Coffre-fort Stripe', es: 'Bóveda Cifrada Stripe', en: 'Encrypted Stripe Vault' }[lang],
+  };
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {/* Supported Payment Methods Ribbon */}
       <div className="bg-[#070A10] border border-slate-800/90 rounded-2xl p-3 space-y-2">
         <div className="flex items-center justify-between">
           <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400">
-            {lang === 'ja' ? '対応決済方法 (即時・安全)' : 'Accepted Payment Methods'}
+            {t.acceptedMethods}
           </span>
           <span className="text-[10px] text-emerald-400 font-semibold flex items-center gap-1">
             <Lock className="w-3 h-3 text-emerald-400" />
@@ -180,24 +228,22 @@ function CheckoutForm({
         <div className="bg-[#131926] border border-[#C5A059]/40 rounded-2xl p-4 space-y-3">
           <div className="flex items-center gap-2 text-[#C5A059] text-xs font-bold uppercase tracking-wider">
             <Sparkles className="w-4 h-4" />
-            <span>{lang === 'ja' ? 'Stripe サンドボックス・デモ決済' : 'Stripe Secure Sandbox Mode'}</span>
+            <span>{t.sandboxTitle}</span>
           </div>
           <p className="text-xs text-slate-300">
-            {lang === 'ja'
-              ? '本番APIキー設定前の安全なテスト環境です。Apple Pay、Google Pay、WeChat Pay、Alipay、PayPay、各種クレジットカード決済のシミュレーションが可能です。'
-              : 'Stripe test environment active. Live Apple Pay, Google Pay, WeChat Pay, Alipay, PayPay, and Credit Cards will seamlessly process once live API keys are added in .env.local.'}
+            {t.sandboxDesc}
           </p>
           <div className="bg-[#0A0D14] rounded-xl p-3 text-[11px] text-slate-400 space-y-1.5 font-mono">
             <div className="flex justify-between">
-              <span>Card Holder:</span>
+              <span>{t.cardHolder}</span>
               <span className="text-white font-bold">{bookingDetails.guestName}</span>
             </div>
             <div className="flex justify-between">
-              <span>Payment Methods:</span>
+              <span>{t.paymentMethodsLabel}</span>
               <span className="text-emerald-400 font-bold">Cards / Apple Pay / WeChat / Alipay / PayPay (TEST)</span>
             </div>
             <div className="flex justify-between">
-              <span>Amount:</span>
+              <span>{t.amountLabel}</span>
               <span className="text-[#C5A059] font-bold">¥{bookingDetails.amount.toLocaleString()} JPY</span>
             </div>
           </div>
@@ -228,7 +274,7 @@ function CheckoutForm({
               <div className="w-full border-t border-slate-800/80" />
             </div>
             <div className="relative flex justify-center text-[10px] uppercase font-bold tracking-wider">
-              <span className="bg-[#0A0D14] px-2 text-slate-400">Payment Options</span>
+              <span className="bg-[#0A0D14] px-2 text-slate-400">{t.paymentOptions}</span>
             </div>
           </div>
 
@@ -266,16 +312,12 @@ function CheckoutForm({
           {isProcessing ? (
             <>
               <Loader2 className="w-4 h-4 animate-spin text-[#0A0D14]" />
-              <span>{lang === 'ja' ? '安全に決済処理中...' : 'Authorizing Secure Payment...'}</span>
+              <span>{t.processing}</span>
             </>
           ) : (
             <>
               <Lock className="w-4 h-4" />
-              <span>
-                {lang === 'ja'
-                  ? `¥${bookingDetails.amount.toLocaleString()} を支払って予約確定`
-                  : `Authorize & Pay ¥${bookingDetails.amount.toLocaleString()}`}
-              </span>
+              <span>{t.payButton}</span>
             </>
           )}
         </button>
@@ -284,18 +326,18 @@ function CheckoutForm({
         <div className="bg-[#0A0D14]/80 border border-slate-800/80 rounded-xl p-3 grid grid-cols-3 gap-2 text-center text-[10px] text-slate-400">
           <div className="flex flex-col items-center gap-1">
             <ShieldCheck className="w-4 h-4 text-[#C5A059]" />
-            <span className="font-semibold text-slate-200">256-Bit SSL</span>
-            <span className="text-[9px] text-slate-500">Bank-Grade Encryption</span>
+            <span className="font-semibold text-slate-200">{t.sslTitle}</span>
+            <span className="text-[9px] text-slate-500">{t.sslDesc}</span>
           </div>
           <div className="flex flex-col items-center gap-1 border-x border-slate-800">
             <Lock className="w-4 h-4 text-emerald-400" />
-            <span className="font-semibold text-slate-200">3D Secure 2.0</span>
-            <span className="text-[9px] text-slate-500">Biometric &amp; OTP Guard</span>
+            <span className="font-semibold text-slate-200">{t.secure3dTitle}</span>
+            <span className="text-[9px] text-slate-500">{t.secure3dDesc}</span>
           </div>
           <div className="flex flex-col items-center gap-1">
             <CreditCard className="w-4 h-4 text-sky-400" />
-            <span className="font-semibold text-slate-200">Zero Storage</span>
-            <span className="text-[9px] text-slate-500">Encrypted Stripe Vault</span>
+            <span className="font-semibold text-slate-200">{t.vaultTitle}</span>
+            <span className="text-[9px] text-slate-500">{t.vaultDesc}</span>
           </div>
         </div>
       </div>
@@ -441,11 +483,23 @@ export default function StripePaymentModal({
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <span className="text-[10px] uppercase font-bold tracking-widest text-[#C5A059] bg-[#C5A059]/10 px-2.5 py-0.5 rounded-full border border-[#C5A059]/30">
-              {lang === 'ja' ? 'Stripe 決済ゲートウェイ' : 'Official Stripe VIP Checkout'}
+              {{
+                ja: 'Stripe 決済ゲートウェイ',
+                zh: 'Stripe VIP 官方安全收银台',
+                fr: 'Passerelle de Paiement Stripe VIP',
+                es: 'Pasarela Oficial de Pago Seguro Stripe',
+                en: 'Official Stripe VIP Checkout',
+              }[lang]}
             </span>
           </div>
           <h3 className="text-xl font-bold text-white tracking-tight">
-            {lang === 'ja' ? 'オンライン予約・事前決済' : 'Secure Private Charter Checkout'}
+            {{
+              ja: 'オンライン予約・事前決済',
+              zh: '专属专车在线预订与安全支付',
+              fr: 'Réservation & Paiement Sécurisé',
+              es: 'Reserva y Pago Seguro en Línea',
+              en: 'Secure Private Charter Checkout',
+            }[lang]}
           </h3>
         </div>
 
@@ -457,11 +511,11 @@ export default function StripePaymentModal({
                 {bookingDetails.destinationTitle}
               </span>
               <span className="text-[11px] text-slate-400 block mt-0.5">
-                {bookingDetails.vehicleName} • {bookingDetails.passengers} Pax • {bookingDetails.travelDate}
+                {bookingDetails.vehicleName} • {bookingDetails.passengers} {{ ja: '名', zh: '人', fr: 'Passagers', es: 'Pasajeros', en: 'Pax' }[lang]} • {bookingDetails.travelDate}
               </span>
             </div>
             <div className="text-right shrink-0">
-              <span className="text-xs text-slate-400 block">Total</span>
+              <span className="text-xs text-slate-400 block">{{ ja: '総額', zh: '总额', fr: 'Total', es: 'Total', en: 'Total' }[lang]}</span>
               <span className="text-lg font-extrabold text-[#C5A059] font-mono">
                 ¥{bookingDetails.amount.toLocaleString()}
               </span>
@@ -470,11 +524,11 @@ export default function StripePaymentModal({
 
           <div className="pt-2 border-t border-slate-800/80 grid grid-cols-2 gap-2 text-[10px] text-slate-400">
             <div>
-              <span className="block text-slate-500">Guest Name:</span>
+              <span className="block text-slate-500">{{ ja: '代表者様名:', zh: '持卡人/乘客:', fr: 'Nom :', es: 'Nombre:', en: 'Guest Name:' }[lang]}</span>
               <span className="text-slate-300 font-medium truncate block">{bookingDetails.guestName}</span>
             </div>
             <div>
-              <span className="block text-slate-500">Email:</span>
+              <span className="block text-slate-500">{{ ja: 'メールアドレス:', zh: '电子邮箱:', fr: 'Email :', es: 'Correo:', en: 'Email:' }[lang]}</span>
               <span className="text-slate-300 font-medium truncate block">{bookingDetails.guestEmail}</span>
             </div>
           </div>
@@ -485,7 +539,13 @@ export default function StripePaymentModal({
           <div className="py-12 text-center space-y-3">
             <Loader2 className="w-8 h-8 text-[#C5A059] animate-spin mx-auto" />
             <p className="text-xs text-slate-400">
-              {lang === 'ja' ? '安全な決済セッションを確立中...' : 'Establishing encrypted Stripe session...'}
+              {{
+                ja: '安全な決済セッションを確立中...',
+                zh: '正在建立高强度加密支付通道...',
+                fr: 'Établissement de la session sécurisée...',
+                es: 'Estableciendo sesión cifrada...',
+                en: 'Establishing encrypted Stripe session...',
+              }[lang]}
             </p>
           </div>
         ) : initError ? (
@@ -497,7 +557,13 @@ export default function StripePaymentModal({
               onClick={onClose}
               className="bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition-colors"
             >
-              Back to Trip Details
+              {{
+                ja: '旅程詳細に戻る',
+                zh: '返回修改行程',
+                fr: 'Retour aux détails',
+                es: 'Volver a los detalles',
+                en: 'Back to Trip Details',
+              }[lang]}
             </button>
           </div>
         ) : isSandbox ? (

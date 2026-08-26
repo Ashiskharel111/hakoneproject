@@ -188,6 +188,54 @@ export default function RouteDistanceVisualizer() {
     ? CORRIDOR_ROUTES
     : CORRIDOR_ROUTES.filter((r) => r.category === activeCategory);
 
+  const t = {
+    badge: {
+      ja: 'インタラクティブルート＆距離カリキュレーター',
+      zh: '交互式路线与高速里程距离测算器',
+      fr: 'Calculateur Interactif d\'Itinéraire & Distance',
+      es: 'Calculadora Interactiva de Rutas y Distancias',
+      en: 'Interactive Route & Distance Calculator',
+    }[lang],
+    title: {
+      ja: '主要ルート距離・所要時間ビジュアライザー',
+      zh: '日本主要高速走廊里程与行车时间全景',
+      fr: 'Visualiseur de Distances & Temps de Trajet Autoroutiers',
+      es: 'Visualizador de Distancias y Tiempos de Viaje',
+      en: 'Expressway Distance & Travel Time Visualizer',
+    }[lang],
+    subtitle: {
+      ja: '羽田・成田空港、富士山・箱根、白馬スキー場への高速道路ルート、所要時間、距離を即座にシミュレーション。',
+      zh: '实时模拟羽田/成田机场、富士山箱根及白马滑雪场的高速公路路线、预计行车耗时与全包专车定价。',
+      fr: 'Calculez les distances autoroutières directes, temps de trajet estimés, aires de repos panoramiques et tarifs fixes.',
+      es: 'Calcule el kilometraje de autopistas, tiempos estimados, paradas panorámicas y tarifas fijas en todo Japón.',
+      en: 'Calculate direct highway mileage, estimated travel times, scenic highway rest stops, and flat-rate fares across Japan.',
+    }[lang],
+    catAll: { ja: 'すべてのルート', zh: '全部路线走廊', fr: 'Tous les Corridors', es: 'Todos los Corredores', en: 'All Corridors' }[lang],
+    catAirport: { ja: '空港送迎', zh: '机场接送', fr: 'Aéroports', es: 'Aeropuertos', en: 'Airports' }[lang],
+    catSightseeing: { ja: '観光チャーター', zh: '观光包车', fr: 'Visites Privées', es: 'Tours Turísticos', en: 'Sightseeing' }[lang],
+    catWinter: { ja: '冬期スキー', zh: '雪季滑雪', fr: 'Ski Hivernal', es: 'Esquí de Invierno', en: 'Winter Ski' }[lang],
+    fromLabel: { ja: '片道', zh: '起价', fr: 'Dès', es: 'Desde', en: 'From' }[lang],
+    totalDistance: { ja: '総走行距離', zh: '高速总里程', fr: 'Distance Totale', es: 'Distancia Total', en: 'Total Distance' }[lang],
+    driveTime: { ja: '推定所要時間', zh: '预计车程', fr: 'Temps de Trajet', es: 'Tiempo de Viaje', en: 'Drive Time' }[lang],
+    fixedRate: { ja: '定額運賃', zh: '一口价包车', fr: 'Tarif Fixe', es: 'Tarifa Fija', en: 'Fixed Rate' }[lang],
+    primaryHighway: { ja: '利用高速道路:', zh: '主要通行高速:', fr: 'Autoroute Principale :', es: 'Autopista Principal:', en: 'Primary Highway:' }[lang],
+    originPoint: { ja: '出発地・乗車地点:', zh: '出发点 / 接送区域:', fr: 'Point de Départ :', es: 'Punto de Salida:', en: 'Origin Point:' }[lang],
+    scenicStopsTitle: {
+      ja: 'おすすめのサービスエリア (SA)・展望スポット',
+      zh: '精选沿途服务区 (SA) 与观景停靠站',
+      fr: 'Aires de Repos Recommandées & Points de Vue',
+      es: 'Áreas de Descanso Recomendadas y Miradores',
+      en: 'Recommended Highway Rest & View Stops',
+    }[lang],
+    reserveRouteBtn: {
+      ja: 'このルートでハイヤーを予約する',
+      zh: '立即预订该路线专属专车',
+      fr: 'Réserver un Chauffeur sur ce Trajet',
+      es: 'Reservar Chófer para esta Ruta',
+      en: 'Reserve Chauffeur for this Route',
+    }[lang],
+  };
+
   return (
     <div className="w-full bg-white dark:bg-[#0A0D14] border border-[#E5E8ED] dark:border-slate-800 rounded-3xl p-5 sm:p-8 shadow-sm transition-colors">
       
@@ -196,25 +244,23 @@ export default function RouteDistanceVisualizer() {
         <div className="space-y-1">
           <div className="inline-flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-widest text-[#0068FF]">
             <Navigation className="w-3.5 h-3.5" />
-            <span>Interactive Route &amp; Distance Calculator</span>
+            <span>{t.badge}</span>
           </div>
           <h2 className="text-xl sm:text-2xl font-extrabold text-[#1A1A1A] dark:text-white">
-            {lang === 'ja' ? '主要ルート距離・所要時間ビジュアライザー' : 'Expressway Distance & Travel Time Visualizer'}
+            {t.title}
           </h2>
           <p className="text-xs text-[#6B7280] dark:text-slate-400">
-            {lang === 'ja'
-              ? '羽田・成田空港、富士山・箱根、白馬スキー場への高速道路ルート、所要時間、距離を即座にシミュレーション。'
-              : 'Calculate direct highway mileage, estimated travel times, scenic highway rest stops, and flat-rate fares across Japan.'}
+            {t.subtitle}
           </p>
         </div>
 
         {/* Category Filters */}
         <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1">
           {[
-            { id: 'all' as const, label: 'All Corridors' },
-            { id: 'airport' as const, label: 'Airports' },
-            { id: 'sightseeing' as const, label: 'Sightseeing' },
-            { id: 'winter' as const, label: 'Winter Ski' },
+            { id: 'all' as const, label: t.catAll },
+            { id: 'airport' as const, label: t.catAirport },
+            { id: 'sightseeing' as const, label: t.catSightseeing },
+            { id: 'winter' as const, label: t.catWinter },
           ].map((cat) => (
             <button
               key={cat.id}
@@ -268,7 +314,7 @@ export default function RouteDistanceVisualizer() {
                 </div>
                 
                 <div className="text-right shrink-0">
-                  <span className="text-[9px] text-[#9CA3AF] block uppercase">From</span>
+                  <span className="text-[9px] text-[#9CA3AF] block uppercase">{t.fromLabel}</span>
                   <span className="font-mono font-bold text-xs text-[#1A1A1A] dark:text-white">
                     ¥{route.startingPrice.toLocaleString()}
                   </span>
@@ -284,15 +330,15 @@ export default function RouteDistanceVisualizer() {
           {/* Top Route Metrics Bar */}
           <div className="grid grid-cols-3 gap-3 bg-white dark:bg-[#0A0D14] p-3.5 rounded-xl border border-[#E5E8ED] dark:border-slate-800 text-center">
             <div>
-              <span className="text-[10px] text-[#9CA3AF] uppercase font-semibold block">Total Distance</span>
+              <span className="text-[10px] text-[#9CA3AF] uppercase font-semibold block">{t.totalDistance}</span>
               <span className="text-lg sm:text-xl font-extrabold text-[#0068FF] font-mono">{currentRoute.distanceKm} km</span>
             </div>
             <div className="border-x border-[#F0F2F5] dark:border-slate-800 px-2">
-              <span className="text-[10px] text-[#9CA3AF] uppercase font-semibold block">Drive Time</span>
+              <span className="text-[10px] text-[#9CA3AF] uppercase font-semibold block">{t.driveTime}</span>
               <span className="text-lg sm:text-xl font-extrabold text-[#00B37E] font-mono">{currentRoute.durationMins}</span>
             </div>
             <div>
-              <span className="text-[10px] text-[#9CA3AF] uppercase font-semibold block">Fixed Rate</span>
+              <span className="text-[10px] text-[#9CA3AF] uppercase font-semibold block">{t.fixedRate}</span>
               <span className="text-lg sm:text-xl font-extrabold text-[#1A1A1A] dark:text-white font-mono">
                 ¥{currentRoute.startingPrice.toLocaleString()}〜
               </span>
@@ -313,11 +359,11 @@ export default function RouteDistanceVisualizer() {
           <div className="space-y-3">
             <div className="text-xs space-y-2 text-[#4B5563] dark:text-slate-300">
               <div className="flex items-start justify-between gap-2">
-                <span className="text-[#9CA3AF] shrink-0 font-medium">Primary Highway:</span>
+                <span className="text-[#9CA3AF] shrink-0 font-medium">{t.primaryHighway}</span>
                 <span className="font-semibold text-right text-[#1A1A1A] dark:text-white">{currentRoute.expressway}</span>
               </div>
               <div className="flex items-start justify-between gap-2">
-                <span className="text-[#9CA3AF] shrink-0 font-medium">Origin Point:</span>
+                <span className="text-[#9CA3AF] shrink-0 font-medium">{t.originPoint}</span>
                 <span className="font-semibold text-right text-[#1A1A1A] dark:text-white">{currentRoute.origin}</span>
               </div>
             </div>
@@ -325,7 +371,7 @@ export default function RouteDistanceVisualizer() {
             {/* Scenic Highway Service Area Stops */}
             <div className="bg-white dark:bg-[#0A0D14] p-3.5 rounded-xl border border-[#E5E8ED] dark:border-slate-800 space-y-2">
               <span className="text-[10px] uppercase font-bold tracking-wider text-[#6B7280] dark:text-slate-400 block">
-                Recommended Highway Rest &amp; View Stops
+                {t.scenicStopsTitle}
               </span>
               <div className="flex flex-wrap gap-1.5">
                 {currentRoute.scenicStops.map((stop, idx) => (
@@ -346,7 +392,7 @@ export default function RouteDistanceVisualizer() {
                 href="/tours"
                 className="w-full bg-[#0068FF] hover:bg-[#0050CC] text-white font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-sm transition-colors"
               >
-                <span>Reserve Chauffeur for this Route</span>
+                <span>{t.reserveRouteBtn}</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>

@@ -118,6 +118,44 @@ export default function ServicesPage() {
     },
   ];
 
+  const t = {
+    heroBadge: {
+      ja: '国土交通省 認可営業用緑ナンバーハイヤー事業体',
+      zh: '日本国土交通省 官方绿牌营运合规车队',
+      fr: 'SERVICES DE CHAUFFEUR PRIVÉ HOMOLOGUÉS MLIT JAPON',
+      es: 'SERVICIOS DE CHÓFER PRIVADO CERTIFICADOS MLIT JAPÓN',
+      en: 'MLIT Certified Commercial Chauffeur Ground Services',
+    }[lang],
+    heroTitle: {
+      ja: '洗練されたプライベートハイヤーサービス',
+      zh: '日本全境 顶规专属专车与贵宾地接方案',
+      fr: 'Chauffeur Privé & Logistique Terrestre d\'Excellence au Japon',
+      es: 'Chófer Privado de Primera Clase y Logística en Japón',
+      en: 'Premier Private Chauffeur & Ground Logistics in Japan',
+    }[lang],
+    heroDesc: {
+      ja: '成田・羽田空港送迎、富士山観光チャーター、冬期4WDスキー送迎からVIPビジネス輸送まで。国土交通省認可の最高品質をお届けします。',
+      zh: '涵盖成田/羽田机场接送、富士山深度包车一日游、长野4WD雪季滑雪专线及商务外事接待。完全一口价，实时航班追踪，尊享豪华车队。',
+      fr: 'Des transferts aéroportuaires fluides aux excursions sur mesure au Mont Fuji, en passant par les transferts ski 4x4 et les roadshows d\'affaires.',
+      es: 'Desde traslados directos de aeropuerto y tours privados al Monte Fuji hasta traslados de esquí 4x4 y transporte corporativo VIP.',
+      en: 'From seamless airport transfers and bespoke Mount Fuji day charters to 4WD winter ski transfers and corporate roadshows. Transparent fixed fares, flight tracking, and pristine executive fleet.',
+    }[lang],
+    servicesTag: { ja: 'サービス一覧', zh: '服务矩阵', fr: 'Prestations Complètes', es: 'Servicios Completos', en: 'Comprehensive Offerings' }[lang],
+    servicesHead: { ja: 'お客様の旅を彩る専任輸送ソリューション', zh: '尊享日本地面出行解决方案', fr: 'Solutions de Déplacement Sur Mesure', es: 'Soluciones de Viaje a Medida', en: 'Tailored Ground Travel Solutions' }[lang],
+    fromLabel: { ja: '片道', zh: '起', fr: 'Dès', es: 'Desde', en: 'From' }[lang],
+    exploreBtn: { ja: '詳細・ご予約はこちら', zh: '查看详情并预约', fr: 'Explorer & Réserver', es: 'Explorar y Reservar', en: 'Explore & Book Service' }[lang],
+    standardTag: { ja: 'SK LIMOのこだわり', zh: '品质标杆', fr: 'Le Standard SK LIMO', es: 'El Estándar SK LIMO', en: 'The SK Limo Standard' }[lang],
+    standardHead: { ja: '世界中のお客様・旅行会社様に選ばれる理由', zh: '为什么全球高端旅客与旅行社信赖我们', fr: 'Pourquoi les Voyageurs Exigeants Nous Choisissent', es: 'Por Qué los Viajeros Exigentes nos Eligen', en: 'Why Discerning Travelers & Travel Agents Choose Us' }[lang],
+    g1Title: { ja: '100% 緑ナンバー認可', zh: '100% 正规商业绿牌', fr: '100 % Agréé Plaque Verte', es: '100% Licencia Placa Verde', en: '100% Green-Plate Licensed' }[lang],
+    g1Desc: { ja: '国土交通省関東運輸局認可。万全の搭乗者傷害保険を完備。', zh: '日本国土交通省正规营运资质，全额配备高额商业乘客险。', fr: 'Agréé par le Ministère des Transports avec assurance responsabilité passagers.', es: 'Autorizado por el Ministerio de Transporte de Japón con seguro integral.', en: 'Authorized by the Ministry of Land, Infrastructure, Transport and Tourism (MLIT) with comprehensive passenger insurance.' }[lang],
+    g2Title: { ja: '24時間 運行管理デスク', zh: '24/7 全天候调度中心', fr: 'Desk Opérationnel 24/7', es: 'Centro Operativo 24/7', en: '24/7 Operations Desk' }[lang],
+    g2Desc: { ja: 'フライト追跡とWhatsAppによる迅速な多言語オペレーション。', zh: '全天候航班追踪与中英日三语WhatsApp即时客服。', fr: 'Suivi de vol en continu et assistance immédiate sur WhatsApp.', es: 'Monitoreo continuo de vuelos y atención inmediata vía WhatsApp.', en: 'Round-the-clock flight tracking and instant dispatch support via WhatsApp and hotline.' }[lang],
+    g3Title: { ja: '清潔な日本車フリート', zh: '尊享日系豪华车队', fr: 'Flotte Japonaise Impeccable', es: 'Flota Japonesa Impecable', en: 'Pristine Japanese Fleet' }[lang],
+    g3Desc: { ja: '毎日除菌・全車禁煙。ハイエース、アルファード、グランエースを配備。', zh: '每日深度清洁消杀，严格全车禁烟：海狮、埃尔法、格兰斯全系在列。', fr: 'Nettoyés et désinfectés chaque jour : HiAce, Toyota Alphard et Granace.', es: 'Limpiados y desinfectados a diario: HiAce, Toyota Alphard y Granace.', en: 'Cleaned and sanitized daily: HiAce (Standard), Toyota Alphard (Premium), and Toyota Granace (Ultra Premium).' }[lang],
+    g4Title: { ja: '明朗な完全定額料金', zh: '全包一口价无隐形消费', fr: 'Tarifs Fixes Tout Compris', es: 'Tarifas Fijas Todo Incluido', en: 'All-Inclusive Fixed Fares' }[lang],
+    g4Desc: { ja: '高速代、燃料代、保険、駐車場代込。メーター加算や渋滞割増なし。', zh: '高速费、油费、保险与停车费下单全锁死，绝无跳表惊吓与高峰加价。', fr: 'Péages, carburant, assurances et parkings fixés à la réservation.', es: 'Peajes, combustible, seguro y aparcamientos garantizados en la reserva.', en: 'Highway tolls, fuel, vehicle insurance, and parking are locked in upon booking. No surprise meter fees.' }[lang],
+  };
+
   return (
     <div className="min-h-screen bg-[#F5F7FA] dark:bg-[#080B11] text-[#1A1A1A] dark:text-[#F1F5F9] transition-colors duration-200">
       <SiteHeader />
@@ -128,19 +166,15 @@ export default function ServicesPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-4 text-center">
           <div className="inline-flex items-center gap-1.5 bg-blue-500/10 border border-blue-500/20 text-[#38BDF8] text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
             <Award className="w-3.5 h-3.5" />
-            <span>MLIT Certified Commercial Chauffeur Ground Services</span>
+            <span>{t.heroBadge}</span>
           </div>
 
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white max-w-3xl mx-auto">
-            {lang === 'ja'
-              ? '洗練されたプライベートハイヤーサービス'
-              : 'Premier Private Chauffeur & Ground Logistics in Japan'}
+            {t.heroTitle}
           </h1>
 
           <p className="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed">
-            {lang === 'ja'
-              ? '成田・羽田空港送迎、富士山観光チャーター、冬期4WDスキー送迎からVIPビジネス輸送まで。国土交通省認可の最高品質をお届けします。'
-              : 'From seamless airport transfers and bespoke Mount Fuji day charters to 4WD winter ski transfers and corporate roadshows. Transparent fixed fares, flight tracking, and pristine executive fleet.'}
+            {t.heroDesc}
           </p>
         </div>
       </section>
@@ -152,10 +186,10 @@ export default function ServicesPage() {
         <section className="space-y-8">
           <div className="text-center max-w-2xl mx-auto space-y-1">
             <span className="text-[11px] uppercase font-bold tracking-widest text-[#0068FF]">
-              Comprehensive Offerings
+              {t.servicesTag}
             </span>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-[#1A1A1A] dark:text-white">
-              Tailored Ground Travel Solutions
+              {t.servicesHead}
             </h2>
           </div>
 
@@ -177,7 +211,7 @@ export default function ServicesPage() {
                       {svc.tag}
                     </div>
                     <div className="absolute bottom-3 right-3 bg-black/80 backdrop-blur-md px-3 py-1 rounded-xl border border-[#C5A059]/40 text-[#C5A059] font-mono font-bold text-xs">
-                      From {svc.startingPrice}
+                      {t.fromLabel} {svc.startingPrice}
                     </div>
                   </div>
 
@@ -205,7 +239,7 @@ export default function ServicesPage() {
                     href={svc.href}
                     className="w-full bg-[#0068FF] hover:bg-[#0050CC] text-white font-bold py-3 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-sm transition-colors"
                   >
-                    <span>Explore &amp; Book Service</span>
+                    <span>{t.exploreBtn}</span>
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -225,43 +259,43 @@ export default function ServicesPage() {
 
           <div className="max-w-2xl space-y-2">
             <span className="text-[11px] uppercase font-bold tracking-widest text-[#C5A059]">
-              The SK Limo Standard
+              {t.standardTag}
             </span>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
-              Why Discerning Travelers &amp; Travel Agents Choose Us
+              {t.standardHead}
             </h2>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="space-y-2 bg-[#111622] p-5 rounded-2xl border border-slate-800">
               <ShieldCheck className="w-6 h-6 text-[#00B37E]" />
-              <h4 className="font-bold text-sm text-white">100% Green-Plate Licensed</h4>
+              <h4 className="font-bold text-sm text-white">{t.g1Title}</h4>
               <p className="text-xs text-slate-400 leading-relaxed">
-                Authorized by the Ministry of Land, Infrastructure, Transport and Tourism (MLIT) with comprehensive passenger insurance.
+                {t.g1Desc}
               </p>
             </div>
 
             <div className="space-y-2 bg-[#111622] p-5 rounded-2xl border border-slate-800">
               <Clock className="w-6 h-6 text-[#0068FF]" />
-              <h4 className="font-bold text-sm text-white">24/7 Operations Desk</h4>
+              <h4 className="font-bold text-sm text-white">{t.g2Title}</h4>
               <p className="text-xs text-slate-400 leading-relaxed">
-                Round-the-clock flight tracking and instant dispatch support via WhatsApp and hotline.
+                {t.g2Desc}
               </p>
             </div>
 
             <div className="space-y-2 bg-[#111622] p-5 rounded-2xl border border-slate-800">
               <Car className="w-6 h-6 text-[#C5A059]" />
-              <h4 className="font-bold text-sm text-white">Pristine Japanese Fleet</h4>
+              <h4 className="font-bold text-sm text-white">{t.g3Title}</h4>
               <p className="text-xs text-slate-400 leading-relaxed">
-                Cleaned and sanitized daily: HiAce (Standard), Toyota Alphard (Premium), and Toyota Granace (Ultra Premium).
+                {t.g3Desc}
               </p>
             </div>
 
             <div className="space-y-2 bg-[#111622] p-5 rounded-2xl border border-slate-800">
               <CheckCircle2 className="w-6 h-6 text-purple-400" />
-              <h4 className="font-bold text-sm text-white">All-Inclusive Fixed Fares</h4>
+              <h4 className="font-bold text-sm text-white">{t.g4Title}</h4>
               <p className="text-xs text-slate-400 leading-relaxed">
-                Highway tolls, fuel, vehicle insurance, and parking are locked in upon booking. No surprise meter fees.
+                {t.g4Desc}
               </p>
             </div>
           </div>

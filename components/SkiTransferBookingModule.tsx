@@ -170,19 +170,231 @@ export default function SkiTransferBookingModule({
     };
   }, [currentResort, selectedVehicle, pickupPoint, addSecondVehicle]);
 
+  const t = {
+    backToCatalog: {
+      ja: 'すべてのツアー一覧に戻る',
+      zh: '返回全部行程列表',
+      fr: 'Retour au catalogue',
+      es: 'Volver al catálogo',
+      en: 'Back to Explore & Catalog',
+    }[lang],
+    badgeTop: {
+      ja: '4WD 冬期スキー直行専属ハイヤー',
+      zh: '4WD 雪季滑雪直达专属专车',
+      fr: 'Transfert Ski 4x4 Privé & Direct',
+      es: 'Traslado de Esquí Privado 4x4',
+      en: '4WD Winter Ski Direct Transfer',
+    }[lang],
+    step1Title: {
+      ja: '1. スキーリゾートを選択',
+      zh: '1. 选择目的地滑雪场',
+      fr: '1. Choisir la Station de Ski',
+      es: '1. Seleccionar Estación de Esquí',
+      en: '1. Select Ski Resort Destination',
+    }[lang],
+    step2Title: {
+      ja: '2. ご出発地・乗車場所',
+      zh: '2. 出发地与接送点',
+      fr: '2. Point de Départ',
+      es: '2. Punto de Salida',
+      en: '2. Departure Point',
+    }[lang],
+    pickupHaneda: {
+      ja: '羽田空港 (HND)',
+      zh: '羽田国际机场 (HND)',
+      fr: 'Aéroport d\'Haneda (HND)',
+      es: 'Aeropuerto de Haneda (HND)',
+      en: 'Haneda Airport (HND)',
+    }[lang],
+    pickupNarita: {
+      ja: '成田空港 (NRT)',
+      zh: '成田国际机场 (NRT)',
+      fr: 'Aéroport de Narita (NRT)',
+      es: 'Aeropuerto de Narita (NRT)',
+      en: 'Narita Airport (NRT)',
+    }[lang],
+    pickupTokyo: {
+      ja: '東京都内ホテル / ご指定住所',
+      zh: '东京市内酒店 / 指定地点',
+      fr: 'Hôtel à Tokyo (Centre)',
+      es: 'Hotel en Tokio (Centro)',
+      en: 'Tokyo Downtown Hotel',
+    }[lang],
+    step3Title: {
+      ja: '3. 4WD 冬期専用車両クラス',
+      zh: '3. 选择 4WD 雪季专属车型',
+      fr: '3. Véhicule 4x4 Équipé Neige',
+      es: '3. Vehículo 4x4 Equipado para Nieve',
+      en: '3. 4WD Winter Fleet Class',
+    }[lang],
+    studlessIncluded: {
+      ja: '全車スタッドレスタイヤ標準装備',
+      zh: '全系标配高性能雪地防滑胎',
+      fr: 'Pneus Neige Inclus Standard',
+      es: 'Neumáticos de Nieve Incluidos',
+      en: 'Studless Tires Included',
+    }[lang],
+    step4Title: {
+      ja: '4. 目的地シャレー・ご乗車詳細',
+      zh: '4. 木屋/酒店地址与乘客信息',
+      fr: '4. Chalet de Destination & Passagers',
+      es: '4. Chalet de Destino y Pasajeros',
+      en: '4. Destination Chalet & Passengers',
+    }[lang],
+    dateLabel: {
+      ja: '送迎日程',
+      zh: '出行日期',
+      fr: 'Date du trajet',
+      es: 'Fecha del traslado',
+      en: 'Transfer Date',
+    }[lang],
+    paxLabel: {
+      ja: 'ご乗車人数',
+      zh: '出行人数',
+      fr: 'Passagers',
+      es: 'Pasajeros',
+      en: 'Guest Count',
+    }[lang],
+    guestsUnit: {
+      ja: '名様',
+      zh: '位贵宾',
+      fr: 'Personnes',
+      es: 'Personas',
+      en: 'Guests',
+    }[lang],
+    chaletLabel: {
+      ja: '目的地の宿・シャレー名または住所',
+      zh: '目的地的木屋、酒店名称或详细地址',
+      fr: 'Nom du chalet / hôtel ou adresse de destination',
+      es: 'Nombre del chalet / hotel o dirección de destino',
+      en: 'Destination Chalet / Hotel Name & Address',
+    }[lang],
+    chaletPlaceholder: {
+      ja: '例: The Happo、白馬和田野シャレー、野沢温泉ホテル など',
+      zh: '例如: The Happo、白马和田野度假木屋、野泽温泉酒店等',
+      fr: 'Ex: The Happo, Chalet Hakuba Wadano, Hôtel Nozawa Onsen',
+      es: 'Ej: The Happo, Chalet Hakuba Wadano, Hotel Nozawa Onsen',
+      en: 'e.g. The Happo, Hakuba Wadano Chalet, Nozawa Onsen Hotel',
+    }[lang],
+    leadNameLabel: {
+      ja: '代表者様氏名',
+      zh: '代表乘客全名',
+      fr: 'Nom du passager principal',
+      es: 'Nombre del pasajero principal',
+      en: 'Lead Guest Full Name',
+    }[lang],
+    emailLabel: {
+      ja: '予約確認書送信先メールアドレス',
+      zh: '接收确认单电子邮箱',
+      fr: 'Email de confirmation',
+      es: 'Correo de confirmación',
+      en: 'Confirmation Email',
+    }[lang],
+    addSecondVehicleTitle: {
+      ja: '+ 2台目サポート車両を追加 (荷物積載・大人数)',
+      zh: '+ 追加第二辆随行保障车 (大量雪具与多人团队)',
+      fr: '+ Ajouter un 2e véhicule (Bagages volumineux & Groupes)',
+      es: '+ Añadir 2º vehículo (Equipaje voluminoso y Grupos)',
+      en: 'Add 2nd Support Vehicle (Luggage & Large Group)',
+    }[lang],
+    addSecondVehicleDesc: {
+      ja: 'スキー板・スノボケースの大量積載や、9名を超えるグループに最適な2台車隊運行。',
+      zh: '双车编队护航，专为超量雪具包、雪板及超过9人的大型团队配置。',
+      fr: 'Convoi double 4x4 pour excès de housses de ski et groupes de plus de 9 personnes.',
+      es: 'Convoy doble 4x4 para exceso de material de esquí y grupos de más de 9 personas.',
+      en: 'Dual 4WD convoy for excess ski bags, snowboards, or groups over 9 guests.',
+    }[lang],
+    memoLabel: {
+      ja: '追加車両・特記事項メモ',
+      zh: '特殊需求与行程备注',
+      fr: 'Remarques & Besoins Particuliers',
+      es: 'Peticiones Especiales y Notas',
+      en: 'Additional Vehicle Memo & Special Requests',
+    }[lang],
+    memoPlaceholder: {
+      ja: '例: スキー板の本数、チャイルドシート希望、途中SAでの休憩希望など',
+      zh: '例如: 滑雪板数量、需要儿童安全座椅、希望在特定服务区休息等',
+      fr: 'Ex: Nombre de housses de ski, sièges bébé, arrêts particuliers souhaités...',
+      es: 'Ej: Número de bolsas de esquí, sillas de bebé, paradas deseadas en ruta...',
+      en: 'e.g. Extra ski bag volume, child safety seats required, specific rest stop preferences.',
+    }[lang],
+    agreementText: {
+      ja: 'スキー送迎日程、人数、目的地シャレー情報を確認し、正規運送事業運行規定およびキャンセルポリシーに同意します。',
+      zh: '我确认滑雪接送日期、人数及木屋信息准确无误，并同意正规营运条款及取消政策。',
+      fr: 'Je confirme l\'exactitude des dates, du nombre de passagers et du chalet, et j\'accepte les conditions de transport.',
+      es: 'Confirmo que las fechas, pasajeros y chalet son correctos, y acepto las condiciones de transporte.',
+      en: 'I confirm my ski transfer date, guest count, and destination chalet details are accurate, and I agree to the licensed commercial carrier terms.',
+    }[lang],
+    quoteTitle: {
+      ja: 'スキー定額見積り',
+      zh: '滑雪专车定额明细',
+      fr: 'Devis Fixe Ski Direct',
+      es: 'Presupuesto Fijo de Esquí',
+      en: 'Ski Direct Quote',
+    }[lang],
+    allInclusive: {
+      ja: '完全定額・高速代込',
+      zh: '全包一口价',
+      fr: 'Tout Compris Garanti',
+      es: 'Todo Incluido Garantizado',
+      en: 'All-Inclusive Fixed',
+    }[lang],
+    destinationLabel: { ja: '目的地:', zh: '目的地:', fr: 'Destination :', es: 'Destino:', en: 'Destination:' }[lang],
+    departureLabel: { ja: '出発地:', zh: '出发地:', fr: 'Départ :', es: 'Salida:', en: 'Departure:' }[lang],
+    vehicleLabel: { ja: '運行車両:', zh: '服务车型:', fr: 'Véhicule :', es: 'Vehículo:', en: 'Vehicle:' }[lang],
+    supportVehicleLabel: { ja: 'サポート車両:', zh: '随行车辆:', fr: 'Véhicule de soutien :', es: 'Vehículo de apoyo:', en: 'Support Vehicle:' }[lang],
+    supportVehicleVal: { ja: '+ 4WD サポート車両 1台', zh: '+ 2号随行保障车 1台', fr: '+ 2e véhicule 4x4', es: '+ 2º vehículo 4x4', en: '+ 2nd 4WD Convoy Vehicle' }[lang],
+    incTires: {
+      ja: 'ブリヂストン製スタッドレスタイヤ完備',
+      zh: '普利司通高性能防滑雪地胎',
+      fr: 'Pneus neige Bridgestone Blizzak inclus',
+      es: 'Neumáticos de nieve Bridgestone Blizzak',
+      en: 'Bridgestone Blizzak winter studless tires',
+    }[lang],
+    incTolls: {
+      ja: '高速道路通行料・ガソリン代込',
+      zh: '包含全程高速公路过路费与燃油费',
+      fr: 'Péages d\'autoroute et carburant inclus',
+      es: 'Peajes de autopista y combustible incluidos',
+      en: 'Expressway highway tolls & fuel included',
+    }[lang],
+    incDoorToDoor: {
+      ja: 'シャレー・ホテル玄関直行ドアtoドア',
+      zh: '点对点直达木屋酒店门口',
+      fr: 'Dépose directe devant le chalet',
+      es: 'Llegada directa a la puerta del chalet',
+      en: 'Door-to-door direct chalet drop-off',
+    }[lang],
+    totalFareLabel: { ja: '定額総額 (税込):', zh: '全包总价 (含税):', fr: 'Tarif Total :', es: 'Tarifa Total:', en: 'Total Fare:' }[lang],
+    instantStripeBtn: {
+      ja: 'Stripe 即時オンライン決済',
+      zh: 'Stripe 在线安全预订支付',
+      fr: 'Paiement Sécurisé Immédiat Stripe',
+      es: 'Pago Seguro Inmediato con Stripe',
+      en: 'Instant Stripe Checkout',
+    }[lang],
+    whatsAppBtn: {
+      ja: 'WhatsApp で空車確認・ご相談',
+      zh: '通过 WhatsApp 确认空车并预订',
+      fr: 'WhatsApp Conciergerie (Devis Pré-rempli)',
+      es: 'WhatsApp Conserjería (Datos Completados)',
+      en: 'WhatsApp Concierge (Auto-Fill Details)',
+    }[lang],
+  };
+
   const pickupLabel =
     pickupPoint === 'nrt'
-      ? 'Narita Airport (NRT)'
+      ? t.pickupNarita
       : pickupPoint === 'hnd'
-      ? 'Haneda Airport (HND)'
-      : 'Tokyo Downtown Hotel';
+      ? t.pickupHaneda
+      : t.pickupTokyo;
 
   const vehicleName =
     selectedVehicle === 'alphard'
-      ? 'Toyota Alphard (Premium - 1-4 Pax)'
+      ? 'Toyota Alphard 4WD (1–4 Pax)'
       : selectedVehicle === 'granace'
-      ? 'Toyota Granace (Ultra Premium - 1-5 Pax)'
-      : 'HiAce Grand Cabin (Standard - 1-9 Pax)';
+      ? 'Toyota Granace VIP 4WD (1–5 Pax)'
+      : 'Toyota HiAce Grand Cabin (1–9 Pax)';
 
   const bookingDetails: BookingPaymentDetails = {
     bookingType: 'winter_transfer',
@@ -212,6 +424,8 @@ export default function SkiTransferBookingModule({
       setValidationError(
         lang === 'ja'
           ? `選択中の車両定員は最大${maxCap}名です（現在${passengers}名）。車両クラスを「Ultra Premium (5名)」または「Standard (9名)」に変更するか、2台目サポート車両を追加してください。`
+          : lang === 'zh'
+          ? `当前选择的车型最多可容纳${maxCap}人（当前已选${passengers}人）。请升级为更大车型或追加第二辆保障车。`
           : `${selectedVehicle === 'alphard' ? 'Toyota Alphard (Premium)' : 'Toyota Granace (Ultra Premium)'} capacity is max ${maxCap} guests. You have selected ${passengers} guests. Please choose a larger vehicle or add a 2nd support vehicle.`
       );
       return;
@@ -220,6 +434,8 @@ export default function SkiTransferBookingModule({
       setValidationError(
         lang === 'ja'
           ? '目的地の宿・シャレー名または住所をご入力ください。'
+          : lang === 'zh'
+          ? '请输入目的地木屋、酒店名称或具体地址。'
           : 'Please enter your destination chalet, hotel name, or address.'
       );
       return;
@@ -228,6 +444,8 @@ export default function SkiTransferBookingModule({
       setValidationError(
         lang === 'ja'
           ? '代表者様のお名前と予約確認書送信用メールアドレスをご入力ください。'
+          : lang === 'zh'
+          ? '请输入代表乘客姓名与确认单电子邮箱。'
           : 'Please enter the lead guest name and confirmation email address.'
       );
       return;
@@ -236,6 +454,8 @@ export default function SkiTransferBookingModule({
       setValidationError(
         lang === 'ja'
           ? 'お支払い前に同意のチェックボックスを選択してください。'
+          : lang === 'zh'
+          ? '请在支付前勾选确认条款。'
           : 'Please check the mandatory confirmation box before proceeding.'
       );
       return;
@@ -270,12 +490,12 @@ export default function SkiTransferBookingModule({
             className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0068FF] dark:text-[#3B82F6] hover:underline cursor-pointer bg-white dark:bg-[#0E131F] border border-[#E5E8ED] dark:border-slate-800 px-3 py-1.5 rounded-xl shadow-sm"
           >
             <span>←</span>
-            <span>{lang === 'ja' ? 'すべてのツアー一覧に戻る' : lang === 'zh' ? '返回全部行程列表' : 'Back to Explore & Catalog'}</span>
+            <span>{t.backToCatalog}</span>
           </button>
         )}
         <div className="inline-flex items-center gap-1.5 bg-[#E8F1FF] dark:bg-[#0068FF]/15 text-[#0068FF] dark:text-[#3B82F6] text-[11px] font-semibold px-3 py-1 rounded-full ml-auto">
           <Snowflake className="w-3 h-3" />
-          <span>4WD Winter Ski Direct Transfer</span>
+          <span>{t.badgeTop}</span>
         </div>
       </div>
 
@@ -293,7 +513,7 @@ export default function SkiTransferBookingModule({
                     1
                   </span>
                   <h2 className="text-sm sm:text-base font-bold text-[#1A1A1A] dark:text-white">
-                    {lang === 'ja' ? 'スキーリゾートを選択' : 'Select Ski Resort Destination'}
+                    {t.step1Title}
                   </h2>
                 </div>
               </div>
@@ -333,16 +553,16 @@ export default function SkiTransferBookingModule({
                     2
                   </span>
                   <h2 className="text-sm sm:text-base font-bold text-[#1A1A1A] dark:text-white">
-                    {lang === 'ja' ? 'ご出発地・乗車場所' : 'Departure Point'}
+                    {t.step2Title}
                   </h2>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                 {[
-                  { id: 'hnd' as const, label: 'Haneda Airport (HND)' },
-                  { id: 'nrt' as const, label: 'Narita Airport (NRT)' },
-                  { id: 'tokyo' as const, label: 'Tokyo Downtown Hotel' },
+                  { id: 'hnd' as const, label: t.pickupHaneda },
+                  { id: 'nrt' as const, label: t.pickupNarita },
+                  { id: 'tokyo' as const, label: t.pickupTokyo },
                 ].map((item) => (
                   <button
                     key={item.id}
@@ -368,10 +588,10 @@ export default function SkiTransferBookingModule({
                     3
                   </span>
                   <h2 className="text-sm sm:text-base font-bold text-[#1A1A1A] dark:text-white">
-                    {lang === 'ja' ? '4WD 冬期専用車両クラス' : '4WD Winter Fleet Class'}
+                    {t.step3Title}
                   </h2>
                 </div>
-                <span className="text-[11px] text-[#00B37E] font-semibold">Studless Tires Included</span>
+                <span className="text-[11px] text-[#00B37E] font-semibold">{t.studlessIncluded}</span>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -476,7 +696,7 @@ export default function SkiTransferBookingModule({
                     4
                   </span>
                   <h2 className="text-sm sm:text-base font-bold text-[#1A1A1A] dark:text-white">
-                    {lang === 'ja' ? '目的地シャレー・ご乗車詳細' : 'Destination Chalet & Passengers'}
+                    {t.step4Title}
                   </h2>
                 </div>
               </div>
@@ -485,7 +705,7 @@ export default function SkiTransferBookingModule({
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label className="text-xs font-semibold text-[#4B5563] dark:text-slate-300 block mb-1">
-                      {lang === 'ja' ? '送迎日程' : 'Transfer Date'} <span className="text-red-500">*</span>
+                      {t.dateLabel} <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="date"
@@ -497,10 +717,10 @@ export default function SkiTransferBookingModule({
 
                   <div>
                     <label className="text-xs font-semibold text-[#4B5563] dark:text-slate-300 block mb-1">
-                      {lang === 'ja' ? 'ご乗車人数' : 'Guest Count'}
+                      {t.paxLabel}
                     </label>
                     <div className="flex items-center justify-between bg-[#F5F7FA] dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-xl px-3 py-1.5">
-                      <span className="text-xs font-bold text-[#1A1A1A] dark:text-white">{passengers} Guests</span>
+                      <span className="text-xs font-bold text-[#1A1A1A] dark:text-white">{passengers} {t.guestsUnit}</span>
                       <div className="flex items-center gap-1.5">
                         <button
                           type="button"
@@ -529,11 +749,11 @@ export default function SkiTransferBookingModule({
 
                 <div>
                   <label className="text-xs font-semibold text-[#4B5563] dark:text-slate-300 block mb-1">
-                    {lang === 'ja' ? '目的地の宿・シャレー名または住所' : 'Destination Chalet / Hotel Name & Address'} <span className="text-red-500">*</span>
+                    {t.chaletLabel} <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
-                    placeholder="e.g. The Happo, Hakuba Wadano Chalet, Nozawa Onsen Hotel"
+                    placeholder={t.chaletPlaceholder}
                     value={chaletAddress}
                     onChange={(e) => {
                       setChaletAddress(e.target.value);
@@ -546,7 +766,7 @@ export default function SkiTransferBookingModule({
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label className="text-xs font-semibold text-[#4B5563] dark:text-slate-300 block mb-1">
-                      {lang === 'ja' ? '代表者様氏名' : 'Lead Guest Full Name'} <span className="text-red-500">*</span>
+                      {t.leadNameLabel} <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
@@ -562,7 +782,7 @@ export default function SkiTransferBookingModule({
 
                   <div>
                     <label className="text-xs font-semibold text-[#4B5563] dark:text-slate-300 block mb-1">
-                      {lang === 'ja' ? '予約確認書送信先メールアドレス' : 'Confirmation Email'} <span className="text-red-500">*</span>
+                      {t.emailLabel} <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="email"
@@ -584,10 +804,10 @@ export default function SkiTransferBookingModule({
                       <Car className="w-4 h-4 text-[#0068FF]" />
                       <div>
                         <span className="text-xs font-bold text-[#1A1A1A] dark:text-white block">
-                          Add 2nd Support Vehicle (Luggage &amp; Large Group)
+                          {t.addSecondVehicleTitle}
                         </span>
                         <span className="text-[10px] text-[#6B7280] dark:text-slate-400">
-                          Dual 4WD convoy for excess ski bags, snowboards, or groups over 9 guests.
+                          {t.addSecondVehicleDesc}
                         </span>
                       </div>
                     </div>
@@ -607,11 +827,11 @@ export default function SkiTransferBookingModule({
                 <div>
                   <label className="text-xs font-semibold text-[#4B5563] dark:text-slate-300 block mb-1 flex items-center gap-1.5">
                     <FileText className="w-3.5 h-3.5 text-[#0068FF]" />
-                    <span>{lang === 'ja' ? '追加車両・特記事項メモ' : 'Additional Vehicle Memo & Special Requests'}</span>
+                    <span>{t.memoLabel}</span>
                   </label>
                   <textarea
                     rows={2}
-                    placeholder="e.g. Extra ski bag volume, child safety seats required, request 2nd vehicle for gear, or specific rest stop preferences."
+                    placeholder={t.memoPlaceholder}
                     value={vehicleMemo}
                     onChange={(e) => setVehicleMemo(e.target.value)}
                     className="w-full bg-[#F5F7FA] dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none focus:border-[#0068FF] resize-none"
@@ -631,9 +851,7 @@ export default function SkiTransferBookingModule({
                       className="mt-0.5 w-4 h-4 rounded border-[#D1D5DB] text-[#0068FF] focus:ring-[#0068FF] cursor-pointer shrink-0"
                     />
                     <span className="text-[11px] text-[#4B5563] dark:text-slate-300 leading-tight">
-                      {lang === 'ja'
-                        ? 'スキー送迎日程、人数、目的地シャレー情報を確認し、運行規定およびキャンセル規定に同意します。'
-                        : 'I confirm my ski transfer date, guest count, and destination chalet details are accurate, and I agree to the licensed commercial carrier terms.'}
+                      {t.agreementText}
                     </span>
                   </label>
                 </div>
@@ -647,11 +865,11 @@ export default function SkiTransferBookingModule({
             <div className="bg-white dark:bg-[#0E131F] rounded-2xl border border-[#E5E8ED] dark:border-slate-800 p-5 sm:p-6 space-y-5 shadow-sm lg:sticky lg:top-24 transition-colors">
               <div className="flex items-center justify-between pb-3 border-b border-[#F0F2F5] dark:border-slate-800">
                 <span className="text-xs font-bold text-[#6B7280] dark:text-slate-400 uppercase tracking-wider">
-                  Ski Direct Quote
+                  {t.quoteTitle}
                 </span>
                 <span className="text-[11px] text-[#00B37E] font-semibold flex items-center gap-1">
                   <CheckCircle2 className="w-3.5 h-3.5" />
-                  All-Inclusive Fixed
+                  {t.allInclusive}
                 </span>
               </div>
 
@@ -670,21 +888,21 @@ export default function SkiTransferBookingModule({
 
               <div className="space-y-2 text-xs text-[#4B5563] dark:text-slate-300">
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Destination:</span>
+                  <span className="text-slate-500">{t.destinationLabel}</span>
                   <span className="font-bold text-[#1A1A1A] dark:text-white text-right">{currentResort.name[lang] || currentResort.name.en}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Departure:</span>
+                  <span className="text-slate-500">{t.departureLabel}</span>
                   <span className="font-bold text-[#1A1A1A] dark:text-white">{pickupLabel}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Vehicle:</span>
+                  <span className="text-slate-500">{t.vehicleLabel}</span>
                   <span className="font-bold text-[#1A1A1A] dark:text-white">{vehicleName}</span>
                 </div>
                 {addSecondVehicle && (
                   <div className="flex justify-between text-emerald-500 font-semibold">
-                    <span>Support Vehicle:</span>
-                    <span>+ 2nd 4WD Convoy Vehicle</span>
+                    <span>{t.supportVehicleLabel}</span>
+                    <span>{t.supportVehicleVal}</span>
                   </div>
                 )}
               </div>
@@ -693,22 +911,22 @@ export default function SkiTransferBookingModule({
               <div className="bg-[#F5F7FA] dark:bg-[#131b2c] rounded-xl p-3 space-y-1.5 text-[11px] text-[#4B5563] dark:text-slate-300">
                 <p className="flex items-center gap-1.5 text-[#00B37E] font-medium">
                   <Check className="w-3.5 h-3.5 shrink-0" />
-                  <span>Bridgestone Blizzak winter studless tires</span>
+                  <span>{t.incTires}</span>
                 </p>
                 <p className="flex items-center gap-1.5 text-[#00B37E] font-medium">
                   <Check className="w-3.5 h-3.5 shrink-0" />
-                  <span>Expressway highway tolls &amp; fuel included</span>
+                  <span>{t.incTolls}</span>
                 </p>
                 <p className="flex items-center gap-1.5 text-[#00B37E] font-medium">
                   <Check className="w-3.5 h-3.5 shrink-0" />
-                  <span>Door-to-door direct chalet drop-off</span>
+                  <span>{t.incDoorToDoor}</span>
                 </p>
               </div>
 
               {/* Price & Action */}
               <div className="pt-2 border-t border-[#F0F2F5] dark:border-slate-800 space-y-3">
                 <div className="flex items-baseline justify-between">
-                  <span className="text-xs text-[#6B7280] dark:text-slate-400 font-bold uppercase">Total Fare:</span>
+                  <span className="text-xs text-[#6B7280] dark:text-slate-400 font-bold uppercase">{t.totalFareLabel}</span>
                   <span className="text-2xl font-extrabold text-[#1A1A1A] dark:text-white font-mono">
                     ¥{quote.finalTotalPrice.toLocaleString()} <span className="text-xs font-normal text-[#9CA3AF]">JPY</span>
                   </span>
@@ -728,7 +946,7 @@ export default function SkiTransferBookingModule({
                     className="w-full bg-[#0068FF] hover:bg-[#0050CC] text-white font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-sm transition-colors cursor-pointer"
                   >
                     <Lock className="w-4 h-4" />
-                    <span>Instant Stripe Checkout</span>
+                    <span>{t.instantStripeBtn}</span>
                   </button>
 
                   <a

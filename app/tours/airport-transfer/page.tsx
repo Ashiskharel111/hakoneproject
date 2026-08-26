@@ -34,6 +34,59 @@ export default function AirportTransferDedicatedPage() {
     'Hello SK Limo! I am inquiring about executive airport transfers for Tokyo Haneda (HND) / Narita (NRT).'
   )}`;
 
+  const t = {
+    badge: { ja: '国土交通省 認可事業体', zh: '日本国土交通省 正规商业绿牌', fr: 'Homologué MLIT Japon', es: 'Certificado MLIT Japón', en: 'MLIT-Certified' }[lang],
+    title: {
+      ja: '成田・羽田空港 ハイヤー定額送迎',
+      zh: '东京成田/羽田机场 专车接送与VIP迎宾',
+      fr: 'Transfert Aéroport VIP Tokyo (Haneda & Narita)',
+      es: 'Traslado VIP Aeropuerto Tokio (Haneda y Narita)',
+      en: 'Tokyo Airport Executive Chauffeur',
+    }[lang],
+    subtitle: {
+      ja: '羽田（HND）・成田（NRT）と都内ホテルを直行で結ぶ完全定額送迎。フライト追跡、60分無料待機、手荷物アシスト付き。',
+      zh: '成田/羽田机场与东京都内酒店直达专车。全包一口价、实时航班监控、免费60分钟等候及到达大厅举牌迎宾。',
+      fr: 'Transferts privés d\'excellence entre Haneda, Narita et Tokyo. Tarifs fixes tout compris, suivi de vol et accueil personnalisé.',
+      es: 'Traslados privados de primera clase entre Haneda, Narita y Tokio. Tarifa fija todo incluido, rastreo de vuelos y bienvenida personalizada.',
+      en: 'Seamless private transfers between Haneda (HND), Narita (NRT), and Central Tokyo hotels. All-inclusive fixed pricing, flight tracking, and personalized meet & greet in the arrival hall.',
+    }[lang],
+    inc1Title: { ja: '60分 無料待機', zh: '60分钟免费等候', fr: 'Attente 60 min gratuite', es: '60 min espera gratis', en: '60-Min Flight Buffer' }[lang],
+    inc1Sub: { ja: '到着後の税関手続きも安心', zh: '落地后通关从容无忧', fr: 'Passage douane sans stress', es: 'Paso por aduanas sin prisas', en: 'Complimentary waiting' }[lang],
+    inc2Title: { ja: '完全 定額料金', zh: '全包一口价', fr: 'Tarif Fixe Garanti', es: 'Tarifa Fija Garantizada', en: 'Fixed Flat Rate' }[lang],
+    inc2Sub: { ja: '高速代・深夜料金込', zh: '含高速费与燃油', fr: 'Péages & carburant inclus', es: 'Peajes y combustible incluidos', en: 'Tolls & fuel included' }[lang],
+    inc3Title: { ja: 'リアルタイム便名追跡', zh: '实时航班动态同步', fr: 'Suivi de Vol en Direct', es: 'Sincronización en Directo', en: 'Live Radar Sync' }[lang],
+    inc3Sub: { ja: '早着・遅延に自動対応', zh: '延误提前自动调整', fr: 'Ajustement auto du chauffeur', es: 'Ajuste auto del chófer', en: 'Auto delay tracking' }[lang],
+    bookOnlineBtn: (open: boolean) => ({
+      ja: open ? '予約フォームを閉じる' : '空港送迎をオンライン予約',
+      zh: open ? '关闭预订表单' : '在线预订机场专车',
+      fr: open ? 'Masquer le Formulaire' : 'Réserver en Ligne',
+      es: open ? 'Ocultar Formulario' : 'Reservar Traslado en Línea',
+      en: open ? 'Hide Booking Form' : 'Book Airport Transfer Online',
+    }[lang]),
+    whatsAppBtn: { ja: 'WhatsApp 24時間コンシェルジュ', zh: 'WhatsApp 24小时客服', fr: 'Conciergerie WhatsApp 24/7', es: 'Conserjería WhatsApp 24/7', en: 'WhatsApp Concierge 24/7' }[lang],
+    flagshipBadge: { ja: 'VIP 最高峰フリート', zh: 'VIP 旗舰豪华车队', fr: 'Flotte VIP Haut de Gamme', es: 'Flota VIP de Alta Gama', en: 'VIP Flagship Fleet' }[lang],
+    flagshipDesc: { ja: '静粛性の高いキャビン、本革キャプテンシート、充実の手荷物積載スペース。', zh: '静谧舒适座舱、独立真皮航空座椅、充足的行李装载空间。', fr: 'Insonorisation parfaite, fauteuils grand confort et vaste volume de bagages.', es: 'Excelente insonorización, asientos de lujo y amplio espacio para equipaje.', en: 'Quiet cabin acoustics, leather captain seats, and generous luggage capacity.' }[lang],
+    howTag: { ja: 'スムーズなご乗車手順', zh: '从容出行指引', fr: 'Expérience Voyageur Fluide', es: 'Experiencia Fluida', en: 'Seamless Passenger Experience' }[lang],
+    howHead: { ja: '空港送迎の流れ', zh: '机场接送服务全流程', fr: 'Comment Fonctionne Votre Transfert', es: 'Cómo Funciona su Traslado', en: 'How Your Airport Transfer Works' }[lang],
+    howSub: { ja: '飛行機が到着してからホテルにチェックインするまで。', zh: '从航班落地东京到抵达酒店大堂的每一步。', fr: 'Du toucher des roues à Tokyo jusqu\'à l\'arrivée à votre hôtel.', es: 'Desde el aterrizaje en Tokio hasta el registro en su hotel.', en: 'From the moment your flight touches down in Tokyo to your hotel check-in.' }[lang],
+    step1Title: { ja: 'フライトのリアルタイム監視', zh: '实时跟踪航班动态', fr: 'Suivi de Vol en Temps Réel', es: 'Seguimiento en Tiempo Real', en: 'Real-Time Flight Tracking' }[lang],
+    step1Desc: { ja: '便名に基づきフライト状況を常時監視。早着や遅延が発生しても配車時間を自動調整します。', zh: '司机根据航班号实时监控进港动态。无论提前到达还是延误，接机时间自动同步调整。', fr: 'Votre chauffeur suit l\'avion en direct. En cas d\'avance ou de retard, la prise en charge s\'adapte sans frais.', es: 'Su chófer rastrea el vuelo en vivo. En caso de adelanto o retraso, la hora se ajusta automáticamente.', en: 'Your chauffeur monitors your inbound aircraft live. If your flight arrives early or is delayed, pickup timing adjusts automatically with zero stress.' }[lang],
+    step2Title: { ja: '60分間の税関待機バッファー', zh: '60分钟从容通关等候', fr: '60 min de Douane Gratuite', es: '60 min para Aduanas sin Prisas', en: '60-Min Customs Buffer' }[lang],
+    step2Desc: { ja: '入国審査・荷物受取・税関検査を急ぐ必要はありません。着陸から60分間無料で待機します。', zh: '无需匆忙通关与提取行李。我们从航班实际落地起提供整整60分钟的免费等候时间。', fr: 'Prenez le temps de passer l\'immigration et de récupérer vos bagages grâce aux 60 minutes offertes.', es: 'Tómese su tiempo en inmigración y recogida de maletas con 60 minutos de espera de cortesía.', en: 'Take your time through immigration, baggage claim, and customs. We provide a full 60 minutes of complimentary wait time starting from actual touchdown.' }[lang],
+    step3Title: { ja: '到着ロビーでのお出迎え', zh: '到达大厅专属举牌迎宾', fr: 'Accueil aux Arrivées', es: 'Bienvenida en Llegadas', en: 'Arrivals Hall Greeting' }[lang],
+    step3Desc: { ja: '税関出口を出ると、お名前入りサインボードを持った専任ドライバーがお待ちしています。手荷物もお運びします。', zh: '走出海关大门，专车司机将手持您姓名的专属标识牌迎候，并即刻协助搬运行李。', fr: 'À la sortie de la douane, votre chauffeur vous attend avec une pancarte à votre nom et prend en charge vos bagages.', es: 'Al salir de la aduana, su chófer le recibirá con un cartel con su nombre y le ayudará con el equipaje.', en: 'As you step out into the arrival lobby, your professional chauffeur awaits with an official nameboard. Immediate baggage assistance is provided.' }[lang],
+    step4Title: { ja: 'ホテル玄関まで直行', zh: '直达酒店大堂', fr: 'Arrivée Directe à l\'Hôtel', es: 'Llegada Directa al Hotel', en: 'Direct Hotel Drop-Off' }[lang],
+    step4Desc: { ja: 'ミネラルウォーターと充電設備を備えた快適な専用車で、ホテルの車寄せまでスムーズにお届けします。', zh: '尊享配备矿泉水与充电设施的高端专车，平稳舒适地直达目的地酒店大堂。', fr: 'Détendez-vous à bord d\'un véhicule grand confort avec eau minérale et chargeurs jusqu\'à votre hôtel.', es: 'Relájese en un vehículo de lujo con agua mineral y cargadores hasta la entrada de su hotel.', en: 'Relax in a climate-controlled luxury vehicle with complimentary bottled water and device charging as you are smoothly chauffeured directly to your hotel lobby.' }[lang],
+    termTag: { ja: 'ターミナル情報', zh: '航站楼指引', fr: 'Informations Terminaux', es: 'Información de Terminales', en: 'Terminal Information' }[lang],
+    termHead: { ja: '東京各空港の待ち合わせ場所', zh: '东京各机场接机汇合点', fr: 'Points de Rendez-Vous aux Aéroports', es: 'Puntos de Encuentro en los Aeropuertos', en: 'Meeting Points at Tokyo Airports' }[lang],
+    fleetTag: { ja: '運行基準・車両仕様', zh: '合规车队标准', fr: 'Standards de Flotte', es: 'Estándares de Flota', en: 'Commercial Fleet Standards' }[lang],
+    fleetHead: { ja: '定員および荷物積載容量', zh: '乘客定员与行李容纳规格', fr: 'Capacité Passagers & Bagages', es: 'Capacidad de Pasajeros y Equipaje', en: 'Luggage & Seating Capacity' }[lang],
+    fleetSub: { ja: 'ご乗車人数とお荷物の量に合わせて最適な車両をお選びいただけます。', zh: '根据您的出行人数与行李件数选择最合适的专属座驾。', fr: 'Sélectionnez le véhicule parfait selon la taille de votre groupe et vos valises.', es: 'Elija el vehículo ideal adaptado al tamaño de su grupo y equipaje.', en: 'Choose the ideal executive vehicle tailored to your group size and baggage requirements.' }[lang],
+    ctaHead: { ja: '東京空港送迎のご予約はお決まりですか？', zh: '准备好预订您的东京机场专车了吗？', fr: 'Prêt à Réserver Votre Transfert d\'Aéroport ?', es: '¿Listo para Reservar su Traslado de Aeropuerto?', en: 'Ready to Reserve Your Tokyo Airport Transfer? stroke' }[lang],
+    ctaSub: { ja: 'リアルタイム追跡付きオンライン予約、またはWhatsAppコンシェルジュにて承ります。', zh: '支持航班实时追踪的在线快速预订，或通过 WhatsApp 咨询专属客服。', fr: 'Réservez en ligne avec suivi de vol ou contactez notre conciergerie sur WhatsApp.', es: 'Reserve online con seguimiento de vuelos o escriba a nuestro equipo por WhatsApp.', en: 'Book online with real-time flight tracking or connect with our concierge team on WhatsApp.' }[lang],
+    ctaPortalBtn: { ja: '総合予約ポータルを開く', zh: '进入预订大厅', fr: 'Ouvrir le Portail de Réservation', es: 'Abrir Portal de Reservas', en: 'Open Main Booking Portal' }[lang],
+  };
+
   return (
     <div className="min-h-screen bg-[#F5F7FA] dark:bg-[#080B11] text-[#1A1A1A] dark:text-[#F1F5F9] transition-colors duration-200">
       <SiteHeader activePage="airport" />
@@ -49,15 +102,15 @@ export default function AirportTransferDedicatedPage() {
             <div className="lg:col-span-7 space-y-6">
               <div className="inline-flex items-center gap-2 bg-[#E8F1FF] dark:bg-[#0068FF]/15 text-[#0068FF] dark:text-[#3B82F6] text-xs font-bold px-3.5 py-1.5 rounded-full">
                 <ShieldCheck className="w-4 h-4 shrink-0" />
-                <span>MLIT-Certified</span>
+                <span>{t.badge}</span>
               </div>
 
               <div className="space-y-3">
-                <h1 className="text-3xl sm:text-F4xl md:text-5xl font-extrabold text-[#1A1A1A] dark:text-white tracking-tight leading-tight">
-                  Tokyo Airport Executive Chauffeur
+                <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#1A1A1A] dark:text-white tracking-tight leading-tight">
+                  {t.title}
                 </h1>
                 <p className="text-sm sm:text-base text-[#4B5563] dark:text-slate-300 max-w-xl leading-relaxed">
-                  Seamless private transfers between Haneda (HND), Narita (NRT), and Central Tokyo hotels. All-inclusive fixed pricing, flight tracking, and personalized meet &amp; greet in the arrival hall.
+                  {t.subtitle}
                 </p>
               </div>
 
@@ -65,18 +118,18 @@ export default function AirportTransferDedicatedPage() {
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">
                 <div className="bg-[#F5F7FA] dark:bg-[#131b2c] border border-[#E5E8ED] dark:border-slate-700/80 p-3 rounded-xl">
                   <Clock className="w-4 h-4 text-[#0068FF] mb-1" />
-                  <span className="font-bold text-xs text-[#1A1A1A] dark:text-white block">60-Min Flight Buffer</span>
-                  <span className="text-[11px] text-[#6B7280] dark:text-slate-400">Complimentary waiting</span>
+                  <span className="font-bold text-xs text-[#1A1A1A] dark:text-white block">{t.inc1Title}</span>
+                  <span className="text-[11px] text-[#6B7280] dark:text-slate-400">{t.inc1Sub}</span>
                 </div>
                 <div className="bg-[#F5F7FA] dark:bg-[#131b2c] border border-[#E5E8ED] dark:border-slate-700/80 p-3 rounded-xl">
                   <ShieldCheck className="w-4 h-4 text-[#0068FF] mb-1" />
-                  <span className="font-bold text-xs text-[#1A1A1A] dark:text-white block">Fixed Flat Rate</span>
-                  <span className="text-[11px] text-[#6B7280] dark:text-slate-400">Tolls &amp; fuel included</span>
+                  <span className="font-bold text-xs text-[#1A1A1A] dark:text-white block">{t.inc2Title}</span>
+                  <span className="text-[11px] text-[#6B7280] dark:text-slate-400">{t.inc2Sub}</span>
                 </div>
                 <div className="bg-[#F5F7FA] dark:bg-[#131b2c] border border-[#E5E8ED] dark:border-slate-700/80 p-3 rounded-xl col-span-2 sm:col-span-1">
                   <Plane className="w-4 h-4 text-[#0068FF] mb-1" />
-                  <span className="font-bold text-xs text-[#1A1A1A] dark:text-white block">Live Radar Sync</span>
-                  <span className="text-[11px] text-[#6B7280] dark:text-slate-400">Auto delay tracking</span>
+                  <span className="font-bold text-xs text-[#1A1A1A] dark:text-white block">{t.inc3Title}</span>
+                  <span className="text-[11px] text-[#6B7280] dark:text-slate-400">{t.inc3Sub}</span>
                 </div>
               </div>
 
@@ -88,7 +141,7 @@ export default function AirportTransferDedicatedPage() {
                   className="bg-[#0068FF] hover:bg-[#0050CC] text-white px-6 py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-md transition-all cursor-pointer"
                 >
                   <Lock className="w-4 h-4" />
-                  <span>{showBookingWizard ? 'Hide Booking Form' : 'Book Airport Transfer Online'}</span>
+                  <span>{t.bookOnlineBtn(showBookingWizard)}</span>
                 </button>
 
                 <a
@@ -98,7 +151,7 @@ export default function AirportTransferDedicatedPage() {
                   className="bg-white dark:bg-[#131b2c] hover:bg-[#F5F7FA] dark:hover:bg-slate-800 text-[#1A1A1A] dark:text-white border border-[#E5E8ED] dark:border-slate-700 px-5 py-3.5 rounded-xl text-xs font-bold flex items-center gap-2 transition-colors"
                 >
                   <MessageSquare className="w-4 h-4 text-[#25D366]" />
-                  <span>WhatsApp Concierge 24/7</span>
+                  <span>{t.whatsAppBtn}</span>
                 </a>
               </div>
             </div>
@@ -115,11 +168,11 @@ export default function AirportTransferDedicatedPage() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-6 text-white space-y-1">
                   <span className="text-xs font-bold text-[#0068FF] bg-white px-2 py-0.5 rounded w-fit uppercase">
-                    VIP Flagship Fleet
+                    {t.flagshipBadge}
                   </span>
                   <h2 className="font-extrabold text-base">Toyota Alphard &amp; Granace VIP</h2>
                   <p className="text-xs text-slate-300">
-                    Quiet cabin acoustics, leather captain seats, and generous luggage capacity.
+                    {t.flagshipDesc}
                   </p>
                 </div>
               </div>
@@ -144,13 +197,13 @@ export default function AirportTransferDedicatedPage() {
       <section className="py-14 sm:py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         <div className="text-center max-w-3xl mx-auto space-y-2">
           <span className="text-[11px] uppercase font-bold tracking-widest text-[#0068FF]">
-            Seamless Passenger Experience
+            {t.howTag}
           </span>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-[#1A1A1A] dark:text-white">
-            How Your Airport Transfer Works
+            {t.howHead}
           </h2>
           <p className="text-xs sm:text-sm text-[#6B7280] dark:text-slate-400">
-            From the moment your flight touches down in Tokyo to your hotel check-in.
+            {t.howSub}
           </p>
         </div>
 
@@ -162,10 +215,10 @@ export default function AirportTransferDedicatedPage() {
               01
             </div>
             <h3 className="font-bold text-sm text-[#1A1A1A] dark:text-white">
-              Real-Time Flight Tracking
+              {t.step1Title}
             </h3>
             <p className="text-xs text-[#6B7280] dark:text-slate-400 leading-relaxed">
-              Your chauffeur monitors your inbound aircraft live. If your flight arrives early or is delayed, pickup timing adjusts automatically with zero stress.
+              {t.step1Desc}
             </p>
           </div>
 
@@ -175,10 +228,10 @@ export default function AirportTransferDedicatedPage() {
               02
             </div>
             <h3 className="font-bold text-sm text-[#1A1A1A] dark:text-white">
-              60-Min Customs Buffer
+              {t.step2Title}
             </h3>
             <p className="text-xs text-[#6B7280] dark:text-slate-400 leading-relaxed">
-              Take your time through immigration, baggage claim, and customs. We provide a full 60 minutes of complimentary wait time starting from actual touchdown.
+              {t.step2Desc}
             </p>
           </div>
 
@@ -188,10 +241,10 @@ export default function AirportTransferDedicatedPage() {
               03
             </div>
             <h3 className="font-bold text-sm text-[#1A1A1A] dark:text-white">
-              Arrivals Hall Greeting
+              {t.step3Title}
             </h3>
             <p className="text-xs text-[#6B7280] dark:text-slate-400 leading-relaxed">
-              As you step out into the arrival lobby, your professional chauffeur awaits with an official nameboard. Immediate baggage assistance is provided.
+              {t.step3Desc}
             </p>
           </div>
 
@@ -201,10 +254,10 @@ export default function AirportTransferDedicatedPage() {
               04
             </div>
             <h3 className="font-bold text-sm text-[#1A1A1A] dark:text-white">
-              Direct Hotel Drop-Off
+              {t.step4Title}
             </h3>
             <p className="text-xs text-[#6B7280] dark:text-slate-400 leading-relaxed">
-              Relax in a climate-controlled luxury vehicle with complimentary bottled water and device charging as you are smoothly chauffeured directly to your hotel lobby.
+              {t.step4Desc}
             </p>
           </div>
 
@@ -219,10 +272,10 @@ export default function AirportTransferDedicatedPage() {
           
           <div className="text-center max-w-2xl mx-auto space-y-2">
             <span className="text-[11px] uppercase font-bold tracking-widest text-[#0068FF]">
-              Terminal Information
+              {t.termTag}
             </span>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-[#1A1A1A] dark:text-white">
-              Meeting Points at Tokyo Airports
+              {t.termHead}
             </h2>
           </div>
 
@@ -300,13 +353,13 @@ export default function AirportTransferDedicatedPage() {
       <section className="py-14 sm:py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         <div className="text-center max-w-2xl mx-auto space-y-2">
           <span className="text-[11px] uppercase font-bold tracking-widest text-[#0068FF]">
-            Commercial Fleet Standards
+            {t.fleetTag}
           </span>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-[#1A1A1A] dark:text-white">
-            Luggage &amp; Seating Capacity
+            {t.fleetHead}
           </h2>
           <p className="text-xs sm:text-sm text-[#6B7280] dark:text-slate-400">
-            Choose the ideal executive vehicle tailored to your group size and baggage requirements.
+            {t.fleetSub}
           </p>
         </div>
 
@@ -408,10 +461,10 @@ export default function AirportTransferDedicatedPage() {
       <section className="py-12 bg-white dark:bg-[#0E131F] border-t border-[#E5E8ED] dark:border-slate-800 transition-colors">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center space-y-4">
           <h2 className="text-xl sm:text-2xl font-extrabold text-[#1A1A1A] dark:text-white">
-            Ready to Reserve Your Tokyo Airport Transfer?
+            {t.ctaHead}
           </h2>
           <p className="text-xs sm:text-sm text-[#6B7280] dark:text-slate-400 max-w-xl mx-auto">
-            Book online with real-time flight tracking or connect with our concierge team on WhatsApp.
+            {t.ctaSub}
           </p>
           <div className="flex items-center justify-center gap-3 pt-2">
             <Link
@@ -419,7 +472,7 @@ export default function AirportTransferDedicatedPage() {
               className="bg-[#0068FF] hover:bg-[#0050CC] text-white px-6 py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-sm transition-colors"
             >
               <Compass className="w-4 h-4" />
-              <span>Open Main Booking Portal</span>
+              <span>{t.ctaPortalBtn}</span>
             </Link>
           </div>
         </div>

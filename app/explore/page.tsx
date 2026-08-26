@@ -130,11 +130,15 @@ export default function ExplorePage() {
         en: 'How does airport pickup work?',
         ja: '空港でのお迎えはどのように行われますか？',
         zh: '机场接机是如何操作的？',
+        fr: 'Comment se déroule l\'accueil à l\'aéroport ?',
+        es: '¿Cómo funciona la recogida en el aeropuerto?',
       },
       a: {
         en: 'Your assigned chauffeur monitors your flight live via AeroDataBox. They will be waiting at the arrival exit hall holding a personalized luxury welcome nameboard. Complimentary 90-minute waiting time is included from the moment your flight actually touches down.',
         ja: '担当ドライバーがAeroDataBoxを通じてフライトの実際の着陸時刻をリアルタイムで監視し、税関出口にてお名前を掲示してお待ちします。実際の着陸時刻から90分間の無料待機が含まれています。',
         zh: '专属司机会通过AeroDataBox实时跟踪您的航班动态，并在国际到达出口手持尊享姓名牌迎接您。飞机实际落地后享有免费90分钟守候时间。',
+        fr: 'Votre chauffeur dédié suit votre vol en direct via AeroDataBox. Il vous attendra dans le hall des arrivées avec un panneau d\'accueil personnalisé. Un temps d\'attente gratuit de 90 minutes est inclus dès l\'atterrissage.',
+        es: 'Su chófer asignado monitorea su vuelo en tiempo real vía AeroDataBox. Le esperará en la sala de llegadas con un cartel de bienvenida personalizado. Se incluyen 90 minutos de espera de cortesía desde el aterrizaje.',
       },
     },
     {
@@ -142,11 +146,15 @@ export default function ExplorePage() {
         en: 'Are the prices fixed or metered?',
         ja: '料金は定額ですか、それともメーター制ですか？',
         zh: '车费是固定包干还是按打表计算？',
+        fr: 'Les tarifs sont-ils fixes ou au compteur ?',
+        es: '¿Los precios son fijos o con taxímetro?',
       },
       a: {
         en: 'All fares on SK LIMO are 100% fixed, all-inclusive, and guaranteed upon booking. Expressway highway tolls, fuel, vehicle insurance, and parking are fully covered with zero surge pricing or unexpected meter surprises.',
         ja: 'SK LIMOのすべての料金は完全定額制です。高速道路料金、燃料代、車両保険、駐車場代がすべて含まれており、渋滞や混雑による追加請求は一切ございません。',
         zh: 'SK LIMO所有价格均为100%固定全包价。高速过路费、燃油费、商业保险均已包含在内，绝无高峰溢价或额外加价。',
+        fr: 'Tous les tarifs sur SK LIMO sont 100 % fixes et tout compris. Les péages d\'autoroute, le carburant, l\'assurance commerciale et les parkings sont entièrement inclus sans majoration imprévue.',
+        es: 'Todas las tarifas en SK LIMO son 100% fijas y con todo incluido. Peajes de autopista, combustible, seguro comercial y aparcamientos están cubiertos sin cargos sorpresa ni suplementos.',
       },
     },
     {
@@ -154,11 +162,15 @@ export default function ExplorePage() {
         en: 'What happens if my flight is delayed or rescheduled?',
         ja: 'フライトが遅延または変更になった場合はどうなりますか？',
         zh: '如果我的航班延误或改期怎么办？',
+        fr: 'Que se passe-t-il si mon vol est retardé ou reporté ?',
+        es: '¿Qué ocurre si mi vuelo se retrasa o reprograma?',
       },
       a: {
         en: 'Because we track your live flight number, delayed arrivals automatically adjust your chauffeur dispatch time at no extra charge. If your flight is cancelled or rescheduled by the airline, send us the airline notice for a free rebooking or full refund.',
         ja: '便名をリアルタイム追跡しているため、フライトの遅延に合わせてドライバーのお迎え時刻も自動調整されます。航空会社都合の欠航・日程変更時は無料で日程変更または全額返金いたします。',
         zh: '我们实时监控您的航班信息，延误到达将自动顺延司机接送时间，无需额外费用。如遇航空公司改期或取消，提供凭证即可免费改期或全额退款。',
+        fr: 'Grâce au suivi en direct de votre vol, les retards ajustent automatiquement l\'horaire du chauffeur sans aucun frais supplémentaire. En cas d\'annulation par la compagnie, contactez-nous pour un report gratuit ou remboursement complet.',
+        es: 'Gracias al rastreo en vivo de su vuelo, los retrasos ajustan automáticamente la llegada del chófer sin coste extra. Si la aerolínea cancela su vuelo, avísenos para reprogramación gratuita o reembolso íntegro.',
       },
     },
     {
@@ -166,11 +178,15 @@ export default function ExplorePage() {
         en: 'What payment methods do you accept?',
         ja: '利用可能な決済方法は何ですか？',
         zh: '支持哪些支付方式？',
+        fr: 'Quels modes de paiement acceptez-vous ?',
+        es: '¿Qué métodos de pago aceptan?',
       },
       a: {
         en: 'We accept Apple Pay (1-click express checkout), Google Pay, Credit Cards (Visa, Mastercard, American Express, JCB, UnionPay), WeChat Pay (微信支付), Alipay (支付宝), and PayPay via encrypted Level-1 PCI-DSS Stripe processing.',
         ja: 'Apple Pay（ワンクリック即時決済）、Google Pay、各種クレジットカード（VISA、Mastercard、AMEX、JCB、銀聯）、WeChat Pay（微信支付）、Alipay（支付宝）、PayPayに対応しております。',
         zh: '支持Apple Pay一键极速支付、Google Pay、国际主流信用卡（Visa、Mastercard、Amex、JCB、银联）、微信支付、支付宝及PayPay。',
+        fr: 'Nous acceptons Apple Pay (1-clic express), Google Pay, cartes bancaires (Visa, Mastercard, Amex, JCB, UnionPay), WeChat Pay, Alipay et PayPay via paiement sécurisé Stripe Niveau-1 PCI-DSS.',
+        es: 'Aceptamos Apple Pay (1-clic express), Google Pay, tarjetas de crédito (Visa, Mastercard, Amex, JCB, UnionPay), WeChat Pay, Alipay y PayPay mediante pasarela segura cifrada Stripe PCI-DSS Nivel-1.',
       },
     },
     {
@@ -178,21 +194,125 @@ export default function ExplorePage() {
         en: 'Are your vehicles legally licensed in Japan?',
         ja: '車両は日本の法令に基づき正規に認可されていますか？',
         zh: '车辆是否具有日本正规营运资质？',
+        fr: 'Vos véhicules disposent-ils d\'une licence légale au Japon ?',
+        es: '¿Sus vehículos cuentan con licencia oficial en Japón?',
       },
       a: {
         en: 'Yes. 100% of our fleet operates on Japanese commercial "Green Plates" (緑ナンバー) authorized by the Ministry of Land, Infrastructure, Transport and Tourism (MLIT) with comprehensive commercial passenger liability insurance.',
         ja: 'はい。当社のすべての車両は、国土交通省関東運輸局の正規認可を受けた「緑ナンバー（営業用登録）」車両であり、万全の搭乗者傷害保険が完備されています。',
         zh: '是的。我们的所有车队均具有日本国土交通省正规营运资质（绿牌合规营运），并全额配备高额商业乘客意外与人身保险。',
+        fr: 'Oui. 100 % de notre flotte roule sous immatriculation commerciale officielle "Plaque Verte" (緑ナンバー) agréée par le Ministère des Transports (MLIT) avec assurance responsabilité passagers complète.',
+        es: 'Sí. El 100% de nuestra flota opera con "Placas Verdes" comerciales oficiales (緑ナンバー) autorizadas por el Ministerio de Transporte de Japón (MLIT) con seguro completo de responsabilidad civil.',
       },
     },
   ];
+
+  const t = {
+    heroRibbon: {
+      ja: '国土交通省 関東運輸局 正規緑ナンバー認可事業体',
+      zh: '日本国土交通省 官方绿牌营运合规车队',
+      fr: 'OPÉRATEUR OFFICIEL AGRÉÉ PLAQUE VERTE (MLIT JAPON)',
+      es: 'OPERADOR OFICIAL CON LICENCIA PLACA VERDE (MLIT JAPÓN)',
+      en: 'JAPAN-ONLY · LICENSED & INSURED GREEN-PLATE OPERATOR',
+    }[lang],
+    heroSubhead: {
+      ja: '日本最高峰のプライベートハイヤー体験 —',
+      zh: '日本头等舱级专属专车出行 —',
+      fr: 'Voyage Première Classe au Japon —',
+      es: 'Viajes de Primera Clase en Japón —',
+      en: 'First-Class Travel in Japan —',
+    }[lang],
+    heroMainhead: {
+      ja: '完全定額・安心の送迎クオリティをお約束。',
+      zh: '全包定额、全程无忧的尊享服务。',
+      fr: 'Chaque trajet, parfaitement pris en charge.',
+      es: 'Cada viaje, perfectamente cubierto.',
+      en: 'Every ride, perfectly covered.',
+    }[lang],
+    check1: {
+      ja: '完全定額料金制 — 高速料金・駐車場・消費税込、チップ不要。',
+      zh: '全包一口价 — 包含高速费、停车费及税费，无任何小费或隐形收费。',
+      fr: 'Tarifs fixes tout compris — Péages, parking et taxes inclus, aucun pourboire requis.',
+      es: 'Precios fijos todo incluido — Peajes de autopista, parking e impuestos incluidos, sin propinas obligatorias.',
+      en: 'All-inclusive fixed prices — Expressway tolls, parking & taxes in, zero tipping expected.',
+    }[lang],
+    check2: {
+      ja: 'フライトリアルタイム追跡 — 到着遅延時も90分無料待機・自動配車調整。',
+      zh: '航班动态实时跟踪 — 延误免费等候90分钟，自动顺延派车时间。',
+      fr: 'Suivi de vol en direct — Retard ? 90 min d\'attente gratuite & réajustement automatique.',
+      es: 'Rastreo de vuelos en vivo — ¿Retraso? 90 min de espera gratis y ajuste automático.',
+      en: 'Flight tracked live — Delayed? Complimentary 90-minute wait & auto-adjusted dispatch.',
+    }[lang],
+    check3: {
+      ja: '到着ロビーお出迎え — 税関出口でネームボードを掲示して専任ドライバーがお待ちします。',
+      zh: '到达厅举牌接机 — 专属司机手持定制欢迎名牌在国际出口等候。',
+      fr: 'Accueil personnalisé — Chauffeur en costume avec panneau nominatif dès la sortie.',
+      es: 'Recepción en llegadas — Chófer uniformado con cartel personalizado en la terminal.',
+      en: 'Curbside meet & greet — Chauffeur meets you at arrivals with personalized nameboard.',
+    }[lang],
+    check4: {
+      ja: '24時間バイリンガル配車デスク — 英語・日本語・中国語でのWhatsApp即時対応。',
+      zh: '24/7中英日三语调度中心 — WhatsApp即时客服，全天候保驾护航。',
+      fr: 'Support bilingue 24/7 — Coordination et dispatch immédiats sur WhatsApp.',
+      es: 'Atención 24/7 multilingüe — Coordinación inmediata vía WhatsApp.',
+      en: '24/7 Operations Desk — Instant WhatsApp coordination and dispatch in English & Japanese.',
+    }[lang],
+    startBookingBtn: { ja: '今すぐ予約する', zh: '立即开始预订', fr: 'Commencer la Réservation', es: 'Comenzar Reserva', en: 'Start Booking Now' }[lang],
+    guaranteesBtn: { ja: '運行保証・サービス規約', zh: '服务保障与规范', fr: 'Nos Engagements', es: 'Nuestras Garantías', en: 'Our Guarantees' }[lang],
+    serviceLabel: { ja: 'サービス種別', zh: '服务类型', fr: 'Service', es: 'Servicio', en: 'Service' }[lang],
+    optAirport: { ja: '空港送迎 (羽田・成田)', zh: '机场专属接送 (羽田/成田)', fr: 'Transfert Aéroport', es: 'Traslado de Aeropuerto', en: 'Airport Transfer' }[lang],
+    optSightseeing: { ja: '観光チャーター (富士山・都内)', zh: '观光包车一日游 (富士山/都内)', fr: 'Excursion d\'une Journée', es: 'Tour Turístico de un Día', en: 'Day Charter Tour' }[lang],
+    optSki: { ja: '4WD スキー直行ハイヤー', zh: '4WD 雪季滑雪专车直达', fr: 'Transfert Ski 4x4', es: 'Traslado de Esquí 4x4', en: '4WD Ski Transfer' }[lang],
+    fromLabel: { ja: 'ご出発地・乗車地', zh: '出发地上车点', fr: 'Point de Départ', es: 'Punto de Salida', en: 'Pickup (From)' }[lang],
+    optHnd: { ja: '羽田空港 (HND)', zh: '羽田国际机场 (HND)', fr: 'Aéroport d\'Haneda (HND)', es: 'Aeropuerto de Haneda (HND)', en: 'Haneda Airport (HND)' }[lang],
+    optNrt: { ja: '成田空港 (NRT)', zh: '成田国际机场 (NRT)', fr: 'Aéroport de Narita (NRT)', es: 'Aeropuerto de Narita (NRT)', en: 'Narita Airport (NRT)' }[lang],
+    optTokyoHotels: { ja: '東京都内ホテル・ご自宅', zh: '东京市区酒店 / 住宅', fr: 'Hôtels à Tokyo (Centre)', es: 'Hoteles en Tokio (Centro)', en: 'Tokyo Hotels (Central)' }[lang],
+    dateLabel: { ja: '日程', zh: '出行日期', fr: 'Date', es: 'Fecha', en: 'Date' }[lang],
+    timeLabel: { ja: '出発時間', zh: '出发时间', fr: 'Heure', es: 'Hora', en: 'Time' }[lang],
+    paxLabel: { ja: 'ご乗車人数', zh: '乘车人数', fr: 'Passagers (Pax)', es: 'Pasajeros (Pax)', en: 'Guests (Pax)' }[lang],
+    checkPriceBtn: { ja: '料金を確認', zh: '查询定额车费', fr: 'Calculer le Prix', es: 'Consultar Precio', en: 'Check Price' }[lang],
+    trust1Title: { ja: '国土交通省 緑ナンバー', zh: '100% 正规商业绿牌', fr: 'Plaque Verte MLIT', es: 'Placa Verde MLIT', en: 'MLIT Green Plate' }[lang],
+    trust1Desc: { ja: '日本の法令に準拠した安心の営業用認可車両', zh: '合规营运资质，全额配备商业乘客险', fr: 'Transport commercial japonais légal et assuré', es: 'Transporte comercial japonés 100% legal y asegurado', en: 'Fully insured commercial legal Japanese transport' }[lang],
+    trust2Title: { ja: '90分間 無料待機', zh: '90分钟 免费守候', fr: '90 Min d\'Attente Gratuite', es: '90 Min de Espera Gratis', en: '90 Min Free Arrival Wait' }[lang],
+    trust2Desc: { ja: '入国審査・荷物受取もゆったり安心', zh: '通关取行李零压力，超时前贴心守候', fr: 'Passage douane & bagages sans stress', es: 'Desembarque y aduanas sin prisas', en: 'Relaxed customs & luggage clearance guarantee' }[lang],
+    trust3Title: { ja: '追加料金ゼロ (¥0)', zh: '¥0 任何高峰溢价', fr: '0 ¥ Frais Cachés', es: '0 ¥ Cargos Ocultos', en: '¥0 Surge Pricing' }[lang],
+    trust3Desc: { ja: '高速代・深夜料金も予約時に全額確定', zh: '高速路桥费及油费于下单时全部锁定', fr: 'Tous les péages & carburant fixés à la réservation', es: 'Peajes y combustible cerrados en la reserva', en: 'All highway tolls & fuel locked at reservation' }[lang],
+    trust4Title: { ja: '24時間 多言語サポート', zh: '24/7 多语种专属客服', fr: 'Support Bilingue 24/7', es: 'Atención 24/7 Multilingüe', en: '24/7 Bilingual Support' }[lang],
+    trust4Desc: { ja: 'WhatsApp & お電話で迅速に対応', zh: '微信 / WhatsApp 与电话即时跟踪调度', fr: 'Desk de suivi WhatsApp & assistance vol', es: 'Seguimiento de vuelos por WhatsApp y teléfono', en: 'WhatsApp & phone flight tracking dispatch desk' }[lang],
+    corridorsTag: { ja: '人気送迎ルート', zh: '高频定额热门路线', fr: 'Trajets Populaires', es: 'Rutas Populares', en: 'Fixed-Rate Routes' }[lang],
+    corridorsHead: { ja: '日本国内 主要ハイヤールート', zh: '日本热门专属包车走廊', fr: 'Principaux Trajets Privés au Japon', es: 'Principales Rutas Privadas en Japón', en: 'Popular Japan Private Chauffeur Corridors' }[lang],
+    openPortalLink: { ja: 'オンライン予約ポータルを開く', zh: '打开在线互动预订通道', fr: 'Ouvrir le portail de réservation', es: 'Abrir portal de reservas interactivo', en: 'Open Interactive Booking Portal' }[lang],
+    fromUnit: { ja: '片道', zh: '起', fr: 'Dès', es: 'Desde', en: 'From' }[lang],
+    hndCardTitle: { ja: '羽田空港 ⇄ 東京都内ホテル', zh: '羽田国际机场 ⇄ 东京市区酒店', fr: 'Aéroport d\'Haneda ⇄ Hôtels de Tokyo', es: 'Aeropuerto de Haneda ⇄ Hoteles de Tokio', en: 'Haneda Airport ⇄ Tokyo Hotels' }[lang],
+    hndCardDesc: { ja: 'ストレスフリーな空港到着。第2・第3ターミナル出口でお出迎えし、ホテル玄関まで直行。', zh: '无缝入境体验。第2/第3航站楼出口举牌接机，直达东京酒店大堂。', fr: 'Arrivée exécutive fluide. Accueil nominatif T2/T3 et dépose directe à votre hôtel.', es: 'Llegada ejecutiva sin estrés. Recepción con cartel en T2/T3 y traslado directo al hotel.', en: 'Seamless executive arrival. Meet & greet with nameboard at Terminal 2/3 and direct drop-off at your Tokyo hotel lobby.' }[lang],
+    bookHndBtn: { ja: '羽田送迎を予約する', zh: '预订羽田机场接送', fr: 'Réserver Transfert Haneda', es: 'Reservar Traslado Haneda', en: 'Book Haneda Transfer' }[lang],
+    fujiCardTitle: { ja: '富士山・河口湖 1日観光チャーター', zh: '富士山与河口湖 专属包车一日游', fr: 'Mont Fuji & Lac Kawaguchiko', es: 'Monte Fuji y Lago Kawaguchiko', en: 'Mount Fuji & Lake Kawaguchiko' }[lang],
+    fujiCardDesc: { ja: '富士山五合目、忍野八海の清流、新倉山浅間公園の五重塔を自由なペースで満喫。', zh: '富士山五合目全景、忍野八海清泉、新仓山浅间公园绝景尽情游览。', fr: 'Vues panoramiques de la 5e Station, sources d\'Oshino Hakkai et pagode Arakurayama à votre rythme.', es: 'Vistas panorámicas de la 5ª Estación, aguas de Oshino Hakkai y pagoda Arakurayama a su ritmo.', en: '5th Station panoramic vistas, crystal waters of Oshino Hakkai, and Arakurayama Sengen Pagoda at your own pace.' }[lang],
+    bookFujiBtn: { ja: '富士山チャーターを予約する', zh: '预订富士山一日游', fr: 'Réserver Excursion Fuji', es: 'Reservar Tour Fuji', en: 'Book Fuji Charter' }[lang],
+    skiCardTitle: { ja: '4WD 白馬スキー場 直行ハイヤー', zh: '4WD 白马山谷滑雪场 直达专车', fr: 'Transfert Ski 4x4 Vallée d\'Hakuba', es: 'Traslado de Esquí 4x4 a Hakuba', en: '4WD Hakuba Valley Alpine Ski Direct' }[lang],
+    skiCardDesc: { ja: '羽田・成田・都内から白馬のシャレー前まで完全ドアtoドア。スタッドレスタイヤ・スキー板積載込。', zh: '羽田/成田/东京直达白马度假木屋门口。标配高性能雪胎，支持大量雪具携带。', fr: 'Porte-à-porte depuis Haneda, Narita ou Tokyo directement à votre chalet à Hakuba. Pneus neige & housses inclus.', es: 'Puerta a puerta desde Haneda, Narita o Tokio a su chalet en Hakuba. Neumáticos de nieve y equipaje incluidos.', en: 'Door-to-door from Haneda, Narita, or Tokyo directly to your Hakuba chalet. Studless snow tires and ski bags included.' }[lang],
+    bookSkiBtn: { ja: '白馬スキー送迎を予約する', zh: '预订白马滑雪直达专车', fr: 'Réserver Transfert Ski', es: 'Reservar Traslado de Esquí', en: 'Book Ski Transfer' }[lang],
+    fleetTag: { ja: '運行車両基準', zh: '专属车队规格', fr: 'Standards de la Flotte', es: 'Estándares de la Flota', en: 'Executive Fleet Standards' }[lang],
+    fleetHead: { ja: '最高水準の正規営業車両ラインナップ', zh: '日本顶规正规商业车队', fr: 'Véhicules Commerciaux Japonais d\'Excellence', es: 'Vehículos Comerciales Japoneses de Primer Nivel', en: 'Pristine Japanese Commercial Vehicles' }[lang],
+    fleetSubhead: { ja: '全車禁煙・毎日徹底除菌。国土交通省の安全管理基準に基づき運行しております。', zh: '每日全车深度消毒杀菌、严格全车禁烟，遵照日本运输局最高安全规范运营。', fr: 'Désinfectés quotidiennement, non-fumeurs et entretenus selon les protocoles stricts du MLIT.', es: 'Desinfectados diariamente, no fumadores y mantenidos bajo estrictos protocolos del MLIT.', en: 'Daily sanitized, non-smoking, and maintained under rigorous Ministry of Transport safety protocols.' }[lang],
+    exteriorTab: { ja: '外観', zh: '车辆外观', fr: 'Extérieur', es: 'Exterior', en: 'Exterior' }[lang],
+    interiorTab: { ja: 'キャビン内装', zh: '尊享内饰', fr: 'Salon Intérieur', es: 'Interior Lounge', en: 'Interior Lounge' }[lang],
+    trunkTab: { ja: 'ラゲッジスペース', zh: '行李后备箱', fr: 'Coffre à Bagages', es: 'Espacio de Equipaje', en: 'Luggage Bay' }[lang],
+    bookVehicleBtn: { ja: 'この車両で予約する', zh: '选择此车型预订', fr: 'Réserver ce Véhicule', es: 'Reservar este Vehículo', en: 'Book This Vehicle' }[lang],
+    faqTag: { ja: 'よくあるご質問', zh: '常见问题解答', fr: 'Réponses Transparentes', es: 'Respuestas Claras', en: 'Transparent Answers' }[lang],
+    faqHead: { ja: 'ご予約・運行に関するFAQ', zh: '常见问题解答 (FAQ)', fr: 'Foire Aux Questions', es: 'Preguntas Frecuentes', en: 'Frequently Asked Questions' }[lang],
+    b2bTag: { ja: '旅行会社様・海外DMC様向け専用デスク', zh: '面向海外旅行社、定制游机构及全球DMC', fr: 'POUR AGENCES DE VOYAGES, TOUR-OPÉRATEURS & DMC', es: 'PARA AGENCIAS DE VIAJES, OPERADORES Y DMC', en: 'FOR TRAVEL AGENTS, TOUR OPERATORS & OVERSEAS DMCs' }[lang],
+    b2bHead: { ja: '日本国内の地上手配はSK LIMOにお任せください', zh: '将日本地接交给我们 — 我们全权统筹全程地面接待', fr: 'Confiez-nous l\'Étape Japon — Nous Gérons Tout le Programme Terrestre', es: 'Déjenos el Tramo en Japón — Gestionamos Todo el Programa Terrestre', en: 'Hand Us the Japan Leg — We Arrange the Entire Ground Programme' }[lang],
+    b2bDesc: { ja: '専任車両、新幹線手配、入場チケット、通訳ガイドまで正規旅行サービス手配業として一括手配いたします。', zh: '提供车队净价合约、新干线车票、景点快速预约门票及持证双语向导。具备日本合法旅行服务手配业牌照。', fr: 'Tarifs nets garantis sur les véhicules, billets Shinkansen, entrées coupe-file et guides agréés. Enregistré au Japon en tant qu\'agence réceptive officielle.', es: 'Tarifas netas garantizadas en vehículos, billetes Shinkansen, entradas y guías autorizados. Registrado en Japón como operador receptivo oficial.', en: 'Guaranteed itemized net rates on vehicles, Shinkansen rail seats, timed-entry tickets, and licensed guides. Registered in Japan as a Travel Service Arrangement Business.' }[lang],
+    b2bBtn: { ja: 'B2B専用窓口にお問い合わせ', zh: '联系B2B地接合作专员', fr: 'Contacter le Desk B2B', es: 'Contactar con el Área B2B', en: 'Connect with B2B Desk' }[lang],
+  };
 
   return (
     <div className="min-h-screen bg-[#FAF8F4] dark:bg-[#080B11] text-[#1D1A16] dark:text-[#F1F5F9] transition-colors duration-200">
       <SiteHeader activePage="home" />
 
       {/* ═════════════════════════════════════════════════════════════════
-          1. CINEMATIC HERO SECTION (Direct RydAgent Inspiration)
+          1. CINEMATIC HERO SECTION
       ═════════════════════════════════════════════════════════════════ */}
       <section className="relative flex min-h-[90svh] items-center justify-center overflow-hidden pt-16 pb-20">
         
@@ -205,7 +325,6 @@ export default function ExplorePage() {
             priority
             className="object-cover object-center brightness-[0.82] dark:brightness-[0.45]"
           />
-          {/* Subtle Dark Vignette & Gradient Overlays */}
           <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/60 to-black/30 dark:from-[#080B11]/95 dark:via-[#080B11]/80 dark:to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#FAF8F4] via-transparent to-black/40 dark:from-[#080B11] dark:via-transparent dark:to-transparent" />
         </div>
@@ -219,43 +338,43 @@ export default function ExplorePage() {
             <div className="inline-flex items-center gap-2 bg-black/60 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-[#C5A059]/40 shadow-sm">
               <span className="w-2 h-2 rounded-full bg-[#C5A059] animate-pulse" />
               <span className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-[#E5C378]">
-                JAPAN-ONLY · LICENSED &amp; INSURED GREEN-PLATE OPERATOR
+                {t.heroRibbon}
               </span>
             </div>
 
             {/* Main Headline */}
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-light tracking-tight leading-[1.15]">
-              <span className="block font-serif italic text-slate-200">First-Class Travel in Japan —</span>
+              <span className="block font-serif italic text-slate-200">{t.heroSubhead}</span>
               <span className="block font-extrabold bg-gradient-to-r from-[#F3E7C4] via-[#C5A059] to-[#E5C378] bg-clip-text text-transparent pt-1">
-                Every ride, perfectly covered.
+                {t.heroMainhead}
               </span>
             </h1>
 
-            {/* RydAgent Value Checklist */}
+            {/* Value Checklist */}
             <ul className="space-y-2.5 text-xs sm:text-sm text-slate-200/95 max-w-xl font-medium pt-2">
               <li className="flex items-center gap-2.5">
                 <span className="w-5 h-5 rounded-full bg-[#C5A059]/20 border border-[#C5A059]/50 flex items-center justify-center text-[#E5C378] font-bold text-xs shrink-0">
                   ✓
                 </span>
-                <span><strong>All-inclusive fixed prices</strong> — Expressway tolls, parking &amp; taxes in, zero tipping expected.</span>
+                <span>{t.check1}</span>
               </li>
               <li className="flex items-center gap-2.5">
                 <span className="w-5 h-5 rounded-full bg-[#C5A059]/20 border border-[#C5A059]/50 flex items-center justify-center text-[#E5C378] font-bold text-xs shrink-0">
                   ✓
                 </span>
-                <span><strong>Flight tracked live</strong> — Delayed? Complimentary 90-minute wait &amp; auto-adjusted dispatch.</span>
+                <span>{t.check2}</span>
               </li>
               <li className="flex items-center gap-2.5">
                 <span className="w-5 h-5 rounded-full bg-[#C5A059]/20 border border-[#C5A059]/50 flex items-center justify-center text-[#E5C378] font-bold text-xs shrink-0">
                   ✓
                 </span>
-                <span><strong>Curbside meet &amp; greet</strong> — Chauffeur meets you at arrivals with personalized nameboard.</span>
+                <span>{t.check3}</span>
               </li>
               <li className="flex items-center gap-2.5">
                 <span className="w-5 h-5 rounded-full bg-[#C5A059]/20 border border-[#C5A059]/50 flex items-center justify-center text-[#E5C378] font-bold text-xs shrink-0">
                   ✓
                 </span>
-                <span><strong>24/7 Operations Desk</strong> — Instant WhatsApp coordination and dispatch in English &amp; Japanese.</span>
+                <span>{t.check4}</span>
               </li>
             </ul>
 
@@ -265,14 +384,14 @@ export default function ExplorePage() {
                 href="/booking"
                 className="bg-gradient-to-r from-[#C5A059] via-[#d8b46b] to-[#C5A059] hover:opacity-95 text-[#0A0D14] font-extrabold px-8 py-4 rounded-xl text-xs uppercase tracking-widest flex items-center gap-2 shadow-xl shadow-[#C5A059]/20 transition-all cursor-pointer"
               >
-                <span>Start Booking Now</span>
+                <span>{t.startBookingBtn}</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
                 href="/services"
                 className="bg-white/10 hover:bg-white/20 text-white backdrop-blur-md border border-white/30 font-bold px-6 py-4 rounded-xl text-xs uppercase tracking-wider transition-all"
               >
-                <span>Our Guarantees</span>
+                <span>{t.guaranteesBtn}</span>
               </Link>
             </div>
 
@@ -283,7 +402,7 @@ export default function ExplorePage() {
       </section>
 
       {/* ═════════════════════════════════════════════════════════════════
-          2. FLOATING QUICK QUOTE & BOOKING WIDGET (RydAgent Signature)
+          2. FLOATING QUICK QUOTE & BOOKING WIDGET
       ═════════════════════════════════════════════════════════════════ */}
       <section className="relative z-30 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 sm:-mt-14 mb-16">
         <form
@@ -293,39 +412,39 @@ export default function ExplorePage() {
           {/* Service Category */}
           <div className="flex flex-col">
             <label className="text-[10px] font-bold uppercase tracking-wider text-[#8C6D3F] dark:text-[#E5C378] mb-1.5">
-              Service
+              {t.serviceLabel}
             </label>
             <select
               value={serviceCategory}
               onChange={(e) => setServiceCategory(e.target.value as any)}
               className="w-full h-11 bg-[#F5F7FA] dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-xl px-3 text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none focus:border-[#C5A059] cursor-pointer"
             >
-              <option value="airport">Airport Transfer</option>
-              <option value="sightseeing">Day Charter Tour</option>
-              <option value="ski">4WD Ski Transfer</option>
+              <option value="airport">{t.optAirport}</option>
+              <option value="sightseeing">{t.optSightseeing}</option>
+              <option value="ski">{t.optSki}</option>
             </select>
           </div>
 
           {/* From */}
           <div className="flex flex-col">
             <label className="text-[10px] font-bold uppercase tracking-wider text-[#8C6D3F] dark:text-[#E5C378] mb-1.5">
-              Pickup (From)
+              {t.fromLabel}
             </label>
             <select
               value={fromLocation}
               onChange={(e) => setFromLocation(e.target.value)}
               className="w-full h-11 bg-[#F5F7FA] dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-xl px-3 text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none focus:border-[#C5A059] cursor-pointer"
             >
-              <option value="hnd">Haneda Airport (HND)</option>
-              <option value="nrt">Narita Airport (NRT)</option>
-              <option value="tokyo">Tokyo Hotels (Central)</option>
+              <option value="hnd">{t.optHnd}</option>
+              <option value="nrt">{t.optNrt}</option>
+              <option value="tokyo">{t.optTokyoHotels}</option>
             </select>
           </div>
 
           {/* Date */}
           <div className="flex flex-col">
             <label className="text-[10px] font-bold uppercase tracking-wider text-[#8C6D3F] dark:text-[#E5C378] mb-1.5">
-              Date
+              {t.dateLabel}
             </label>
             <input
               type="date"
@@ -338,15 +457,15 @@ export default function ExplorePage() {
           {/* Time */}
           <div className="flex flex-col">
             <label className="text-[10px] font-bold uppercase tracking-wider text-[#8C6D3F] dark:text-[#E5C378] mb-1.5">
-              Time
+              {t.timeLabel}
             </label>
             <select
               value={quoteTime}
               onChange={(e) => setQuoteTime(e.target.value)}
               className="w-full h-11 bg-[#F5F7FA] dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-xl px-3 text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none focus:border-[#C5A059] cursor-pointer"
             >
-              {['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '20:00', '22:00'].map((t) => (
-                <option key={t} value={t}>{t}</option>
+              {['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '20:00', '22:00'].map((tVal) => (
+                <option key={tVal} value={tVal}>{tVal}</option>
               ))}
             </select>
           </div>
@@ -354,7 +473,7 @@ export default function ExplorePage() {
           {/* Vehicle / Pax */}
           <div className="flex flex-col">
             <label className="text-[10px] font-bold uppercase tracking-wider text-[#8C6D3F] dark:text-[#E5C378] mb-1.5">
-              Guests (Pax)
+              {t.paxLabel}
             </label>
             <select
               value={quotePax}
@@ -372,40 +491,40 @@ export default function ExplorePage() {
             type="submit"
             className="w-full h-11 bg-[#C5A059] hover:bg-[#d8b46b] text-[#0A0D14] font-extrabold rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-[#C5A059]/20 transition-all cursor-pointer"
           >
-            <span>Check Price</span>
+            <span>{t.checkPriceBtn}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </form>
       </section>
 
       {/* ═════════════════════════════════════════════════════════════════
-          3. KEY TRUST METRICS & WHAT WE OPERATE
+          3. KEY TRUST METRICS
       ═════════════════════════════════════════════════════════════════ */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
           
           <div className="bg-white dark:bg-[#0E131F] border border-[#E8E2D8] dark:border-slate-800 rounded-2xl p-6 space-y-2 shadow-sm">
             <div className="text-3xl sm:text-4xl font-extrabold text-[#C5A059] font-mono">100%</div>
-            <p className="text-xs font-semibold text-[#1D1A16] dark:text-white">MLIT Green Plate</p>
-            <p className="text-[11px] text-[#6B6458] dark:text-slate-400">Fully insured commercial legal Japanese transport</p>
+            <p className="text-xs font-semibold text-[#1D1A16] dark:text-white">{t.trust1Title}</p>
+            <p className="text-[11px] text-[#6B6458] dark:text-slate-400">{t.trust1Desc}</p>
           </div>
 
           <div className="bg-white dark:bg-[#0E131F] border border-[#E8E2D8] dark:border-slate-800 rounded-2xl p-6 space-y-2 shadow-sm">
             <div className="text-3xl sm:text-4xl font-extrabold text-[#C5A059] font-mono">90 Min</div>
-            <p className="text-xs font-semibold text-[#1D1A16] dark:text-white">Free Arrival Wait</p>
-            <p className="text-[11px] text-[#6B6458] dark:text-slate-400">Relaxed customs &amp; luggage clearance guarantee</p>
+            <p className="text-xs font-semibold text-[#1D1A16] dark:text-white">{t.trust2Title}</p>
+            <p className="text-[11px] text-[#6B6458] dark:text-slate-400">{t.trust2Desc}</p>
           </div>
 
           <div className="bg-white dark:bg-[#0E131F] border border-[#E8E2D8] dark:border-slate-800 rounded-2xl p-6 space-y-2 shadow-sm">
             <div className="text-3xl sm:text-4xl font-extrabold text-[#C5A059] font-mono">¥0</div>
-            <p className="text-xs font-semibold text-[#1D1A16] dark:text-white">Surge Pricing</p>
-            <p className="text-[11px] text-[#6B6458] dark:text-slate-400">All highway tolls &amp; fuel locked at reservation</p>
+            <p className="text-xs font-semibold text-[#1D1A16] dark:text-white">{t.trust3Title}</p>
+            <p className="text-[11px] text-[#6B6458] dark:text-slate-400">{t.trust3Desc}</p>
           </div>
 
           <div className="bg-white dark:bg-[#0E131F] border border-[#E8E2D8] dark:border-slate-800 rounded-2xl p-6 space-y-2 shadow-sm">
             <div className="text-3xl sm:text-4xl font-extrabold text-[#C5A059] font-mono">24/7</div>
-            <p className="text-xs font-semibold text-[#1D1A16] dark:text-white">Bilingual Support</p>
-            <p className="text-[11px] text-[#6B6458] dark:text-slate-400">WhatsApp &amp; phone flight tracking dispatch desk</p>
+            <p className="text-xs font-semibold text-[#1D1A16] dark:text-white">{t.trust4Title}</p>
+            <p className="text-[11px] text-[#6B6458] dark:text-slate-400">{t.trust4Desc}</p>
           </div>
 
         </div>
@@ -418,17 +537,17 @@ export default function ExplorePage() {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
             <span className="text-[11px] font-extrabold uppercase tracking-widest text-[#8C6D3F] dark:text-[#C5A059]">
-              Fixed-Rate Routes
+              {t.corridorsTag}
             </span>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-[#1D1A16] dark:text-white">
-              Popular Japan Private Chauffeur Corridors
+              {t.corridorsHead}
             </h2>
           </div>
           <Link
             href="/booking"
             className="inline-flex items-center gap-1.5 text-xs font-bold text-[#8C6D3F] dark:text-[#C5A059] hover:underline"
           >
-            <span>Open Interactive Booking Portal</span>
+            <span>{t.openPortalLink}</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
@@ -449,13 +568,13 @@ export default function ExplorePage() {
                   25–35 Min · 22 km
                 </div>
                 <div className="absolute bottom-3 right-3 bg-black/80 backdrop-blur-md px-2.5 py-1 rounded text-[#E5C378] font-mono font-bold text-xs border border-[#C5A059]/40">
-                  From ¥16,000
+                  {t.fromUnit} ¥16,000
                 </div>
               </div>
               <div className="p-5 space-y-2">
-                <h3 className="font-bold text-base text-[#1D1A16] dark:text-white">Haneda Airport ⇄ Tokyo Hotels</h3>
+                <h3 className="font-bold text-base text-[#1D1A16] dark:text-white">{t.hndCardTitle}</h3>
                 <p className="text-xs text-[#6B6458] dark:text-slate-300">
-                  Seamless executive arrival. Meet &amp; greet with nameboard at Terminal 2/3 and direct drop-off at your Tokyo hotel lobby.
+                  {t.hndCardDesc}
                 </p>
               </div>
             </div>
@@ -464,7 +583,7 @@ export default function ExplorePage() {
                 href="/booking?category=airport&from=hnd"
                 className="w-full bg-[#FAF8F4] dark:bg-slate-800 hover:bg-[#C5A059] hover:text-black dark:hover:bg-[#C5A059] dark:hover:text-black text-[#1D1A16] dark:text-white font-bold py-2.5 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all border border-[#E8E2D8] dark:border-slate-700"
               >
-                <span>Book Haneda Transfer</span>
+                <span>{t.bookHndBtn}</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
@@ -484,13 +603,13 @@ export default function ExplorePage() {
                   10 Hours · 118 km
                 </div>
                 <div className="absolute bottom-3 right-3 bg-black/80 backdrop-blur-md px-2.5 py-1 rounded text-[#E5C378] font-mono font-bold text-xs border border-[#C5A059]/40">
-                  From ¥75,000
+                  {t.fromUnit} ¥75,000
                 </div>
               </div>
               <div className="p-5 space-y-2">
-                <h3 className="font-bold text-base text-[#1D1A16] dark:text-white">Mount Fuji &amp; Lake Kawaguchiko</h3>
+                <h3 className="font-bold text-base text-[#1D1A16] dark:text-white">{t.fujiCardTitle}</h3>
                 <p className="text-xs text-[#6B6458] dark:text-slate-300">
-                  5th Station panoramic vistas, crystal waters of Oshino Hakkai, and Arakurayama Sengen Pagoda at your own pace.
+                  {t.fujiCardDesc}
                 </p>
               </div>
             </div>
@@ -499,7 +618,7 @@ export default function ExplorePage() {
                 href="/booking?category=sightseeing&from=tokyo"
                 className="w-full bg-[#FAF8F4] dark:bg-slate-800 hover:bg-[#C5A059] hover:text-black dark:hover:bg-[#C5A059] dark:hover:text-black text-[#1D1A16] dark:text-white font-bold py-2.5 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all border border-[#E8E2D8] dark:border-slate-700"
               >
-                <span>Book Fuji Charter</span>
+                <span>{t.bookFujiBtn}</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
@@ -519,13 +638,13 @@ export default function ExplorePage() {
                   3.5–4.0 Hours · 4WD Direct
                 </div>
                 <div className="absolute bottom-3 right-3 bg-black/80 backdrop-blur-md px-2.5 py-1 rounded text-[#E5C378] font-mono font-bold text-xs border border-[#C5A059]/40">
-                  From ¥110,000
+                  {t.fromUnit} ¥110,000
                 </div>
               </div>
               <div className="p-5 space-y-2">
-                <h3 className="font-bold text-base text-[#1D1A16] dark:text-white">4WD Hakuba Valley Alpine Ski Direct</h3>
+                <h3 className="font-bold text-base text-[#1D1A16] dark:text-white">{t.skiCardTitle}</h3>
                 <p className="text-xs text-[#6B6458] dark:text-slate-300">
-                  Door-to-door from Haneda, Narita, or Tokyo directly to your Hakuba chalet. Studless snow tires and ski bags included.
+                  {t.skiCardDesc}
                 </p>
               </div>
             </div>
@@ -534,7 +653,7 @@ export default function ExplorePage() {
                 href="/booking?category=ski&from=hnd"
                 className="w-full bg-[#FAF8F4] dark:bg-slate-800 hover:bg-[#C5A059] hover:text-black dark:hover:bg-[#C5A059] dark:hover:text-black text-[#1D1A16] dark:text-white font-bold py-2.5 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all border border-[#E8E2D8] dark:border-slate-700"
               >
-                <span>Book Ski Transfer</span>
+                <span>{t.bookSkiBtn}</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
@@ -544,20 +663,20 @@ export default function ExplorePage() {
       </section>
 
       {/* ═════════════════════════════════════════════════════════════════
-          5. FLEET SHOWCASE WITH RIGHT-SIDE GOLD BADGES
+          5. FLEET SHOWCASE
       ═════════════════════════════════════════════════════════════════ */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="bg-white dark:bg-[#0E131F] border border-[#E8E2D8] dark:border-slate-800 rounded-3xl p-6 sm:p-10 space-y-8 shadow-sm">
           
           <div className="text-center max-w-2xl mx-auto space-y-1">
             <span className="text-[11px] uppercase font-bold tracking-widest text-[#8C6D3F] dark:text-[#C5A059]">
-              Executive Fleet Standards
+              {t.fleetTag}
             </span>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-[#1D1A16] dark:text-white">
-              Pristine Japanese Commercial Vehicles
+              {t.fleetHead}
             </h2>
             <p className="text-xs text-[#6B6458] dark:text-slate-400">
-              Daily sanitized, non-smoking, and maintained under rigorous Ministry of Transport safety protocols.
+              {t.fleetSubhead}
             </p>
           </div>
 
@@ -614,7 +733,7 @@ export default function ExplorePage() {
                       : 'bg-white dark:bg-slate-800 border-[#E8E2D8] dark:border-slate-700 text-[#4B5563] dark:text-slate-300'
                   }`}
                 >
-                  Exterior
+                  {t.exteriorTab}
                 </button>
                 <button
                   type="button"
@@ -625,7 +744,7 @@ export default function ExplorePage() {
                       : 'bg-white dark:bg-slate-800 border-[#E8E2D8] dark:border-slate-700 text-[#4B5563] dark:text-slate-300'
                   }`}
                 >
-                  Interior Lounge
+                  {t.interiorTab}
                 </button>
                 <button
                   type="button"
@@ -636,7 +755,7 @@ export default function ExplorePage() {
                       : 'bg-white dark:bg-slate-800 border-[#E8E2D8] dark:border-slate-700 text-[#4B5563] dark:text-slate-300'
                   }`}
                 >
-                  Luggage Bay
+                  {t.trunkTab}
                 </button>
               </div>
             </div>
@@ -672,7 +791,7 @@ export default function ExplorePage() {
                   href="/booking"
                   className="bg-[#C5A059] hover:bg-[#d8b46b] text-[#0A0D14] font-extrabold px-6 py-3 rounded-xl text-xs uppercase tracking-wider inline-flex items-center gap-2 shadow-md transition-all"
                 >
-                  <span>Book This Vehicle</span>
+                  <span>{t.bookVehicleBtn}</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
@@ -691,15 +810,15 @@ export default function ExplorePage() {
       </section>
 
       {/* ═════════════════════════════════════════════════════════════════
-          7. FREQUENTLY ASKED QUESTIONS (Accordion FAQ)
+          7. FREQUENTLY ASKED QUESTIONS
       ═════════════════════════════════════════════════════════════════ */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-8">
         <div className="text-center space-y-1">
           <span className="text-[11px] uppercase font-bold tracking-widest text-[#8C6D3F] dark:text-[#C5A059]">
-            Transparent Answers
+            {t.faqTag}
           </span>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-[#1D1A16] dark:text-white">
-            Frequently Asked Questions
+            {t.faqHead}
           </h2>
         </div>
 
@@ -743,13 +862,13 @@ export default function ExplorePage() {
 
           <div className="space-y-3 max-w-2xl relative z-10">
             <span className="text-[11px] uppercase font-bold tracking-widest text-[#E5C378]">
-              FOR TRAVEL AGENTS, TOUR OPERATORS &amp; OVERSEAS DMCs
+              {t.b2bTag}
             </span>
             <h3 className="text-2xl sm:text-3xl font-extrabold text-white">
-              Hand Us the Japan Leg — We Arrange the Entire Ground Programme
+              {t.b2bHead}
             </h3>
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-              Guaranteed itemized net rates on vehicles, Shinkansen rail seats, timed-entry tickets, and licensed guides. Registered in Japan as a Travel Service Arrangement Business.
+              {t.b2bDesc}
             </p>
           </div>
 
@@ -758,7 +877,7 @@ export default function ExplorePage() {
               href="/contact"
               className="bg-[#C5A059] hover:bg-[#d8b46b] text-[#0A0D14] font-extrabold px-8 py-4 rounded-xl text-xs uppercase tracking-wider inline-flex items-center gap-2 shadow-xl shadow-[#C5A059]/20 transition-all"
             >
-              <span>Connect with B2B Desk</span>
+              <span>{t.b2bBtn}</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>

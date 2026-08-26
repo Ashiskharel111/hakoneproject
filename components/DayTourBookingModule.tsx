@@ -205,17 +205,199 @@ export default function DayTourBookingModule({
     return fee;
   }, [currentDest, selectedVehicle]);
 
+  const t = {
+    backToCatalog: {
+      ja: 'すべてのツアー一覧に戻る',
+      zh: '返回全部行程列表',
+      fr: 'Retour au catalogue',
+      es: 'Volver al catálogo',
+      en: 'Back to Explore & Catalog',
+    }[lang],
+    badgeTop: {
+      ja: '厳選プライベート観光チャーター',
+      zh: '精选尊享私家包车一日游',
+      fr: 'Excursion Privée d\'une Journée',
+      es: 'Tour Privado de un Día',
+      en: 'Curated Private Day Charter',
+    }[lang],
+    step1Title: {
+      ja: '1. 観光コース・目的地を選択',
+      zh: '1. 选择观光路线与目的地',
+      fr: '1. Choisir l\'Itinéraire & Destination',
+      es: '1. Seleccionar Destino e Itinerario',
+      en: 'Select Destination & Itinerary',
+    }[lang],
+    doorToDoor: {
+      ja: '完全ドアtoドア送迎',
+      zh: '门到门全程无忧',
+      fr: 'Porte-à-Porte',
+      es: 'Puerta a Puerta',
+      en: 'Door-to-Door',
+    }[lang],
+    step2Title: {
+      ja: '2. 車両クラスを選択',
+      zh: '2. 选择专车车型等级',
+      fr: '2. Choisir la Catégorie du Véhicule',
+      es: '2. Elegir Categoría de Vehículo',
+      en: 'Select Executive Vehicle Class',
+    }[lang],
+    greenPlateInsured: {
+      ja: '緑ナンバー正規保険完備',
+      zh: '正规绿牌商业全保',
+      fr: 'Assuré Plaque Verte MLIT',
+      es: 'Seguro Placa Verde MLIT',
+      en: 'Green-Plate Insured',
+    }[lang],
+    step3Title: {
+      ja: '3. 乗車人数・お迎えホテル情報',
+      zh: '3. 出行人数与接送酒店信息',
+      fr: '3. Passagers & Informations Hôtel',
+      es: '3. Pasajeros y Datos del Hotel',
+      en: 'Passengers & Pickup Details',
+    }[lang],
+    dateLabel: {
+      ja: 'ご乗車日程',
+      zh: '出行日期',
+      fr: 'Date du tour',
+      es: 'Fecha del tour',
+      en: 'Tour Date',
+    }[lang],
+    paxLabel: {
+      ja: 'ご乗車人数',
+      zh: '出行人数',
+      fr: 'Passagers',
+      es: 'Pasajeros',
+      en: 'Guest Count',
+    }[lang],
+    guestsUnit: {
+      ja: '名様',
+      zh: '位贵宾',
+      fr: 'Personnes',
+      es: 'Personas',
+      en: 'Guests',
+    }[lang],
+    hotelLabel: {
+      ja: 'お迎え先ホテル名・都内住所',
+      zh: '出发地酒店名称或东京都内地址',
+      fr: 'Nom de l\'hôtel ou adresse à Tokyo',
+      es: 'Nombre del hotel o dirección en Tokio',
+      en: 'Pickup Hotel Name or Tokyo Address',
+    }[lang],
+    hotelPlaceholder: {
+      ja: '例: アマン東京、グランドハイアット東京（六本木）、都内ご自宅など',
+      zh: '例如: 东京安缦、六本木君悦酒店或东京都内具体地址',
+      fr: 'Ex: Aman Tokyo, Grand Hyatt Tokyo (Roppongi), ou adresse',
+      es: 'Ej: Aman Tokyo, Grand Hyatt Tokyo (Roppongi), o dirección',
+      en: 'e.g. Aman Tokyo, Grand Hyatt Tokyo (Roppongi), or Tokyo Address',
+    }[lang],
+    leadNameLabel: {
+      ja: '代表者様氏名',
+      zh: '代表乘客姓名',
+      fr: 'Nom du passager principal',
+      es: 'Nombre del pasajero principal',
+      en: 'Lead Guest Full Name',
+    }[lang],
+    emailLabel: {
+      ja: '予約確認書送信先メールアドレス',
+      zh: '确认单接收邮箱',
+      fr: 'Email de confirmation',
+      es: 'Correo de confirmación',
+      en: 'Confirmation Email',
+    }[lang],
+    specialRequestsLabel: {
+      ja: 'ご要望・立ち寄り希望地（任意）',
+      zh: '个性化定制与中途停靠需求 (选填)',
+      fr: 'Demandes particulières / Arrêts souhaités (Optionnel)',
+      es: 'Peticiones especiales / Paradas deseadas (Opcional)',
+      en: 'Custom Requests / Stops (Optional)',
+    }[lang],
+    specialRequestsPlaceholder: {
+      ja: '例: チャイルドシート希望、御殿場アウトレット立ち寄り、特定のレストラン予約など',
+      zh: '例如: 需要儿童座椅、中途停靠御殿场奥特莱斯、推荐特色餐厅等',
+      fr: 'Ex: Sièges enfant, arrêt shopping Gotemba Outlet, restaurant...',
+      es: 'Ej: Sillas de niño, parada de compras en Gotemba Outlet, restaurante...',
+      en: 'e.g. Child seat requested, stop by Gotemba Outlets, or scenic restaurant reservation',
+    }[lang],
+    agreementText: {
+      ja: '旅程内容、ご乗車人数、お迎え先ホテル情報を確認し、正規運送事業運行規定およびキャンセル規定に同意します。',
+      zh: '我确认行程内容、人数及出发酒店信息无误，并同意正规营运条款与取消政策。',
+      fr: 'Je confirme l\'exactitude de l\'itinéraire, des passagers et de l\'hôtel, et j\'accepte les conditions de transport.',
+      es: 'Confirmo la exactitud del itinerario, pasajeros y hotel, y acepto las condiciones de transporte.',
+      en: 'I confirm my tour destination, guest count, and pickup hotel address are correct, and I agree to the MLIT licensed carrier terms & cancellation policy.',
+    }[lang],
+    quoteTitle: {
+      ja: '観光チャーター定額見積り',
+      zh: '一日游包车费用明细',
+      fr: 'Récapitulatif du Devis',
+      es: 'Resumen del Presupuesto',
+      en: 'Charter Quote Summary',
+    }[lang],
+    allInclusive: {
+      ja: '完全定額・高速代込',
+      zh: '全包一口价',
+      fr: 'Tout Compris Garanti',
+      es: 'Todo Incluido Garantizado',
+      en: 'All-Inclusive Fixed',
+    }[lang],
+    durationBadge: {
+      ja: '時間 貸切',
+      zh: '小时专属包车',
+      fr: 'Heures de Charter',
+      es: 'Horas de Charter',
+      en: 'Duration',
+    }[lang],
+    destinationLabel: { ja: '目的地:', zh: '目的地:', fr: 'Destination :', es: 'Destino:', en: 'Destination:' }[lang],
+    vehicleLabel: { ja: '運行車両:', zh: '服务车型:', fr: 'Véhicule :', es: 'Vehículo:', en: 'Vehicle:' }[lang],
+    dateAndGuestsLabel: { ja: '日程・人数:', zh: '日期与人数:', fr: 'Date & Passagers :', es: 'Fecha y Pasajeros:', en: 'Date & Guests:' }[lang],
+    incTolls: {
+      ja: '高速道路利用料・燃料代・駐車料金込',
+      zh: '已含全程高速路桥费、燃油费及停车费',
+      fr: 'Tous les péages d\'autoroute et carburant inclus',
+      es: 'Peajes de autopista, combustible y parkings incluidos',
+      en: 'All expressway highway tolls & fuel included',
+    }[lang],
+    incDriver: {
+      ja: '経験豊富なプロ専任乗務員がご案内',
+      zh: '资深持证专业司机全程贴心服务',
+      fr: 'Chauffeur professionnel bilingue dédié',
+      es: 'Chófer profesional bilingüe dedicado',
+      en: 'Licensed bilingual professional chauffeur',
+    }[lang],
+    incStops: {
+      ja: '自由な写真撮影スポット＆ペース配分',
+      zh: '沿途自由停留拍照，自主掌控游览节奏',
+      fr: 'Arrêts photo et rythme entièrement flexibles',
+      es: 'Paradas fotográficas y ritmo totalmente flexible',
+      en: 'Flexible customized stops & photography points',
+    }[lang],
+    totalFareLabel: { ja: '定額総額 (税込):', zh: '全包总价 (含税):', fr: 'Tarif Total :', es: 'Tarifa Total:', en: 'Total Fare:' }[lang],
+    instantStripeBtn: {
+      ja: 'Stripe 即時オンライン決済',
+      zh: 'Stripe 在线安全预订支付',
+      fr: 'Paiement Sécurisé Immédiat Stripe',
+      es: 'Pago Seguro Inmediato con Stripe',
+      en: 'Instant Stripe Checkout',
+    }[lang],
+    whatsAppBtn: {
+      ja: 'WhatsApp で空車確認・ご相談',
+      zh: '通过 WhatsApp 确认空车并预订',
+      fr: 'WhatsApp Conciergerie',
+      es: 'WhatsApp Conserjería',
+      en: 'WhatsApp Concierge',
+    }[lang],
+  };
+
   const vehicleName =
     selectedVehicle === 'alphard'
-      ? 'Toyota Alphard (Premium - 1-4 Pax)'
+      ? 'Toyota Alphard (1–4 Pax)'
       : selectedVehicle === 'granace'
-      ? 'Toyota Granace (Ultra Premium - 1-5 Pax)'
-      : 'HiAce Grand Cabin (Standard - 1-9 Pax)';
+      ? 'Toyota Granace VIP (1–5 Pax)'
+      : 'Toyota HiAce Grand Cabin (1–9 Pax)';
 
   const bookingDetails: BookingPaymentDetails = {
     bookingType: 'destination',
     destinationId: currentDest.id,
-    destinationTitle: `${currentDest.name.en} (${currentDest.charterHours} Private Charter)`,
+    destinationTitle: `${currentDest.name[lang] || currentDest.name.en} (${currentDest.charterHours})`,
     vehicle: selectedVehicle,
     vehicleName,
     passengers,
@@ -235,6 +417,8 @@ export default function DayTourBookingModule({
       setValidationError(
         lang === 'ja'
           ? `選択中の車両定員は最大${maxCap}名です（現在${passengers}名）。車両クラスを「Ultra Premium (5名)」または「Standard (9名)」に変更してください。`
+          : lang === 'zh'
+          ? `当前选择的车型最多可容纳${maxCap}人（当前已选${passengers}人）。请升级为更大车型。`
           : `${selectedVehicle === 'alphard' ? 'Toyota Alphard (Premium)' : 'Toyota Granace (Ultra Premium)'} capacity is max ${maxCap} guests. You have selected ${passengers} guests. Please choose a larger vehicle.`
       );
       return;
@@ -243,6 +427,8 @@ export default function DayTourBookingModule({
       setValidationError(
         lang === 'ja'
           ? 'お迎え先ホテル名または東京都内住所をご入力ください。'
+          : lang === 'zh'
+          ? '请输入出发地酒店名称或东京都内具体地址。'
           : 'Please enter your pickup hotel name or Tokyo address.'
       );
       return;
@@ -251,6 +437,8 @@ export default function DayTourBookingModule({
       setValidationError(
         lang === 'ja'
           ? '代表者様のお名前と予約確認書送信用メールアドレスをご入力ください。'
+          : lang === 'zh'
+          ? '请输入代表乘客姓名与确认单电子邮箱。'
           : 'Please enter the lead guest name and confirmation email.'
       );
       return;
@@ -259,6 +447,8 @@ export default function DayTourBookingModule({
       setValidationError(
         lang === 'ja'
           ? 'お支払い前に同意のチェックボックスを選択してください。'
+          : lang === 'zh'
+          ? '请在支付前勾选确认条款。'
           : 'Please check the mandatory confirmation box before proceeding.'
       );
       return;
@@ -292,12 +482,12 @@ export default function DayTourBookingModule({
             className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0068FF] dark:text-[#3B82F6] hover:underline cursor-pointer bg-white dark:bg-[#0E131F] border border-[#E5E8ED] dark:border-slate-800 px-3 py-1.5 rounded-xl shadow-sm"
           >
             <span>←</span>
-            <span>{lang === 'ja' ? 'すべてのツアー一覧に戻る' : lang === 'zh' ? '返回全部行程列表' : 'Back to Explore & Catalog'}</span>
+            <span>{t.backToCatalog}</span>
           </button>
         )}
         <div className="inline-flex items-center gap-1.5 bg-[#E8F1FF] dark:bg-[#0068FF]/15 text-[#0068FF] dark:text-[#3B82F6] text-[11px] font-semibold px-3 py-1 rounded-full ml-auto">
           <Compass className="w-3 h-3" />
-          <span>Curated Private Day Charter</span>
+          <span>{t.badgeTop}</span>
         </div>
       </div>
 
@@ -315,10 +505,10 @@ export default function DayTourBookingModule({
                     1
                   </span>
                   <h2 className="text-sm sm:text-base font-bold text-[#1A1A1A] dark:text-white">
-                    {lang === 'ja' ? '観光コース・目的地を選択' : 'Select Destination & Itinerary'}
+                    {t.step1Title}
                   </h2>
                 </div>
-                <span className="text-[11px] text-[#6B7280] dark:text-slate-400">Door-to-Door</span>
+                <span className="text-[11px] text-[#6B7280] dark:text-slate-400">{t.doorToDoor}</span>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -341,7 +531,7 @@ export default function DayTourBookingModule({
                         </span>
                       </div>
                       <div className="flex items-center justify-between text-[10px] text-[#6B7280] dark:text-slate-400 pt-1 border-t border-[#F0F2F5] dark:border-slate-800/80">
-                        <span>{dest.charterHours} Charter</span>
+                        <span>{dest.charterHours}</span>
                         <span className="font-mono font-bold text-[#1A1A1A] dark:text-white">¥{dest.baseTourRate.toLocaleString()}〜</span>
                       </div>
                     </button>
@@ -358,10 +548,10 @@ export default function DayTourBookingModule({
                     2
                   </span>
                   <h2 className="text-sm sm:text-base font-bold text-[#1A1A1A] dark:text-white">
-                    {lang === 'ja' ? '車両クラスを選択' : 'Select Executive Vehicle Class'}
+                    {t.step2Title}
                   </h2>
                 </div>
-                <span className="text-[11px] text-[#00B37E] font-semibold">Green-Plate Insured</span>
+                <span className="text-[11px] text-[#00B37E] font-semibold">{t.greenPlateInsured}</span>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -384,7 +574,6 @@ export default function DayTourBookingModule({
                     >
                       <div className="relative w-full h-20 rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-900">
                         <Image src={v.img} alt={v.name} fill className="object-cover" />
-                        {/* Gold Badge on Top-Right */}
                         <div className="absolute top-2 right-2 bg-black/80 backdrop-blur-md px-2 py-0.5 rounded border border-[#C5A059]/40 shadow">
                           <span className="text-[#C5A059] font-extrabold text-[9px] tracking-wider uppercase">
                             {v.goldBadge}
@@ -436,7 +625,7 @@ export default function DayTourBookingModule({
                     3
                   </span>
                   <h2 className="text-sm sm:text-base font-bold text-[#1A1A1A] dark:text-white">
-                    {lang === 'ja' ? '乗車人数・お迎えホテル情報' : 'Passengers & Pickup Details'}
+                    {t.step3Title}
                   </h2>
                 </div>
               </div>
@@ -445,7 +634,7 @@ export default function DayTourBookingModule({
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label className="text-xs font-semibold text-[#4B5563] dark:text-slate-300 block mb-1">
-                      {lang === 'ja' ? 'ご乗車日程' : 'Tour Date'} <span className="text-red-500">*</span>
+                      {t.dateLabel} <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="date"
@@ -457,10 +646,10 @@ export default function DayTourBookingModule({
 
                   <div>
                     <label className="text-xs font-semibold text-[#4B5563] dark:text-slate-300 block mb-1">
-                      {lang === 'ja' ? 'ご乗車人数' : 'Guest Count'}
+                      {t.paxLabel}
                     </label>
                     <div className="flex items-center justify-between bg-[#F5F7FA] dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-xl px-3 py-1.5">
-                      <span className="text-xs font-bold text-[#1A1A1A] dark:text-white">{passengers} Guests</span>
+                      <span className="text-xs font-bold text-[#1A1A1A] dark:text-white">{passengers} {t.guestsUnit}</span>
                       <div className="flex items-center gap-1.5">
                         <button
                           type="button"
@@ -489,11 +678,11 @@ export default function DayTourBookingModule({
 
                 <div>
                   <label className="text-xs font-semibold text-[#4B5563] dark:text-slate-300 block mb-1">
-                    {lang === 'ja' ? 'お迎え先ホテル名・住所' : 'Pickup Hotel Name or Tokyo Address'} <span className="text-red-500">*</span>
+                    {t.hotelLabel} <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
-                    placeholder="e.g. Aman Tokyo, Grand Hyatt Tokyo (Roppongi), or Tokyo Address"
+                    placeholder={t.hotelPlaceholder}
                     value={pickupHotel}
                     onChange={(e) => {
                       setPickupHotel(e.target.value);
@@ -506,7 +695,7 @@ export default function DayTourBookingModule({
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label className="text-xs font-semibold text-[#4B5563] dark:text-slate-300 block mb-1">
-                      {lang === 'ja' ? '代表者様氏名' : 'Lead Guest Full Name'} <span className="text-red-500">*</span>
+                      {t.leadNameLabel} <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
@@ -522,7 +711,7 @@ export default function DayTourBookingModule({
 
                   <div>
                     <label className="text-xs font-semibold text-[#4B5563] dark:text-slate-300 block mb-1">
-                      {lang === 'ja' ? '予約確認書送信先メールアドレス' : 'Confirmation Email'} <span className="text-red-500">*</span>
+                      {t.emailLabel} <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="email"
@@ -539,11 +728,11 @@ export default function DayTourBookingModule({
 
                 <div>
                   <label className="text-xs font-semibold text-[#4B5563] dark:text-slate-300 block mb-1">
-                    {lang === 'ja' ? 'ご要望・立ち寄り希望地（任意）' : 'Custom Requests / Stops (Optional)'}
+                    {t.specialRequestsLabel}
                   </label>
                   <input
                     type="text"
-                    placeholder="e.g. Child seat requested, stop by Gotemba Outlets, or scenic restaurant reservation"
+                    placeholder={t.specialRequestsPlaceholder}
                     value={specialRequests}
                     onChange={(e) => setSpecialRequests(e.target.value)}
                     className="w-full bg-[#F5F7FA] dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none focus:border-[#0068FF]"
@@ -563,9 +752,7 @@ export default function DayTourBookingModule({
                       className="mt-0.5 w-4 h-4 rounded border-[#D1D5DB] text-[#0068FF] focus:ring-[#0068FF] cursor-pointer shrink-0"
                     />
                     <span className="text-[11px] text-[#4B5563] dark:text-slate-300 leading-tight">
-                      {lang === 'ja'
-                        ? '旅程内容、ご乗車人数、お迎え先ホテル情報を確認し、運行規定およびキャンセル規定に同意します。'
-                        : 'I confirm my tour destination, guest count, and pickup hotel address are correct, and I agree to the MLIT licensed carrier terms & cancellation policy.'}
+                      {t.agreementText}
                     </span>
                   </label>
                 </div>
@@ -579,11 +766,11 @@ export default function DayTourBookingModule({
             <div className="bg-white dark:bg-[#0E131F] rounded-2xl border border-[#E5E8ED] dark:border-slate-800 p-5 sm:p-6 space-y-5 shadow-sm lg:sticky lg:top-24 transition-colors">
               <div className="flex items-center justify-between pb-3 border-b border-[#F0F2F5] dark:border-slate-800">
                 <span className="text-xs font-bold text-[#6B7280] dark:text-slate-400 uppercase tracking-wider">
-                  Charter Quote Summary
+                  {t.quoteTitle}
                 </span>
                 <span className="text-[11px] text-[#00B37E] font-semibold flex items-center gap-1">
                   <CheckCircle2 className="w-3.5 h-3.5" />
-                  All-Inclusive Fixed
+                  {t.allInclusive}
                 </span>
               </div>
 
@@ -596,22 +783,22 @@ export default function DayTourBookingModule({
                   className="object-cover"
                 />
                 <div className="absolute top-2.5 left-2.5 bg-black/60 backdrop-blur-md text-white text-[10px] font-bold px-2 py-0.5 rounded">
-                  {currentDest.charterHours} Duration
+                  {currentDest.charterHours}
                 </div>
               </div>
 
               <div className="space-y-2 text-xs text-[#4B5563] dark:text-slate-300">
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Destination:</span>
+                  <span className="text-slate-500">{t.destinationLabel}</span>
                   <span className="font-bold text-[#1A1A1A] dark:text-white text-right">{currentDest.name[lang] || currentDest.name.en}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Vehicle:</span>
+                  <span className="text-slate-500">{t.vehicleLabel}</span>
                   <span className="font-bold text-[#1A1A1A] dark:text-white">{vehicleName}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Date &amp; Guests:</span>
-                  <span className="font-bold text-[#1A1A1A] dark:text-white">{travelDate} · {passengers} Pax</span>
+                  <span className="text-slate-500">{t.dateAndGuestsLabel}</span>
+                  <span className="font-bold text-[#1A1A1A] dark:text-white">{travelDate} · {passengers} {t.guestsUnit}</span>
                 </div>
               </div>
 
@@ -619,22 +806,22 @@ export default function DayTourBookingModule({
               <div className="bg-[#F5F7FA] dark:bg-[#131b2c] rounded-xl p-3 space-y-1.5 text-[11px] text-[#4B5563] dark:text-slate-300">
                 <p className="flex items-center gap-1.5 text-[#00B37E] font-medium">
                   <Check className="w-3.5 h-3.5 shrink-0" />
-                  <span>All expressway highway tolls &amp; fuel included</span>
+                  <span>{t.incTolls}</span>
                 </p>
                 <p className="flex items-center gap-1.5 text-[#00B37E] font-medium">
                   <Check className="w-3.5 h-3.5 shrink-0" />
-                  <span>Licensed bilingual professional chauffeur</span>
+                  <span>{t.incDriver}</span>
                 </p>
                 <p className="flex items-center gap-1.5 text-[#00B37E] font-medium">
                   <Check className="w-3.5 h-3.5 shrink-0" />
-                  <span>Flexible customized stops &amp; photography points</span>
+                  <span>{t.incStops}</span>
                 </p>
               </div>
 
               {/* Price & Action */}
               <div className="pt-2 border-t border-[#F0F2F5] dark:border-slate-800 space-y-3">
                 <div className="flex items-baseline justify-between">
-                  <span className="text-xs text-[#6B7280] dark:text-slate-400 font-bold uppercase">Total Fare:</span>
+                  <span className="text-xs text-[#6B7280] dark:text-slate-400 font-bold uppercase">{t.totalFareLabel}</span>
                   <span className="text-2xl font-extrabold text-[#1A1A1A] dark:text-white font-mono">
                     ¥{vehiclePrice.toLocaleString()} <span className="text-xs font-normal text-[#9CA3AF]">JPY</span>
                   </span>
@@ -654,7 +841,7 @@ export default function DayTourBookingModule({
                     className="w-full bg-[#0068FF] hover:bg-[#0050CC] text-white font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-sm transition-colors cursor-pointer"
                   >
                     <Lock className="w-4 h-4" />
-                    <span>Instant Stripe Checkout</span>
+                    <span>{t.instantStripeBtn}</span>
                   </button>
 
                   <a
@@ -664,7 +851,7 @@ export default function DayTourBookingModule({
                     className="w-full bg-[#25D366] hover:bg-[#20ba5a] text-white font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-colors shadow-sm"
                   >
                     <MessageSquare className="w-4 h-4" />
-                    <span>WhatsApp Concierge</span>
+                    <span>{t.whatsAppBtn}</span>
                   </a>
                 </div>
               </div>

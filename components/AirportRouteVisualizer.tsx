@@ -218,6 +218,58 @@ export default function AirportRouteVisualizer({
     selectedAirport === 'HND' ? 'Haneda Airport Terminal 3 Tokyo' : 'Narita International Airport Terminal 1 Chiba'
   )}&t=&z=${selectedAirport === 'HND' ? '12' : '10'}&ie=UTF8&iwloc=&output=embed`;
 
+  const t = {
+    badge: {
+      ja: '高速道路直行アクセスルート',
+      zh: '高速直达专属专车走廊',
+      fr: 'Corridor d\'Accès Autoroutier Direct',
+      es: 'Corredor de Autopista Directo',
+      en: 'Expressway Route Corridor',
+    }[lang],
+    toTokyo: {
+      ja: '⇄ 東京都内ホテル・ご指定先',
+      zh: '⇄ 东京都内酒店 / 指定区域',
+      fr: '⇄ Hôtels du Centre de Tokyo',
+      es: '⇄ Hoteles en el Centro de Tokio',
+      en: '⇄ Tokyo Downtown',
+    }[lang],
+    estimatedDrive: {
+      ja: '推定所要時間',
+      zh: '预计车程',
+      fr: 'Trajet Estimé',
+      es: 'Tiempo Estimado',
+      en: 'Estimated Drive',
+    }[lang],
+    distance: {
+      ja: '走行距離',
+      zh: '高速里程',
+      fr: 'Distance',
+      es: 'Distancia',
+      en: 'Distance',
+    }[lang],
+    hanedaShort: { ja: '羽田空港 (HND)', zh: '羽田国际机场 (HND)', fr: 'Aéroport d\'Haneda (HND)', es: 'Aeropuerto de Haneda (HND)', en: 'Haneda Airport (HND)' }[lang],
+    naritaShort: { ja: '成田空港 (NRT)', zh: '成田国际机场 (NRT)', fr: 'Aéroport de Narita (NRT)', es: 'Aeropuerto de Narita (NRT)', en: 'Narita Airport (NRT)' }[lang],
+    highlights: {
+      HND: {
+        ja: ['レインボーブリッジ眺望', '首都高湾岸線直行', '大井ジャンクション迂回', '第2/3ターミナルVIP乗降'],
+        zh: ['彩虹大桥壮丽海景', '首都高速湾岸线直通', '大井枢纽快速分流', 'T2/T3航站楼贵宾道直达'],
+        fr: ['Vue sur le Rainbow Bridge', 'Autoroute Shuto Wangan', 'Contournement fluide d\'Oi', 'VIP Curb T2/T3 Direct'],
+        es: ['Vistas del Rainbow Bridge', 'Autopista Shuto Wangan', 'Acceso rápido Oi Junction', 'Terminal 2/3 VIP'],
+        en: ['Rainbow Bridge View', 'Shuto Wangan Line', 'Oi Junction Bypass', 'Terminal 2/3 VIP Curbside'],
+      }[lang],
+      NRT: {
+        ja: ['東関東自動車道直行', '幕張ベイエリア通過', '酒々井SA休憩可能', '新空港IC直結VIPアクセス'],
+        zh: ['东关东高速直通', '幕张海滨走廊', '酒酒井服务区 (SA)', '新机场高速专线直达'],
+        fr: ['Autoroute Higashi-Kanto', 'Baie de Makuhari', 'Aire de repos de Shisui', 'Accès direct Shin-Kuko'],
+        es: ['Autopista Higashi-Kanto', 'Zona de Makuhari', 'Área de descanso Shisui', 'Acceso directo Shin-Kuko'],
+        en: ['Higashi-Kanto Highway', 'Makuhari Bay Area', 'Shisui Rest Area', 'Shin-Kuko Direct Corridor'],
+      }[lang],
+    },
+  };
+
+  const airportShortName = selectedAirport === 'HND' ? t.hanedaShort : t.naritaShort;
+  const currentHighlights = t.highlights[selectedAirport] || t.highlights.HND;
+
   return (
     <div className={`bg-white dark:bg-[#0E131F] border border-[#E5E8ED] dark:border-slate-800 rounded-3xl p-5 sm:p-7 shadow-sm space-y-4 ${className}`}>
       
@@ -226,21 +278,21 @@ export default function AirportRouteVisualizer({
         <div>
           <div className="inline-flex items-center gap-1.5 bg-[#C5A059]/15 border border-[#C5A059]/40 text-[#8C6D3F] dark:text-[#E5C378] text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full mb-1">
             <Navigation className="w-3 h-3" />
-            <span>Expressway Route Corridor</span>
+            <span>{t.badge}</span>
           </div>
           <h3 className="text-base sm:text-lg font-bold text-[#1A1A1A] dark:text-white">
-            {corridor.shortName} ⇄ Tokyo Downtown
+            {airportShortName} {t.toTokyo}
           </h3>
         </div>
 
         <div className="flex items-center gap-3 bg-[#FAF8F4] dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 px-3.5 py-2 rounded-xl text-xs shrink-0">
           <div>
-            <span className="text-[9px] text-[#9CA3AF] uppercase font-bold block">Estimated Drive</span>
+            <span className="text-[9px] text-[#9CA3AF] uppercase font-bold block">{t.estimatedDrive}</span>
             <span className="font-extrabold text-[#00B37E] font-mono text-sm">{corridor.durationText}</span>
           </div>
           <div className="h-6 w-px bg-slate-300 dark:bg-slate-700" />
           <div>
-            <span className="text-[9px] text-[#9CA3AF] uppercase font-bold block">Distance</span>
+            <span className="text-[9px] text-[#9CA3AF] uppercase font-bold block">{t.distance}</span>
             <span className="font-extrabold text-[#1A1A1A] dark:text-white font-mono text-sm">~{corridor.distanceKm} km</span>
           </div>
         </div>
@@ -270,7 +322,7 @@ export default function AirportRouteVisualizer({
         {/* Top Destination Badge */}
         <div className="absolute top-3 left-3 bg-black/80 backdrop-blur-md border border-white/10 text-white px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow z-10">
           <Plane className="w-3.5 h-3.5 text-[#C5A059]" />
-          <span>{corridor.shortName} (~{corridor.distanceKm} km)</span>
+          <span>{airportShortName} (~{corridor.distanceKm} km)</span>
         </div>
 
         {/* Expressway Highway Badge */}
@@ -282,7 +334,7 @@ export default function AirportRouteVisualizer({
 
       {/* Highlights & Guarantees Bar */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
-        {corridor.corridorHighlights.map((highlight, idx) => (
+        {currentHighlights.map((highlight: string, idx: number) => (
           <div
             key={idx}
             className="flex items-center gap-1.5 bg-[#FAF8F4] dark:bg-[#161f30] border border-[#E8E2D8] dark:border-slate-700/80 p-2.5 rounded-xl text-[11px] text-[#4B5563] dark:text-slate-300 font-medium"

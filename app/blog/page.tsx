@@ -238,6 +238,65 @@ export default function BlogPage() {
     },
   ];
 
+  const t = {
+    heroBadge: {
+      ja: '日本旅行＆専任ハイヤー・エグゼクティブ移動インサイト',
+      zh: '日本深度旅行与高端专车出行洞察指南',
+      fr: 'INSIGHTS VOYAGE & CHAUFFEUR PRIVÉ AU JAPON',
+      es: 'GUÍAS Y CONSEJOS DE TRANSPORTE VIP EN JAPÓN',
+      en: 'Japan Travel & Executive Chauffeur Insights',
+    }[lang],
+    heroTitle: {
+      ja: 'SK LIMO 旅のインサイト＆トラベルガイド',
+      zh: 'SK LIMO 专属专车出行专栏与日本旅游指南',
+      fr: 'Le Journal du Chauffeur Privé & Guides de Voyage',
+      es: 'El Diario del Chófer Privado y Guías de Viaje',
+      en: 'The Private Chauffeur Journal & Travel Guides',
+    }[lang],
+    heroDesc: {
+      ja: '羽田・成田空港の最新到着情報、富士山・箱根の極上ルート、冬期スキー送迎のロジスティクスを専門家が解説。',
+      zh: '由日本本土客运专家深度撰写：机场抵离指引、富士山箱根优选路线、雪季滑雪专线与日本法定客运合规全景。',
+      fr: 'Guides d\'itinéraires exclusifs, logistique aéroportuaire, transferts ski alpins et conformité rédigés par des professionnels.',
+      es: 'Guías de rutas exclusivas, logística de aeropuertos, traslados de esquí y normativas redactadas por profesionales.',
+      en: 'Insider route guides, airport logistics, alpine ski transfers, and regulatory insights written by Japanese ground transport professionals.',
+    }[lang],
+    editorialAuthor: {
+      ja: 'SK LIMO 編集部',
+      zh: 'SK LIMO 官方编辑团队',
+      fr: 'Équipe Rédactionnelle SK Limo',
+      es: 'Equipo Editorial SK Limo',
+      en: 'SK Limo Editorial Team',
+    }[lang],
+    exploreRelatedBtn: {
+      ja: '関連する旅程・ご予約詳細を見る',
+      zh: '查看相关行程与预订通道',
+      fr: 'Explorer les itinéraires & réserver',
+      es: 'Explorar itinerarios y reservar',
+      en: 'Explore related itineraries & booking',
+    }[lang],
+    faqBadge: {
+      ja: '旅行者のための必須FAQ',
+      zh: '出行必备常见问题',
+      fr: 'FAQ Essentielle du Voyageur',
+      es: 'Preguntas Frecuentes Esenciales',
+      en: 'Essential Traveler FAQ',
+    }[lang],
+    faqTitle: {
+      ja: 'よくあるご質問（空港送迎・運行保証・正規認可）',
+      zh: '接送机服务、延误保障与正规资质常见问题',
+      fr: 'Arrivée, Logistique & Engagements de Service',
+      es: 'Llegada, Logística y Garantías del Servicio',
+      en: 'Arrival, Logistics & Service Guarantees FAQ',
+    }[lang],
+    faqSubtitle: {
+      ja: '空港でのお迎え方法、フライト遅延時の対応、会社認可情報についてご確認いただけます。',
+      zh: '全景透明解答：举牌迎宾流程、延误无忧等候、替代赔付承诺与日本正规绿牌营运资质。',
+      fr: 'Détails clairs sur l\'accueil aux arrivées, le suivi des retards et notre licence officielle au Japon.',
+      es: 'Información clara sobre la recepción en llegadas, seguimiento de vuelos y nuestras licencias oficiales.',
+      en: 'Clear, transparent details on meet & greet, delay tracking, driver guarantees, and our Japanese commercial licensing.',
+    }[lang],
+  };
+
   return (
     <div className="min-h-screen bg-[#FAF8F4] dark:bg-[#080B11] text-[#1A1A1A] dark:text-[#F1F5F9] transition-colors duration-200">
       <SiteHeader />
@@ -248,19 +307,15 @@ export default function BlogPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-4 text-center">
           <div className="inline-flex items-center gap-1.5 bg-blue-500/10 border border-blue-500/20 text-[#38BDF8] text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
             <BookOpen className="w-3.5 h-3.5" />
-            <span>Japan Travel &amp; Executive Chauffeur Insights</span>
+            <span>{t.heroBadge}</span>
           </div>
 
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white max-w-3xl mx-auto">
-            {lang === 'ja'
-              ? 'SK LIMO 旅のインサイト＆トラベルガイド'
-              : 'The Private Chauffeur Journal & Travel Guides'}
+            {t.heroTitle}
           </h1>
 
           <p className="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed">
-            {lang === 'ja'
-              ? '羽田・成田空港の最新到着情報、富士山・箱根の極上ルート、冬期スキー送迎のロジスティクスを専門家が解説。'
-              : 'Insider route guides, airport logistics, alpine ski transfers, and regulatory insights written by Japanese ground transport professionals.'}
+            {t.heroDesc}
           </p>
         </div>
       </section>
@@ -294,7 +349,7 @@ export default function BlogPage() {
                   <div className="flex items-center gap-3 text-[11px] text-[#9CA3AF]">
                     <span>{art.date}</span>
                     <span>•</span>
-                    <span className="text-[#0068FF] font-semibold">SK Limo Editorial Team</span>
+                    <span className="text-[#0068FF] font-semibold">{t.editorialAuthor}</span>
                   </div>
 
                   <h3 className="text-lg sm:text-xl font-bold text-[#1A1A1A] dark:text-white group-hover:text-[#0068FF] transition-colors leading-snug">
@@ -312,7 +367,7 @@ export default function BlogPage() {
                   href="/booking"
                   className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0068FF] dark:text-[#3B82F6] hover:underline"
                 >
-                  <span>Explore related itineraries &amp; booking</span>
+                  <span>{t.exploreRelatedBtn}</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
@@ -321,23 +376,19 @@ export default function BlogPage() {
         </div>
 
         {/* ═════════════════════════════════════════════════════════════════
-            TRAVELER & AIRPORT ARRIVAL FAQ SECTION (User Specification)
+            TRAVELER & AIRPORT ARRIVAL FAQ SECTION
         ═════════════════════════════════════════════════════════════════ */}
         <section className="bg-white dark:bg-[#0E131F] border border-[#E8E2D8] dark:border-slate-800 rounded-3xl p-6 sm:p-10 space-y-8 shadow-sm">
           <div className="text-center max-w-2xl mx-auto space-y-2">
             <div className="inline-flex items-center gap-1.5 bg-[#C5A059]/15 border border-[#C5A059]/40 text-[#8C6D3F] dark:text-[#E5C378] text-[11px] font-extrabold uppercase px-3 py-1 rounded-full">
               <HelpCircle className="w-3.5 h-3.5" />
-              <span>Essential Traveler FAQ</span>
+              <span>{t.faqBadge}</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-[#1A1A1A] dark:text-white">
-              {lang === 'ja'
-                ? 'よくあるご質問（空港送迎・運行保証・正規認可）'
-                : 'Arrival, Logistics &amp; Service Guarantees FAQ'}
+              {t.faqTitle}
             </h2>
             <p className="text-xs text-[#6B7280] dark:text-slate-400">
-              {lang === 'ja'
-                ? '空港でのお迎え方法、フライト遅延時の対応、会社認可情報についてご確認いただけます。'
-                : 'Clear, transparent details on meet &amp; greet, delay tracking, driver guarantees, and our Japanese commercial licensing.'}
+              {t.faqSubtitle}
             </p>
           </div>
 
