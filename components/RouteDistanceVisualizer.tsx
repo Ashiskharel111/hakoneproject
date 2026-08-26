@@ -17,6 +17,7 @@ import {
   ExternalLink
 } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
+import GoogleRouteMap from '@/components/GoogleRouteMap';
 
 export interface RouteItem {
   id: string;
@@ -44,8 +45,8 @@ const CORRIDOR_ROUTES: RouteItem[] = [
       es: 'Centro de Tokio ⇄ Aeropuerto Haneda',
     },
     category: 'airport',
-    origin: 'Minato / Chiyoda / Shinjuku / Shibuya',
-    destination: 'Haneda Airport Terminal 2/3',
+    origin: 'Tokyo Station, Japan',
+    destination: 'Haneda Airport Terminal 3, Tokyo, Japan',
     distanceKm: 22,
     durationMins: '25–35 Mins',
     expressway: 'Shuto Expressway (Wangan Line & Route 1)',
@@ -298,33 +299,14 @@ export default function RouteDistanceVisualizer() {
             </div>
           </div>
 
-          {/* Google Maps Interactive Frame */}
-          <div className="relative aspect-[16/9] w-full rounded-xl overflow-hidden border border-[#E5E8ED] dark:border-slate-800 shadow-inner bg-slate-200 dark:bg-slate-900">
-            {(() => {
-              const googleMapsKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || '';
-              const mapSrc = googleMapsKey
-                ? `https://www.google.com/maps/embed/v1/directions?key=${googleMapsKey}&origin=${encodeURIComponent(currentRoute.origin)}&destination=${encodeURIComponent(currentRoute.destination)}&mode=driving`
-                : `https://maps.google.com/maps?q=${encodeURIComponent(currentRoute.destination + ' Japan')}&t=&z=10&ie=UTF8&iwloc=&output=embed`;
-
-              return (
-                <iframe
-                  title={`Google Map Route of ${currentRoute.name.en}`}
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0 }}
-                  loading="lazy"
-                  allowFullScreen
-                  referrerPolicy="no-referrer-when-downgrade"
-                  src={mapSrc}
-                  className="w-full h-full grayscale-[15%] contrast-[1.05] dark:invert-[90%] dark:hue-rotate-180"
-                />
-              );
-            })()}
-            {/* Overlay Banner */}
-            <div className="absolute top-3 left-3 bg-black/75 backdrop-blur-md text-white px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow">
-              <MapPin className="w-3.5 h-3.5 text-[#C5A059]" />
-              <span>{currentRoute.destination}</span>
-            </div>
+          {/* Google Maps Interactive Driving Route Polyline Canvas */}
+          <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden shadow-md">
+            <GoogleRouteMap
+              origin={currentRoute.origin}
+              destination={currentRoute.destination}
+              destinationName={currentRoute.name[lang] || currentRoute.name.en}
+              fallbackQuery={currentRoute.embedMapQuery}
+            />
           </div>
 
           {/* Route Details Breakdown */}
