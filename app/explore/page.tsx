@@ -26,10 +26,21 @@ import {
   Briefcase,
   Check
 } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
-import RouteDistanceVisualizer from '@/components/RouteDistanceVisualizer';
 import { useLanguage } from '@/context/LanguageContext';
+
+const RouteDistanceVisualizer = dynamic(() => import('@/components/RouteDistanceVisualizer'), {
+  loading: () => (
+    <div className="w-full bg-white dark:bg-[#0A0D14] border border-[#E5E8ED] dark:border-slate-800 rounded-3xl p-8 min-h-[420px] flex items-center justify-center">
+      <div className="flex flex-col items-center gap-2 text-slate-400 dark:text-slate-500">
+        <div className="w-8 h-8 border-2 border-[#C5A059] border-t-transparent rounded-full animate-spin" />
+        <span className="text-xs font-semibold">Loading Route Visualizer...</span>
+      </div>
+    </div>
+  ),
+});
 
 export default function ExplorePage() {
   const [lang] = useLanguage();
@@ -134,11 +145,11 @@ export default function ExplorePage() {
         es: '¿Cómo funciona la recogida en el aeropuerto?',
       },
       a: {
-        en: 'Your assigned chauffeur monitors your flight live via AeroDataBox. They will be waiting at the arrival exit hall holding a personalized luxury welcome nameboard. Complimentary 90-minute waiting time is included from the moment your flight actually touches down.',
-        ja: '担当ドライバーがAeroDataBoxを通じてフライトの実際の着陸時刻をリアルタイムで監視し、税関出口にてお名前を掲示してお待ちします。実際の着陸時刻から90分間の無料待機が含まれています。',
-        zh: '专属司机会通过AeroDataBox实时跟踪您的航班动态，并在国际到达出口手持尊享姓名牌迎接您。飞机实际落地后享有免费90分钟守候时间。',
-        fr: 'Votre chauffeur dédié suit votre vol en direct via AeroDataBox. Il vous attendra dans le hall des arrivées avec un panneau d\'accueil personnalisé. Un temps d\'attente gratuit de 90 minutes est inclus dès l\'atterrissage.',
-        es: 'Su chófer asignado monitorea su vuelo en tiempo real vía AeroDataBox. Le esperará en la sala de llegadas con un cartel de bienvenida personalizado. Se incluyen 90 minutos de espera de cortesía desde el aterrizaje.',
+        en: 'Your assigned chauffeur monitors your inbound aircraft live. They will be waiting at the arrival exit hall holding a personalized luxury welcome nameboard. 100% flexible complimentary waiting time is included with zero delay charges — we won’t charge a penny for flight delays.',
+        ja: '担当ドライバーがフライトの実際の着陸時刻をリアルタイムで監視し、税関出口にてお名前を掲示してお待ちします。遅延時も追加料金は一切不要（¥0）で、完全無料・柔軟にお待ちいたします。',
+        zh: '专属司机会实时跟踪您的航班进港动态，并在国际到达出口手持尊享姓名牌迎接您。无论航班延误多久，均享100%免费灵活守候，不加收一分钱延误费。',
+        fr: 'Votre chauffeur dédié suit votre vol en direct. Il vous attendra dans le hall des arrivées avec un panneau d\'accueil personnalisé. Temps d\'attente 100% flexible et gratuit inclus, sans le moindre centime facturé pour les retards.',
+        es: 'Su chófer asignado monitorea su vuelo en tiempo real. Le esperará en la sala de llegadas con un cartel de bienvenida personalizado. Tiempo de espera 100% flexible y gratuito incluido, sin cobrarle un solo céntimo por retrasos.',
       },
     },
     {
@@ -209,11 +220,11 @@ export default function ExplorePage() {
 
   const t = {
     heroRibbon: {
-      ja: '国土交通省 関東運輸局 正規緑ナンバー認可事業体',
-      zh: '日本国土交通省 官方绿牌营运合规车队',
-      fr: 'OPÉRATEUR OFFICIEL AGRÉÉ PLAQUE VERTE (MLIT JAPON)',
-      es: 'OPERADOR OFICIAL CON LICENCIA PLACA VERDE (MLIT JAPÓN)',
-      en: 'JAPAN-ONLY · LICENSED & INSURED GREEN-PLATE OPERATOR',
+      ja: '国土交通省許可 正規緑ナンバー・保険完備',
+      zh: '官方绿牌认证・商业保险完备',
+      fr: 'LICENCIÉ ET ASSURÉ',
+      es: 'LICENCIADO Y ASEGURADO',
+      en: 'LICENSED & INSURED',
     }[lang],
     heroSubhead: {
       ja: '日本最高峰のプライベートハイヤー体験 —',
@@ -237,11 +248,11 @@ export default function ExplorePage() {
       en: 'All-inclusive fixed prices — Expressway tolls, parking & taxes in, zero tipping expected.',
     }[lang],
     check2: {
-      ja: 'フライトリアルタイム追跡 — 到着遅延時も90分無料待機・自動配車調整。',
-      zh: '航班动态实时跟踪 — 延误免费等候90分钟，自动顺延派车时间。',
-      fr: 'Suivi de vol en direct — Retard ? 90 min d\'attente gratuite & réajustement automatique.',
-      es: 'Rastreo de vuelos en vivo — ¿Retraso? 90 min de espera gratis y ajuste automático.',
-      en: 'Flight tracked live — Delayed? Complimentary 90-minute wait & auto-adjusted dispatch.',
+      ja: 'フライトリアルタイム追跡 — 到着遅延時も追加料金ゼロ(¥0)・完全無料待機。',
+      zh: '航班动态实时跟踪 — 延误零加价，100%免费灵活守候。',
+      fr: 'Suivi de vol en direct — Retard ? Attente 100% flexible gratuite & zéro frais de retard.',
+      es: 'Rastreo de vuelos en vivo — ¿Retraso? Espera 100% flexible gratis y 0 cargos por retraso.',
+      en: 'Flight tracked live — Delayed? 100% free flexible wait with zero delay charges.',
     }[lang],
     check3: {
       ja: '到着ロビーお出迎え — 税関出口でネームボードを掲示して専任ドライバーがお待ちします。',
@@ -273,8 +284,8 @@ export default function ExplorePage() {
     checkPriceBtn: { ja: '料金を確認', zh: '查询定额车费', fr: 'Calculer le Prix', es: 'Consultar Precio', en: 'Check Price' }[lang],
     trust1Title: { ja: '国土交通省 緑ナンバー', zh: '100% 正规商业绿牌', fr: 'Plaque Verte MLIT', es: 'Placa Verde MLIT', en: 'MLIT Green Plate' }[lang],
     trust1Desc: { ja: '日本の法令に準拠した安心の営業用認可車両', zh: '合规营运资质，全额配备商业乘客险', fr: 'Transport commercial japonais légal et assuré', es: 'Transporte comercial japonés 100% legal y asegurado', en: 'Fully insured commercial legal Japanese transport' }[lang],
-    trust2Title: { ja: '90分間 無料待機', zh: '90分钟 免费守候', fr: '90 Min d\'Attente Gratuite', es: '90 Min de Espera Gratis', en: '90 Min Free Arrival Wait' }[lang],
-    trust2Desc: { ja: '入国審査・荷物受取もゆったり安心', zh: '通关取行李零压力，超时前贴心守候', fr: 'Passage douane & bagages sans stress', es: 'Desembarque y aduanas sin prisas', en: 'Relaxed customs & luggage clearance guarantee' }[lang],
+    trust2Title: { ja: '遅延料金¥0・完全無料待機', zh: '延误0加价・免费灵活守候', fr: 'Attente 100% Flexible & Gratuite', es: 'Espera 100% Flexible y Gratis', en: '100% Free Flexible Wait' }[lang],
+    trust2Desc: { ja: '遅延時も追加料金なし。税関・荷物受取も安心。', zh: '无论延误多久不加收一分钱，通关取行李从容无忧。', fr: 'Zéro centime pour les retards. Douane & bagages sans stress.', es: 'Ni un céntimo por retrasos. Aduanas y equipaje sin estrés.', en: 'We won’t charge a penny for flight delays. Clearance with zero stress.' }[lang],
     trust3Title: { ja: '追加料金ゼロ (¥0)', zh: '¥0 任何高峰溢价', fr: '0 ¥ Frais Cachés', es: '0 ¥ Cargos Ocultos', en: '¥0 Surge Pricing' }[lang],
     trust3Desc: { ja: '高速代・深夜料金も予約時に全額確定', zh: '高速路桥费及油费于下单时全部锁定', fr: 'Tous les péages & carburant fixés à la réservation', es: 'Peajes y combustible cerrados en la reserva', en: 'All highway tolls & fuel locked at reservation' }[lang],
     trust4Title: { ja: '24時間 多言語サポート', zh: '24/7 多语种专属客服', fr: 'Support Bilingue 24/7', es: 'Atención 24/7 Multilingüe', en: '24/7 Bilingual Support' }[lang],
@@ -319,7 +330,7 @@ export default function ExplorePage() {
         {/* Background Photorealistic Image */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="/images/dest-haneda-hero-1920x1080.jpg"
+            src="/images/landing.jpg"
             alt="SK Limo Executive Chauffeur and Black Toyota Alphard in Japan"
             fill
             priority
@@ -825,17 +836,19 @@ export default function ExplorePage() {
         <div className="space-y-3">
           {faqs.map((faq, idx) => {
             const isOpen = openFaqIndex === idx;
+            const qText = (faq.q as any)[lang] || faq.q.en;
+            const aText = (faq.a as any)[lang] || faq.a.en;
             return (
               <div
-                key={idx}
-                className="bg-white dark:bg-[#0E131F] border border-[#E8E2D8] dark:border-slate-800 rounded-2xl overflow-hidden transition-all shadow-sm"
+                key={`${idx}-${lang}`}
+                className="bg-white dark:bg-[#0E131F] border border-[#E8E2D8] dark:border-slate-800 rounded-2xl overflow-hidden transition-all duration-300 shadow-sm"
               >
                 <button
                   type="button"
                   onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
                   className="w-full p-5 text-left flex items-center justify-between gap-4 font-bold text-sm text-[#1D1A16] dark:text-white cursor-pointer"
                 >
-                  <span>{(faq.q as any)[lang] || faq.q.en}</span>
+                  <span className="transition-opacity duration-300">{qText}</span>
                   {isOpen ? (
                     <ChevronUp className="w-4 h-4 text-[#8C6D3F] dark:text-[#C5A059] shrink-0" />
                   ) : (
@@ -844,7 +857,7 @@ export default function ExplorePage() {
                 </button>
                 {isOpen && (
                   <div className="px-5 pb-5 pt-0 text-xs text-[#6B6458] dark:text-slate-300 leading-relaxed border-t border-[#F0F2F5] dark:border-slate-800/80 mt-1">
-                    <p className="pt-3">{(faq.a as any)[lang] || faq.a.en}</p>
+                    <p className="pt-3 transition-opacity duration-300">{aText}</p>
                   </div>
                 )}
               </div>

@@ -29,10 +29,6 @@ import {
   ArrowLeftRight,
 } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
-import StripePaymentModal, { BookingPaymentDetails } from '@/components/StripePaymentModal';
-import BookingConfirmationModal from '@/components/BookingConfirmationModal';
-import GooglePlacesAutocomplete from '@/components/GooglePlacesAutocomplete';
-import AirportRouteVisualizer from '@/components/AirportRouteVisualizer';
 import {
   calculateAirportTransferPrice,
   Airport,
@@ -40,6 +36,11 @@ import {
   TimeOfDay,
   BASE_PRICING_RATES,
 } from '@/lib/airport-pricing';
+import StripePaymentModal, { BookingPaymentDetails } from '@/components/StripePaymentModal';
+import BookingConfirmationModal from '@/components/BookingConfirmationModal';
+import GooglePlacesAutocomplete from '@/components/GooglePlacesAutocomplete';
+import AirportRouteVisualizer from '@/components/AirportRouteVisualizer';
+import { getTodayJST, getFutureDateJST, isValidEmail, isValidPhone } from '@/lib/date-utils';
 
 export type TransferDirection = 'airport_to_hotel' | 'hotel_to_airport';
 
@@ -78,40 +79,29 @@ export default function AirportTransferModule({
   const [vehicleType, setVehicleType] = useState<VehicleType>('Foreign Large');
   const [isMultiVehicle, setIsMultiVehicle] = useState<boolean>(false); // 2x Foreign Large for >4 pax
 
-  // 2. Hotel Destination & Guest Contact Details
-  const [hotelAddress, setHotelAddress] = useState<string>('Grand Hyatt Tokyo (Roppongi)');
-  const [guestName, setGuestName] = useState<string>('Valued Guest');
-  const [guestEmail, setGuestEmail] = useState<string>('client@example.com');
-  const [guestPhone, setGuestPhone] = useState<string>('+81 80 1234 5678');
+  // 2. Hotel Destination & Guest Contact Details (Empty defaults)
+  const [hotelAddress, setHotelAddress] = useState<string>('');
+  const [guestName, setGuestName] = useState<string>('');
+  const [guestEmail, setGuestEmail] = useState<string>('');
+  const [guestPhone, setGuestPhone] = useState<string>('');
 
   // 3. Minimized Notes & Special Requests
   const [showNotesField, setShowNotesField] = useState<boolean>(false);
   const [specialNotes, setSpecialNotes] = useState<string>('');
 
-  // 4. Flight & Schedule State (Placed at bottom before addons)
+  // 4. Flight & Schedule State (Step 1)
   const [travelDate, setTravelDate] = useState(() => {
     if (initialDate) return initialDate;
-    const d = new Date();
-    d.setDate(d.getDate() + 2);
-    return d.toISOString().split('T')[0];
+    return getTodayJST();
   });
-  const [flightNumber, setFlightNumber] = useState('EK312');
+  const [flightNumber, setFlightNumber] = useState('');
   const [isLookingUpFlight, setIsLookingUpFlight] = useState(false);
-  const [flightData, setFlightData] = useState<FlightInfo | null>({
-    flightNumber: 'EK312',
-    airline: 'Emirates',
-    airport: initialAirport,
-    airportName: initialAirport === 'NRT' ? 'Narita International Airport (NRT)' : 'Haneda International Airport (HND)',
-    arrivalTime: '22:35',
-    terminal: 'Terminal 3',
-    isLateNight: true,
-    source: 'aerodatabox_live',
-  });
+  const [flightData, setFlightData] = useState<FlightInfo | null>(null);
   const [showManualTimeOverride, setShowManualTimeOverride] = useState(false);
 
   // Manual fallback controls
   const [airport, setAirport] = useState<Airport>(initialAirport);
-  const [timeOfDay, setTimeOfDay] = useState<TimeOfDay>('Late Night');
+  const [timeOfDay, setTimeOfDay] = useState<TimeOfDay>('Standard');
 
   // 5. Add-ons
   const [nrtGreeter, setNrtGreeter] = useState<boolean>(false);
@@ -146,6 +136,14 @@ export default function AirportTransferModule({
         if (data.airport === 'HND') {
           setNrtGreeter(false);
         }
+      } else {
+        setValidationError(
+          lang === 'ja'
+            ? `便名「${targetFlight}」のリアルタイムレーダー情報を取得できませんでした。予約完了後に運行管理デスクにて確認いたします。`
+            : lang === 'zh'
+            ? `未能从雷达获取航班「${targetFlight}」的实时数据，预订后调度中心将人工核对。`
+            : `Live radar data not found for flight ${targetFlight}. Our dispatch desk will verify arrival details upon booking.`
+        );
       }
     } catch (err) {
       console.error('Flight lookup error:', err);
@@ -154,16 +152,16 @@ export default function AirportTransferModule({
     }
   };
 
-  // Adjust vehicle options when passenger count changes
-  useEffect(() => {
-    if (passengers > 4) {
-      if (!isMultiVehicle) {
+  // Handle passenger adjustments
+  const handlePassengerChange = (newCount: number) => {
+    const clamped = Math.max(1, Math.min(9, newCount));
+    setPassengers(clamped);
+    if (clamped > 4) {
+      if (vehicleType === 'Foreign Large' && !isMultiVehicle) {
         setVehicleType('Wagon');
       }
-    } else {
-      setIsMultiVehicle(false);
     }
-  }, [passengers, isMultiVehicle]);
+  };
 
   // Determine actual vehicle count
   const effectiveVehicleCount = isMultiVehicle && passengers > 4 ? 2 : 1;
@@ -197,8 +195,14 @@ export default function AirportTransferModule({
   const bookingDetails: BookingPaymentDetails = {
     bookingType: 'airport_transfer',
     destinationId: airport.toLowerCase(),
+    pickupId: airport.toLowerCase(),
     destinationTitle: `${directionText} (${vehicleNameDisplay})`,
     vehicle: effectiveVehicleType === 'Foreign Large' ? 'alphard' : 'granace',
+    vehicleType: effectiveVehicleType,
+    vehicleCount: effectiveVehicleCount,
+    timeOfDay,
+    nrtGreeter,
+    vipMeetCount,
     vehicleName: vehicleNameDisplay,
     passengers,
     luggageCount,
@@ -206,8 +210,8 @@ export default function AirportTransferModule({
     guestName: guestName.trim() || 'Valued Guest',
     guestEmail: guestEmail.trim() || 'client@example.com',
     guestPhone: guestPhone.trim() || '+81 80 1234 5678',
-    flightNumber: flightData?.flightNumber || flightNumber,
-    pickupAddress: hotelAddress.trim() || 'Grand Hyatt Tokyo (Roppongi)',
+    flightNumber: flightData?.flightNumber || flightNumber.trim() || 'TBD',
+    pickupAddress: hotelAddress.trim() || 'Tokyo Address',
     notes: specialNotes.trim() || undefined,
     amount: pricing.totalAmount,
     currency: 'jpy',
@@ -237,11 +241,53 @@ export default function AirportTransferModule({
       es: 'Hotel ➔ Aeropuerto (Salida)',
     }[lang],
     step1Title: {
-      en: '1. Number of Passengers & Luggage (Max 9)',
-      ja: '1. ご乗車人数・スーツケース個数（最大9名）',
-      zh: '1. 出行人数与行李件数（最多9人）',
-      fr: '1. Passagers & Bagages (Max 9)',
-      es: '1. Pasajeros y Equipaje (Máx 9)',
+      en: '1. Flight Details & Travel Date',
+      ja: '1. フライト便名・ご利用日程',
+      zh: '1. 航班信息与出行日期',
+      fr: '1. Vol & Date de Voyage',
+      es: '1. Vuelo y Fecha de Viaje',
+    }[lang],
+    autoDetectTime: {
+      en: 'Live Flight Radar',
+      ja: 'リアルタイム便名照会',
+      zh: '实时航班动态同步',
+      fr: 'Radar en Direct',
+      es: 'Radar en Vivo',
+    }[lang],
+    arrivalDateLabel: {
+      en: direction === 'airport_to_hotel' ? 'Flight Date' : 'Pickup Date',
+      ja: direction === 'airport_to_hotel' ? 'フライト日' : 'お迎え日',
+      zh: direction === 'airport_to_hotel' ? '航班日期' : '出发日期',
+      fr: 'Date du vol',
+      es: 'Fecha del vuelo',
+    }[lang],
+    flightNumberLabel: {
+      en: 'Flight Number (IATA Code)',
+      ja: '便名 / フライト番号（IATAコード）',
+      zh: '航班号（IATA代码）',
+      fr: 'Numéro de vol',
+      es: 'Número de vuelo',
+    }[lang],
+    checkButton: {
+      en: 'Check Flight',
+      ja: '便名検索',
+      zh: '查询航班',
+      fr: 'Vérifier',
+      es: 'Consultar',
+    }[lang],
+    checkingText: {
+      en: 'Checking...',
+      ja: '照会中...',
+      zh: '查询中...',
+      fr: 'Vérification...',
+      es: 'Consultando...',
+    }[lang],
+    step2Title: {
+      en: '2. Number of Passengers & Luggage (Max 9)',
+      ja: '2. ご乗車人数・スーツケース個数（最大9名）',
+      zh: '2. 出行人数与行李件数（最多9人）',
+      fr: '2. Passagers & Bagages (Max 9)',
+      es: '2. Pasajeros y Equipaje (Máx 9)',
     }[lang],
     passengersLabel: {
       en: 'Passengers',
@@ -264,12 +310,12 @@ export default function AirportTransferModule({
       fr: 'Bagages en soute',
       es: 'Equipaje facturado',
     }[lang],
-    step2Title: {
-      en: '2. Available Vehicle Options',
-      ja: '2. ご利用可能な車種',
-      zh: '2. 可选车型',
-      fr: '2. Véhicules Disponibles',
-      es: '2. Vehículos Disponibles',
+    step3Title: {
+      en: '3. Available Vehicle Options',
+      ja: '3. ご利用可能な車種',
+      zh: '3. 可选车型',
+      fr: '3. Véhicules Disponibles',
+      es: '3. Vehículos Disponibles',
     }[lang],
     multiVehicleNotice: {
       en: `For ${passengers} guests, a single Wagon accommodates everyone comfortably (up to 9 pax), or select 2× Premium Vehicles (1 vehicle per 4 guests).`,
@@ -278,12 +324,12 @@ export default function AirportTransferModule({
       fr: `Pour ${passengers} passagers, un seul van accueille jusqu'à 9 personnes, ou choisissez 2 véhicules VIP (4 personnes par voiture).`,
       es: `Para ${passengers} pasajeros, un solo van puede llevar hasta 9 personas, o elija 2 vehículos VIP (4 personas por auto).`,
     }[lang],
-    step3Title: {
-      en: '3. Hotel / Address & Contact Details',
-      ja: '3. ホテル・住所・代表者様情報',
-      zh: '3. 酒店/地址与联系信息',
-      fr: '3. Hôtel & Contact',
-      es: '3. Hotel y Contacto',
+    step4Title: {
+      en: '4. Hotel / Address & Contact Details',
+      ja: '4. ホテル・住所・代表者様情報',
+      zh: '4. 酒店/地址与联系信息',
+      fr: '4. Hôtel & Contact',
+      es: '4. Hotel y Contacto',
     }[lang],
     hotelLabel: {
       en: direction === 'airport_to_hotel' ? 'Destination Hotel Name or Tokyo Address' : 'Pickup Hotel Name or Tokyo Address',
@@ -312,48 +358,6 @@ export default function AirportTransferModule({
       zh: '+ 添加特殊要求与备注（儿童安全座椅、超大行李等）',
       fr: '+ Ajouter une demande spéciale (siège bébé, bagages)',
       es: '+ Añadir solicitudes especiales (silla de bebé, equipaje extra)',
-    }[lang],
-    step4Title: {
-      en: '4. Flight Details & Arrival Schedule (AeroDataBox Live)',
-      ja: '4. フライト便名・到着日時（AeroDataBox連動）',
-      zh: '4. 航班信息与到达时间（AeroDataBox实时查询）',
-      fr: '4. Vol & Horaire d\'Arrivée (AeroDataBox Direct)',
-      es: '4. Vuelo y Horario (AeroDataBox en Vivo)',
-    }[lang],
-    autoDetectTime: {
-      en: 'Live AeroDataBox API',
-      ja: 'リアルタイムAPI連動',
-      zh: '实时航班API',
-      fr: 'API Vol en Direct',
-      es: 'API de Vuelos en Vivo',
-    }[lang],
-    arrivalDateLabel: {
-      en: direction === 'airport_to_hotel' ? 'Flight Date' : 'Pickup Date',
-      ja: direction === 'airport_to_hotel' ? 'フライト日' : 'お迎え日',
-      zh: direction === 'airport_to_hotel' ? '航班日期' : '出发日期',
-      fr: 'Date du vol',
-      es: 'Fecha del vuelo',
-    }[lang],
-    flightNumberLabel: {
-      en: 'Flight Number (IATA Code)',
-      ja: '便名 / フライト番号（IATAコード）',
-      zh: '航班号（IATA代码）',
-      fr: 'Numéro de vol',
-      es: 'Número de vuelo',
-    }[lang],
-    checkButton: {
-      en: 'Check Flight',
-      ja: '便名検索',
-      zh: '查询航班',
-      fr: 'Vérifier',
-      es: 'Consultar',
-    }[lang],
-    checkingText: {
-      en: 'Fetching API...',
-      ja: 'API照会中...',
-      zh: '查询API中...',
-      fr: 'Interrogation...',
-      es: 'Consultando...',
     }[lang],
     scheduledArrival: {
       en: 'Scheduled Flight Time',
@@ -392,10 +396,24 @@ export default function AirportTransferModule({
     }[lang],
     step5Title: {
       en: '5. Airport Greeter & VIP Concierge',
-      ja: '5. 空港ミート・VIPコンシェルジュ',
-      zh: '5. 机场举牌接机与VIP通道',
-      fr: '5. Accueil Aéroport & Concierge VIP',
-      es: '5. Bienvenida en Aeropuerto y VIP',
+      ja: '5. 専用グリーター・VIPコンシェルジュ',
+      zh: '5. 专属迎宾员与VIP礼宾服务',
+      fr: '5. Accueil Personnalisé & Concierge VIP',
+      es: '5. Recepción Personalizada y Concierge VIP',
+    }[lang],
+    greeterTitle: {
+      en: 'Dedicated Greeter',
+      ja: '専用グリーター',
+      zh: '专属迎宾员',
+      fr: 'Accueil Dédié',
+      es: 'Recepción Personalizada',
+    }[lang],
+    greeterDesc: {
+      en: 'Dedicated staff waiting at the arrival lobby with a personalized nameboard',
+      ja: '到着ロビーにて専任スタッフがお名前入りサインボードを持ってお出迎え',
+      zh: '专属工作人员手持定制姓名牌在到达大厅举牌迎候',
+      fr: 'Personnel dédié vous attendant dans le hall des arrivées avec un panneau à votre nom',
+      es: 'Personal dedicado que le espera en la sala de llegadas con un cartel a su nombre',
     }[lang],
     rateSummaryTitle: {
       en: 'Rate Summary',
@@ -419,11 +437,11 @@ export default function AirportTransferModule({
       es: 'Peajes de autopista y combustible incluidos',
     }[lang],
     delayBufferInclusions: {
-      en: '60-Min complimentary flight delay buffer',
-      ja: 'フライト遅延60分無料待機サービス',
-      zh: '免费提供60分钟航班延误等待',
-      fr: '60 min d\'attente gratuite en cas de retard',
-      es: '60 min de espera de cortesía por retraso',
+      en: '100% Free flexible delay wait (we won’t charge a penny)',
+      ja: 'フライト遅延完全無料待機（遅延追加料金¥0）',
+      zh: '航班延误100%免费灵活守候（延误¥0加价）',
+      fr: 'Attente 100% flexible & gratuite (zéro frais de retard)',
+      es: 'Espera 100% flexible y gratuita (0 cargos por retraso)',
     }[lang],
     mandatoryAgreement: {
       en: 'I confirm that my flight schedule, passenger count, and destination hotel are correct, and I agree to the MLIT-licensed transfer terms.',
@@ -459,13 +477,33 @@ export default function AirportTransferModule({
       );
       return;
     }
-    if (!isConfirmedAgreement) {
+    if (!guestName.trim() || !guestEmail.trim()) {
       setValidationError(
         lang === 'ja'
-          ? 'お支払い前に同意のチェックボックスを選択してください。'
+          ? '代表者様のお名前と予約確認書送信用メールアドレスをご入力ください。'
           : lang === 'zh'
-          ? '请勾选确认条款方框以继续支付。'
-          : 'Please check the mandatory confirmation box below before proceeding.'
+          ? '请输入代表乘客姓名与确认单电子邮箱。'
+          : 'Please enter the lead guest name and confirmation email.'
+      );
+      return;
+    }
+    if (!isValidEmail(guestEmail)) {
+      setValidationError(
+        lang === 'ja'
+          ? '有効なメールアドレスをご入力ください（例: name@example.com）。'
+          : lang === 'zh'
+          ? '请输入有效的电子邮箱地址（例如: name@example.com）。'
+          : 'Please enter a valid email address (e.g. name@example.com).'
+      );
+      return;
+    }
+    if (guestPhone.trim() && !isValidPhone(guestPhone)) {
+      setValidationError(
+        lang === 'ja'
+          ? '国際電話番号（国番号付き 例: +81 90...）をご入力ください。'
+          : lang === 'zh'
+          ? '请输入包含国家区号的有效联系电话（例如: +81 90...）。'
+          : 'Please enter a valid phone number with country code (e.g. +81 90...).'
       );
       return;
     }
@@ -482,19 +520,9 @@ export default function AirportTransferModule({
   return (
     <div className="w-full bg-[#F5F7FA] dark:bg-[#080B11] text-[#1A1A1A] dark:text-[#F1F5F9] transition-colors duration-200">
       
-      {/* Top Banner / Back to Catalog */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-4 pb-2 flex items-center justify-between">
-        {onBackToCatalog && (
-          <button
-            type="button"
-            onClick={onBackToCatalog}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0068FF] dark:text-[#3B82F6] hover:underline cursor-pointer bg-white dark:bg-[#0E131F] border border-[#E5E8ED] dark:border-slate-800 px-3 py-1.5 rounded-xl shadow-sm"
-          >
-            <span>←</span>
-            <span>{lang === 'ja' ? 'すべてのツアー一覧に戻る' : lang === 'zh' ? '返回全部行程列表' : 'Back to All Charters & Tours'}</span>
-          </button>
-        )}
-        <div className="inline-flex items-center gap-1.5 bg-[#E8F1FF] dark:bg-[#0068FF]/15 text-[#0068FF] dark:text-[#3B82F6] text-[11px] font-semibold px-3 py-1 rounded-full ml-auto">
+      {/* Top Tagline Badge */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-4 pb-2 flex items-center justify-end">
+        <div className="inline-flex items-center gap-1.5 bg-[#E8F1FF] dark:bg-[#0068FF]/15 text-[#0068FF] dark:text-[#3B82F6] text-[11px] font-semibold px-3 py-1 rounded-full">
           <Plane className="w-3 h-3" />
           <span>{t.badge}</span>
         </div>
@@ -544,7 +572,7 @@ export default function AirportTransferModule({
           {/* Left: Step-by-Step Configuration (7 cols) */}
           <div className="lg:col-span-7 space-y-5">
 
-            {/* STEP 1: Passengers & Luggage (Max 9 Pax) */}
+            {/* STEP 1: Flight Details & Arrival Schedule (Asked First) */}
             <div className="bg-white dark:bg-[#0E131F] rounded-2xl border border-[#E5E8ED] dark:border-slate-800 p-4 sm:p-6 space-y-4 shadow-sm transition-colors">
               <div className="flex items-center justify-between pb-2 border-b border-[#F0F2F5] dark:border-slate-800">
                 <div className="flex items-center gap-2">
@@ -555,365 +583,8 @@ export default function AirportTransferModule({
                     {t.step1Title}
                   </h2>
                 </div>
-                <span className="text-[11px] text-[#6B7280] dark:text-slate-400">Max 9 Pax</span>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {/* Passengers Counter */}
-                <div className="p-3.5 bg-[#F5F7FA] dark:bg-[#131b2c] rounded-xl border border-[#E5E8ED] dark:border-slate-700/80 flex items-center justify-between">
-                  <div className="flex items-center gap-2.5">
-                    <Users className="w-4 h-4 text-[#0068FF]" />
-                    <div>
-                      <span className="font-semibold text-xs text-[#1A1A1A] dark:text-white block">{t.passengersLabel}</span>
-                      <span className="text-[10px] text-[#9CA3AF] dark:text-slate-400">
-                        {t.maxLimitNotice}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setPassengers(Math.max(1, passengers - 1))}
-                      className="w-8 h-8 rounded-lg bg-white dark:bg-slate-800 border border-[#E5E8ED] dark:border-slate-700 hover:bg-[#E5E8ED] text-[#1A1A1A] dark:text-white font-bold flex items-center justify-center cursor-pointer text-sm"
-                    >
-                      −
-                    </button>
-                    <span className="font-bold text-sm text-[#1A1A1A] dark:text-white min-w-[28px] text-center font-mono">
-                      {passengers}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => setPassengers(Math.min(9, passengers + 1))}
-                      className="w-8 h-8 rounded-lg bg-white dark:bg-slate-800 border border-[#E5E8ED] dark:border-slate-700 hover:bg-[#E5E8ED] text-[#1A1A1A] dark:text-white font-bold flex items-center justify-center cursor-pointer text-sm"
-                    >
-                      +
-                    </button>
-                  </div>
-                </div>
-
-                {/* Luggage Counter */}
-                <div className="p-3.5 bg-[#F5F7FA] dark:bg-[#131b2c] rounded-xl border border-[#E5E8ED] dark:border-slate-700/80 flex items-center justify-between">
-                  <div className="flex items-center gap-2.5">
-                    <Luggage className="w-4 h-4 text-[#0068FF]" />
-                    <div>
-                      <span className="font-semibold text-xs text-[#1A1A1A] dark:text-white block">{t.luggageLabel}</span>
-                      <span className="text-[10px] text-[#9CA3AF] dark:text-slate-400">Suitcases (24"-28")</span>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setLuggageCount(Math.max(0, luggageCount - 1))}
-                      className="w-8 h-8 rounded-lg bg-white dark:bg-slate-800 border border-[#E5E8ED] dark:border-slate-700 hover:bg-[#E5E8ED] text-[#1A1A1A] dark:text-white font-bold flex items-center justify-center cursor-pointer text-sm"
-                    >
-                      −
-                    </button>
-                    <span className="font-bold text-sm text-[#1A1A1A] dark:text-white min-w-[28px] text-center font-mono">
-                      {luggageCount}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => setLuggageCount(Math.min(10, luggageCount + 1))}
-                      className="w-8 h-8 rounded-lg bg-white dark:bg-slate-800 border border-[#E5E8ED] dark:border-slate-700 hover:bg-[#E5E8ED] text-[#1A1A1A] dark:text-white font-bold flex items-center justify-center cursor-pointer text-sm"
-                    >
-                      +
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Instant Zero-API Airport Highway Route Visualizer */}
-            <AirportRouteVisualizer
-              selectedAirport={airport}
-              direction={direction}
-              hotelAddress={hotelAddress}
-            />
-
-            {/* STEP 2: Available Vehicles */}
-            <div className="bg-white dark:bg-[#0E131F] rounded-2xl border border-[#E5E8ED] dark:border-slate-800 p-4 sm:p-6 space-y-4 shadow-sm transition-colors">
-              <div className="flex items-center justify-between pb-2 border-b border-[#F0F2F5] dark:border-slate-800">
-                <div className="flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-full bg-[#0068FF] text-white font-bold text-xs flex items-center justify-center">
-                    2
-                  </span>
-                  <h2 className="text-sm sm:text-base font-bold text-[#1A1A1A] dark:text-white">
-                    {t.step2Title}
-                  </h2>
-                </div>
-                <span className="text-[11px] text-[#00B37E] font-semibold flex items-center gap-1">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
-                  Capacity Verified
-                </span>
-              </div>
-
-              {/* Case A: 1-4 Passengers */}
-              {passengers <= 4 && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setVehicleType('Foreign Large');
-                      setIsMultiVehicle(false);
-                    }}
-                    className={`p-3.5 rounded-xl border-2 text-left transition-all cursor-pointer ${
-                      vehicleType === 'Foreign Large' && !isMultiVehicle
-                        ? 'border-[#0068FF] bg-[#E8F1FF] dark:bg-[#0068FF]/15'
-                        : 'border-[#E5E8ED] dark:border-slate-700 bg-white dark:bg-[#131b2c] hover:border-[#D1D5DB]'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className={`font-bold text-sm ${vehicleType === 'Foreign Large' && !isMultiVehicle ? 'text-[#0068FF] dark:text-[#3B82F6]' : 'text-[#1A1A1A] dark:text-white'}`}>
-                        Toyota Alphard
-                      </span>
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-[10px] bg-white dark:bg-slate-800 border border-[#E5E8ED] dark:border-slate-700 px-2 py-0.5 rounded text-[#4B5563] dark:text-slate-300 font-medium">
-                          1–4 Pax
-                        </span>
-                        <span className="text-[#C5A059] font-extrabold text-[9px] tracking-wider uppercase bg-[#C5A059]/10 px-1.5 py-0.5 rounded border border-[#C5A059]/30">
-                          PREMIUM
-                        </span>
-                      </div>
-                    </div>
-                    <span className="text-[11px] text-[#6B7280] dark:text-slate-400 block mt-1">
-                      VIP First-Class Captain Seats
-                    </span>
-                    <div className="flex items-baseline justify-between mt-2 pt-2 border-t border-[#E5E8ED]/60 dark:border-slate-700/60">
-                      <span className="text-[10px] text-[#9CA3AF] dark:text-slate-400">Base Fare:</span>
-                      <span className="font-bold text-xs text-[#1A1A1A] dark:text-white font-mono">
-                        ¥{BASE_PRICING_RATES[airport]['Foreign Large'].toLocaleString()} JPY
-                      </span>
-                    </div>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setVehicleType('Wagon');
-                      setIsMultiVehicle(false);
-                    }}
-                    className={`p-3.5 rounded-xl border-2 text-left transition-all cursor-pointer ${
-                      vehicleType === 'Wagon' && !isMultiVehicle
-                        ? 'border-[#0068FF] bg-[#E8F1FF] dark:bg-[#0068FF]/15'
-                        : 'border-[#E5E8ED] dark:border-slate-700 bg-white dark:bg-[#131b2c] hover:border-[#D1D5DB]'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className={`font-bold text-sm ${vehicleType === 'Wagon' && !isMultiVehicle ? 'text-[#0068FF] dark:text-[#3B82F6]' : 'text-[#1A1A1A] dark:text-white'}`}>
-                        HiAce Grand Cabin
-                      </span>
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-[10px] bg-white dark:bg-slate-800 border border-[#E5E8ED] dark:border-slate-700 px-2 py-0.5 rounded text-[#4B5563] dark:text-slate-300 font-medium">
-                          1–9 Pax
-                        </span>
-                        <span className="text-[#C5A059] font-extrabold text-[9px] tracking-wider uppercase bg-[#C5A059]/10 px-1.5 py-0.5 rounded border border-[#C5A059]/30">
-                          STANDARD
-                        </span>
-                      </div>
-                    </div>
-                    <span className="text-[11px] text-[#6B7280] dark:text-slate-400 block mt-1">
-                      High-Capacity Group Van (Up to 9 Pax)
-                    </span>
-                    <div className="flex items-baseline justify-between mt-2 pt-2 border-t border-[#E5E8ED]/60 dark:border-slate-700/60">
-                      <span className="text-[10px] text-[#9CA3AF] dark:text-slate-400">Base Fare:</span>
-                      <span className="font-bold text-xs text-[#1A1A1A] dark:text-white font-mono">
-                        ¥{BASE_PRICING_RATES[airport]['Wagon'].toLocaleString()} JPY
-                      </span>
-                    </div>
-                  </button>
-                </div>
-              )}
-
-              {/* Case B: 5 to 9 Passengers */}
-              {passengers > 4 && (
-                <div className="space-y-3">
-                  <div className="p-2.5 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/60 rounded-xl text-xs text-amber-800 dark:text-amber-300 flex items-center gap-2">
-                    <Info className="w-4 h-4 shrink-0 text-amber-600" />
-                    <span>{t.multiVehicleNotice}</span>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setVehicleType('Wagon');
-                        setIsMultiVehicle(false);
-                      }}
-                      className={`p-3.5 rounded-xl border-2 text-left transition-all cursor-pointer ${
-                        !isMultiVehicle
-                          ? 'border-[#0068FF] bg-[#E8F1FF] dark:bg-[#0068FF]/15'
-                          : 'border-[#E5E8ED] dark:border-slate-700 bg-white dark:bg-[#131b2c] hover:border-[#D1D5DB]'
-                      }`}
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className={`font-bold text-sm ${!isMultiVehicle ? 'text-[#0068FF] dark:text-[#3B82F6]' : 'text-[#1A1A1A] dark:text-white'}`}>
-                          1× Grand Cabin Wagon
-                        </span>
-                        <span className="text-[10px] bg-[#00B37E] text-white px-2 py-0.5 rounded font-bold">
-                          Standard (1-9 Pax)
-                        </span>
-                      </div>
-                      <span className="text-[11px] text-[#6B7280] dark:text-slate-400 block mt-1">
-                        Toyota HiAce (Fits up to 9 Guests comfortably)
-                      </span>
-                      <div className="flex items-baseline justify-between mt-2 pt-2 border-t border-[#E5E8ED]/60 dark:border-slate-700/60">
-                        <span className="text-[10px] text-[#9CA3AF] dark:text-slate-400">Base Rate:</span>
-                        <span className="font-bold text-xs text-[#1A1A1A] dark:text-white font-mono">
-                          ¥{BASE_PRICING_RATES[airport]['Wagon'].toLocaleString()} JPY
-                        </span>
-                      </div>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setVehicleType('Foreign Large');
-                        setIsMultiVehicle(true);
-                      }}
-                      className={`p-3.5 rounded-xl border-2 text-left transition-all cursor-pointer ${
-                        isMultiVehicle
-                          ? 'border-[#0068FF] bg-[#E8F1FF] dark:bg-[#0068FF]/15'
-                          : 'border-[#E5E8ED] dark:border-slate-700 bg-white dark:bg-[#131b2c] hover:border-[#D1D5DB]'
-                      }`}
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className={`font-bold text-sm ${isMultiVehicle ? 'text-[#0068FF] dark:text-[#3B82F6]' : 'text-[#1A1A1A] dark:text-white'}`}>
-                          2× Premium Vehicles
-                        </span>
-                        <span className="text-[10px] bg-[#C5A059] text-white px-2 py-0.5 rounded font-bold">
-                          VIP Fleet (4 Pax/Car)
-                        </span>
-                      </div>
-                      <span className="text-[11px] text-[#6B7280] dark:text-slate-400 block mt-1">
-                        2× Toyota Alphard Executive
-                      </span>
-                      <div className="flex items-baseline justify-between mt-2 pt-2 border-t border-[#E5E8ED]/60 dark:border-slate-700/60">
-                        <span className="text-[10px] text-[#9CA3AF] dark:text-slate-400">Base Rate (2×):</span>
-                        <span className="font-bold text-xs text-[#0068FF] dark:text-[#3B82F6] font-mono">
-                          ¥{(BASE_PRICING_RATES[airport]['Foreign Large'] * 2).toLocaleString()} JPY
-                        </span>
-                      </div>
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* STEP 3: Hotel / Address & Contact Details */}
-            <div className="bg-white dark:bg-[#0E131F] rounded-2xl border border-[#E5E8ED] dark:border-slate-800 p-4 sm:p-6 space-y-4 shadow-sm transition-colors">
-              <div className="flex items-center justify-between pb-2 border-b border-[#F0F2F5] dark:border-slate-800">
-                <div className="flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-full bg-[#0068FF] text-white font-bold text-xs flex items-center justify-center">
-                    3
-                  </span>
-                  <h2 className="text-sm sm:text-base font-bold text-[#1A1A1A] dark:text-white">
-                    {t.step3Title}
-                  </h2>
-                </div>
-                <span className="text-[11px] text-red-500 font-semibold">* Required</span>
-              </div>
-
-              {/* Hotel Name Input with Google Places Autocomplete */}
-              <div>
-                <label className="text-xs font-semibold text-[#4B5563] dark:text-slate-300 block mb-1 flex items-center justify-between">
-                  <span className="flex items-center gap-1">
-                    <MapPin className="w-3.5 h-3.5 text-[#0068FF]" />
-                    <span>{t.hotelLabel} <span className="text-red-500">*</span></span>
-                  </span>
-                  <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold">
-                    Google Maps Places Verified
-                  </span>
-                </label>
-                <GooglePlacesAutocomplete
-                  value={hotelAddress}
-                  onChange={(val) => {
-                    setHotelAddress(val);
-                    if (validationError) setValidationError(null);
-                  }}
-                  placeholder="Search hotel (e.g. Grand Hyatt, Aman, Ritz-Carlton) or Tokyo address..."
-                />
-              </div>
-
-              {/* Lead Guest Name & Email Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="text-xs font-semibold text-[#4B5563] dark:text-slate-300 block mb-1">
-                    {t.guestNameLabel}
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="e.g. John Smith"
-                    value={guestName}
-                    onChange={(e) => setGuestName(e.target.value)}
-                    className="w-full bg-[#F5F7FA] dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none focus:border-[#0068FF]"
-                  />
-                </div>
-
-                <div>
-                  <label className="text-xs font-semibold text-[#4B5563] dark:text-slate-300 block mb-1">
-                    {t.guestEmailLabel}
-                  </label>
-                  <input
-                    type="email"
-                    placeholder="client@example.com"
-                    value={guestEmail}
-                    onChange={(e) => setGuestEmail(e.target.value)}
-                    className="w-full bg-[#F5F7FA] dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none focus:border-[#0068FF]"
-                  />
-                </div>
-              </div>
-
-              {/* Minimized Add Notes Button & Field */}
-              <div className="pt-1">
-                {!showNotesField ? (
-                  <button
-                    type="button"
-                    onClick={() => setShowNotesField(true)}
-                    className="inline-flex items-center gap-1.5 text-xs text-[#0068FF] dark:text-[#3B82F6] hover:underline font-medium cursor-pointer"
-                  >
-                    <Plus className="w-3.5 h-3.5" />
-                    <span>{t.specialNotesToggle}</span>
-                  </button>
-                ) : (
-                  <div className="p-3 bg-[#F5F7FA] dark:bg-[#131b2c] rounded-xl border border-[#E5E8ED] dark:border-slate-700 space-y-2">
-                    <div className="flex items-center justify-between">
-                      <label className="text-xs font-semibold text-[#4B5563] dark:text-slate-300 flex items-center gap-1">
-                        <FileText className="w-3.5 h-3.5 text-[#0068FF]" />
-                        <span>Special Requests / Notes</span>
-                      </label>
-                      <button
-                        type="button"
-                        onClick={() => setShowNotesField(false)}
-                        className="text-[10px] text-[#9CA3AF] hover:text-[#1A1A1A] dark:hover:text-white cursor-pointer"
-                      >
-                        Minimize
-                      </button>
-                    </div>
-                    <textarea
-                      rows={2}
-                      placeholder="e.g. 1 Infant child seat needed, 2 sets of golf clubs, English-speaking driver preferred"
-                      value={specialNotes}
-                      onChange={(e) => setSpecialNotes(e.target.value)}
-                      className="w-full bg-white dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-lg p-2.5 text-xs text-[#1A1A1A] dark:text-white focus:outline-none focus:border-[#0068FF]"
-                    />
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* STEP 4: Flight Details & Arrival Schedule (AeroDataBox Live API at Bottom) */}
-            <div className="bg-white dark:bg-[#0E131F] rounded-2xl border border-[#E5E8ED] dark:border-slate-800 p-4 sm:p-6 space-y-4 shadow-sm transition-colors">
-              <div className="flex items-center justify-between pb-2 border-b border-[#F0F2F5] dark:border-slate-800">
-                <div className="flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-full bg-[#0068FF] text-white font-bold text-xs flex items-center justify-center">
-                    4
-                  </span>
-                  <h2 className="text-sm sm:text-base font-bold text-[#1A1A1A] dark:text-white">
-                    {t.step4Title}
-                  </h2>
-                </div>
                 <span className="text-[11px] text-[#0068FF] dark:text-[#3B82F6] font-medium flex items-center gap-1">
-                  <Sparkles className="w-3 h-3" />
+                  <Plane className="w-3 h-3" />
                   {t.autoDetectTime}
                 </span>
               </div>
@@ -926,6 +597,7 @@ export default function AirportTransferModule({
                   </label>
                   <input
                     type="date"
+                    min={getTodayJST()}
                     value={travelDate}
                     onChange={(e) => setTravelDate(e.target.value)}
                     className="w-full bg-[#F5F7FA] dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none focus:border-[#0068FF]"
@@ -1036,7 +708,7 @@ export default function AirportTransferModule({
                   className="text-[11px] text-[#0068FF] dark:text-[#3B82F6] hover:underline font-medium flex items-center gap-1 cursor-pointer"
                 >
                   <SlidersHorizontal className="w-3 h-3" />
-                  <span>{showManualTimeOverride ? 'Hide manual adjustments' : 'Change airport or time manually'}</span>
+                  <span>{showManualTimeOverride ? 'Hide manual adjustments' : 'Change airport or time slot manually'}</span>
                 </button>
 
                 {showManualTimeOverride && (
@@ -1046,10 +718,7 @@ export default function AirportTransferModule({
                       <div className="grid grid-cols-2 gap-2">
                         <button
                           type="button"
-                          onClick={() => {
-                            setAirport('HND');
-                            setNrtGreeter(false);
-                          }}
+                          onClick={() => setAirport('HND')}
                           className={`py-1.5 px-2 rounded-lg text-xs font-semibold border cursor-pointer ${
                             airport === 'HND' ? 'bg-[#0068FF] text-white border-[#0068FF]' : 'bg-white dark:bg-slate-800 text-[#4B5563] dark:text-slate-200 border-[#E5E8ED] dark:border-slate-700'
                           }`}
@@ -1097,6 +766,313 @@ export default function AirportTransferModule({
 
             </div>
 
+            {/* STEP 2: Passengers & Luggage (Max 9 Pax) */}
+            <div className="bg-white dark:bg-[#0E131F] rounded-2xl border border-[#E5E8ED] dark:border-slate-800 p-4 sm:p-6 space-y-4 shadow-sm transition-colors">
+              <div className="flex items-center justify-between pb-2 border-b border-[#F0F2F5] dark:border-slate-800">
+                <div className="flex items-center gap-2">
+                  <span className="w-6 h-6 rounded-full bg-[#0068FF] text-white font-bold text-xs flex items-center justify-center">
+                    2
+                  </span>
+                  <h2 className="text-sm sm:text-base font-bold text-[#1A1A1A] dark:text-white">
+                    {t.step2Title}
+                  </h2>
+                </div>
+                <span className="text-[11px] text-[#6B7280] dark:text-slate-400">Max 9 Pax</span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Passengers Counter */}
+                <div className="p-3.5 bg-[#F5F7FA] dark:bg-[#131b2c] rounded-xl border border-[#E5E8ED] dark:border-slate-700/80 flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    <Users className="w-4 h-4 text-[#0068FF]" />
+                    <div>
+                      <span className="font-semibold text-xs text-[#1A1A1A] dark:text-white block">{t.passengersLabel}</span>
+                      <span className="text-[10px] text-[#6B7280] dark:text-slate-400">1 - 9 Guests</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => handlePassengerChange(Math.max(1, passengers - 1))}
+                      className="w-8 h-8 rounded-lg bg-white dark:bg-slate-700 hover:bg-[#E5E8ED] text-[#1A1A1A] dark:text-white font-bold flex items-center justify-center border border-[#E5E8ED] dark:border-slate-600 transition-colors cursor-pointer"
+                    >
+                      −
+                    </button>
+                    <span className="font-bold text-sm text-[#1A1A1A] dark:text-white w-6 text-center font-mono">
+                      {passengers}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => handlePassengerChange(Math.min(9, passengers + 1))}
+                      className="w-8 h-8 rounded-lg bg-white dark:bg-slate-700 hover:bg-[#E5E8ED] text-[#1A1A1A] dark:text-white font-bold flex items-center justify-center border border-[#E5E8ED] dark:border-slate-600 transition-colors cursor-pointer"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+
+                {/* Luggage Counter */}
+                <div className="p-3.5 bg-[#F5F7FA] dark:bg-[#131b2c] rounded-xl border border-[#E5E8ED] dark:border-slate-700/80 flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    <Luggage className="w-4 h-4 text-[#0068FF]" />
+                    <div>
+                      <span className="font-semibold text-xs text-[#1A1A1A] dark:text-white block">{t.luggageLabel}</span>
+                      <span className="text-[10px] text-[#6B7280] dark:text-slate-400">Suitcases</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setLuggageCount(Math.max(0, luggageCount - 1))}
+                      className="w-8 h-8 rounded-lg bg-white dark:bg-slate-700 hover:bg-[#E5E8ED] text-[#1A1A1A] dark:text-white font-bold flex items-center justify-center border border-[#E5E8ED] dark:border-slate-600 transition-colors cursor-pointer"
+                    >
+                      −
+                    </button>
+                    <span className="font-bold text-sm text-[#1A1A1A] dark:text-white w-6 text-center font-mono">
+                      {luggageCount}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setLuggageCount(luggageCount + 1)}
+                      className="w-8 h-8 rounded-lg bg-white dark:bg-slate-700 hover:bg-[#E5E8ED] text-[#1A1A1A] dark:text-white font-bold flex items-center justify-center border border-[#E5E8ED] dark:border-slate-600 transition-colors cursor-pointer"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Route & Highway Corridor Visualizer */}
+              <AirportRouteVisualizer
+                selectedAirport={airport}
+                direction={direction}
+                hotelAddress={hotelAddress}
+              />
+            </div>
+
+            {/* STEP 3: Available Vehicle Options */}
+            <div className="bg-white dark:bg-[#0E131F] rounded-2xl border border-[#E5E8ED] dark:border-slate-800 p-4 sm:p-6 space-y-4 shadow-sm transition-colors">
+              <div className="flex items-center justify-between pb-2 border-b border-[#F0F2F5] dark:border-slate-800">
+                <div className="flex items-center gap-2">
+                  <span className="w-6 h-6 rounded-full bg-[#0068FF] text-white font-bold text-xs flex items-center justify-center">
+                    3
+                  </span>
+                  <h2 className="text-sm sm:text-base font-bold text-[#1A1A1A] dark:text-white">
+                    {t.step3Title}
+                  </h2>
+                </div>
+                <span className="text-[11px] text-[#6B7280] dark:text-slate-400">All-Inclusive Fixed</span>
+              </div>
+
+              {/* Multi-vehicle alert if >4 pax */}
+              {passengers > 4 && (
+                <div className="p-3 bg-[#E8F1FF] dark:bg-[#0068FF]/10 rounded-xl border border-[#0068FF]/30 text-xs text-[#0068FF] dark:text-[#3B82F6] flex items-start gap-2">
+                  <Sparkles className="w-4 h-4 shrink-0 mt-0.5" />
+                  <span>{t.multiVehicleNotice}</span>
+                </div>
+              )}
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {/* Alphard / Premium Option */}
+                {passengers <= 4 ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setVehicleType('Foreign Large');
+                      setIsMultiVehicle(false);
+                    }}
+                    className={`p-4 rounded-xl border text-left transition-all cursor-pointer relative ${
+                      vehicleType === 'Foreign Large' && !isMultiVehicle
+                        ? 'border-[#0068FF] bg-[#E8F1FF]/50 dark:bg-[#0068FF]/15 ring-2 ring-[#0068FF]/30 shadow-sm'
+                        : 'border-[#E5E8ED] dark:border-slate-700 bg-white dark:bg-[#131b2c] hover:border-[#CBD5E1]'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="font-bold text-xs sm:text-sm text-[#1A1A1A] dark:text-white">Toyota Alphard VIP</span>
+                      <span className="text-xs font-bold text-[#0068FF] dark:text-[#3B82F6] font-mono">
+                        ¥{BASE_PRICING_RATES[airport]['Foreign Large'].toLocaleString()}
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-[#6B7280] dark:text-slate-400 mb-2">
+                      Executive lounge leather captain seats. Perfect for couples or VIP executives.
+                    </p>
+                    <div className="flex items-center gap-3 text-[10px] text-[#4B5563] dark:text-slate-300 font-medium">
+                      <span className="flex items-center gap-1"><Users className="w-3 h-3" /> Max 4 Pax</span>
+                      <span className="flex items-center gap-1"><Luggage className="w-3 h-3" /> Max 4 Bags</span>
+                    </div>
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setVehicleType('Foreign Large');
+                      setIsMultiVehicle(true);
+                    }}
+                    className={`p-4 rounded-xl border text-left transition-all cursor-pointer relative ${
+                      isMultiVehicle
+                        ? 'border-[#0068FF] bg-[#E8F1FF]/50 dark:bg-[#0068FF]/15 ring-2 ring-[#0068FF]/30 shadow-sm'
+                        : 'border-[#E5E8ED] dark:border-slate-700 bg-white dark:bg-[#131b2c] hover:border-[#CBD5E1]'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="font-bold text-xs sm:text-sm text-[#1A1A1A] dark:text-white">2× Toyota Alphard VIP</span>
+                      <span className="text-xs font-bold text-[#0068FF] dark:text-[#3B82F6] font-mono">
+                        ¥{(BASE_PRICING_RATES[airport]['Foreign Large'] * 2).toLocaleString()}
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-[#6B7280] dark:text-slate-400 mb-2">
+                      Two luxury executive vehicles traveling in convoy for supreme comfort.
+                    </p>
+                    <div className="flex items-center gap-3 text-[10px] text-[#4B5563] dark:text-slate-300 font-medium">
+                      <span className="flex items-center gap-1"><Users className="w-3 h-3" /> Max 8 Pax</span>
+                      <span className="flex items-center gap-1"><Luggage className="w-3 h-3" /> Max 8 Bags</span>
+                    </div>
+                  </button>
+                )}
+
+                {/* Grand Cabin Wagon Option */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setVehicleType('Wagon');
+                    setIsMultiVehicle(false);
+                  }}
+                  className={`p-4 rounded-xl border text-left transition-all cursor-pointer relative ${
+                    vehicleType === 'Wagon' && !isMultiVehicle
+                      ? 'border-[#0068FF] bg-[#E8F1FF]/50 dark:bg-[#0068FF]/15 ring-2 ring-[#0068FF]/30 shadow-sm'
+                      : 'border-[#E5E8ED] dark:border-slate-700 bg-white dark:bg-[#131b2c] hover:border-[#CBD5E1]'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-bold text-xs sm:text-sm text-[#1A1A1A] dark:text-white">HiAce Grand Cabin</span>
+                    <span className="text-xs font-bold text-[#0068FF] dark:text-[#3B82F6] font-mono">
+                      ¥{BASE_PRICING_RATES[airport]['Wagon'].toLocaleString()}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-[#6B7280] dark:text-slate-400 mb-2">
+                    Extra-long wheelbase high-roof van. Generous headroom and massive luggage space.
+                  </p>
+                  <div className="flex items-center gap-3 text-[10px] text-[#4B5563] dark:text-slate-300 font-medium">
+                    <span className="flex items-center gap-1"><Users className="w-3 h-3" /> Up to 9 Pax</span>
+                    <span className="flex items-center gap-1"><Luggage className="w-3 h-3" /> 9+ Bags</span>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            {/* STEP 4: Hotel / Address & Contact Details */}
+            <div className="bg-white dark:bg-[#0E131F] rounded-2xl border border-[#E5E8ED] dark:border-slate-800 p-4 sm:p-6 space-y-4 shadow-sm transition-colors">
+              <div className="flex items-center justify-between pb-2 border-b border-[#F0F2F5] dark:border-slate-800">
+                <div className="flex items-center gap-2">
+                  <span className="w-6 h-6 rounded-full bg-[#0068FF] text-white font-bold text-xs flex items-center justify-center">
+                    4
+                  </span>
+                  <h2 className="text-sm sm:text-base font-bold text-[#1A1A1A] dark:text-white">
+                    {t.step4Title}
+                  </h2>
+                </div>
+                <span className="text-[11px] text-red-500 font-semibold">* Required</span>
+              </div>
+
+              {/* Hotel Name Input with Google Places Autocomplete */}
+              <div>
+                <label className="text-xs font-semibold text-[#4B5563] dark:text-slate-300 block mb-1">
+                  <span className="flex items-center gap-1">
+                    <MapPin className="w-3.5 h-3.5 text-[#0068FF]" />
+                    <span>{t.hotelLabel} <span className="text-red-500">*</span></span>
+                  </span>
+                </label>
+                <GooglePlacesAutocomplete
+                  value={hotelAddress}
+                  onChange={(val) => {
+                    setHotelAddress(val);
+                    if (validationError) setValidationError(null);
+                  }}
+                  placeholder="Search hotel (e.g. Grand Hyatt, Aman, Ritz-Carlton) or Tokyo address..."
+                />
+              </div>
+
+              {/* Lead Guest Name & Email Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs font-semibold text-[#4B5563] dark:text-slate-300 block mb-1">
+                    {t.guestNameLabel} <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. John Smith"
+                    value={guestName}
+                    onChange={(e) => setGuestName(e.target.value)}
+                    className="w-full bg-[#F5F7FA] dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none focus:border-[#0068FF]"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-xs font-semibold text-[#4B5563] dark:text-slate-300 block mb-1">
+                    {t.guestEmailLabel} <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    placeholder="client@example.com"
+                    value={guestEmail}
+                    onChange={(e) => setGuestEmail(e.target.value)}
+                    className="w-full bg-[#F5F7FA] dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none focus:border-[#0068FF]"
+                  />
+                </div>
+              </div>
+
+              {/* Guest International Phone Number */}
+              <div>
+                <label className="text-xs font-semibold text-[#4B5563] dark:text-slate-300 block mb-1">
+                  Contact Phone Number (WhatsApp / Mobile with country code)
+                </label>
+                <input
+                  type="tel"
+                  placeholder="+81 80 1234 5678 or +1 212 555 0199"
+                  value={guestPhone}
+                  onChange={(e) => setGuestPhone(e.target.value)}
+                  className="w-full bg-[#F5F7FA] dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none focus:border-[#0068FF]"
+                />
+              </div>
+
+              {/* Minimized Add Notes Button & Field */}
+              <div className="pt-1">
+                {!showNotesField ? (
+                  <button
+                    type="button"
+                    onClick={() => setShowNotesField(true)}
+                    className="inline-flex items-center gap-1.5 text-xs text-[#0068FF] dark:text-[#3B82F6] hover:underline font-medium cursor-pointer"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>{t.specialNotesToggle}</span>
+                  </button>
+                ) : (
+                  <div className="p-3 bg-[#F5F7FA] dark:bg-[#131b2c] rounded-xl border border-[#E5E8ED] dark:border-slate-700 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <label className="text-xs font-semibold text-[#4B5563] dark:text-slate-300 flex items-center gap-1">
+                        <FileText className="w-3.5 h-3.5 text-[#0068FF]" />
+                        <span>Special Requests / Notes</span>
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => setShowNotesField(false)}
+                        className="text-[10px] text-[#9CA3AF] hover:text-[#1A1A1A] dark:hover:text-white cursor-pointer"
+                      >
+                        Minimize
+                      </button>
+                    </div>
+                    <textarea
+                      rows={2}
+                      placeholder="e.g. 1 Infant child seat needed, 2 sets of golf clubs, English-speaking driver preferred"
+                      value={specialNotes}
+                      onChange={(e) => setSpecialNotes(e.target.value)}
+                      className="w-full bg-white dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-lg p-2.5 text-xs text-[#1A1A1A] dark:text-white focus:outline-none focus:border-[#0068FF]"
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+
             {/* STEP 5: Airport Greeter & VIP Concierge */}
             <div className="bg-white dark:bg-[#0E131F] rounded-2xl border border-[#E5E8ED] dark:border-slate-800 p-4 sm:p-6 space-y-4 shadow-sm transition-colors">
               <div className="flex items-center justify-between pb-2 border-b border-[#F0F2F5] dark:border-slate-800">
@@ -1111,61 +1087,56 @@ export default function AirportTransferModule({
                 <span className="text-[11px] text-[#6B7280] dark:text-slate-400">Optional</span>
               </div>
 
-              {/* NRT Greeter Option */}
+              {/* Dedicated Greeter Option */}
               <div
                 className={`p-3.5 rounded-xl border transition-all flex items-center justify-between gap-3 ${
-                  airport === 'NRT'
-                    ? nrtGreeter
-                      ? 'border-[#0068FF] bg-[#E8F1FF] dark:bg-[#0068FF]/15'
-                      : 'border-[#E5E8ED] dark:border-slate-700 bg-white dark:bg-[#131b2c]'
-                    : 'border-[#F0F2F5] dark:border-slate-800 bg-[#FAFAFA] dark:bg-[#0d121c] opacity-50'
+                  nrtGreeter
+                    ? 'border-[#0068FF] bg-[#E8F1FF] dark:bg-[#0068FF]/15'
+                    : 'border-[#E5E8ED] dark:border-slate-700 bg-white dark:bg-[#131b2c]'
                 }`}
               >
                 <div className="flex items-center gap-2.5">
-                  <UserCheck className={`w-5 h-5 shrink-0 ${nrtGreeter && airport === 'NRT' ? 'text-[#0068FF]' : 'text-[#9CA3AF]'}`} />
+                  <UserCheck className={`w-5 h-5 shrink-0 ${nrtGreeter ? 'text-[#0068FF]' : 'text-[#9CA3AF]'}`} />
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="font-semibold text-xs text-[#1A1A1A] dark:text-white">NRT Dedicated Greeter</span>
+                      <span className="font-semibold text-xs text-[#1A1A1A] dark:text-white">{t.greeterTitle}</span>
                       <span className="text-[10px] font-mono font-bold text-[#0068FF] dark:text-[#3B82F6]">+¥10,000 JPY</span>
                     </div>
                     <span className="text-[11px] text-[#6B7280] dark:text-slate-400 block">
-                      {airport === 'NRT'
-                        ? 'Dedicated staff waiting at Narita arrival lobby with signboard'
-                        : 'Available for Narita Airport (NRT) arrivals only'}
+                      {t.greeterDesc}
                     </span>
                   </div>
                 </div>
                 <input
                   type="checkbox"
-                  disabled={airport !== 'NRT'}
-                  checked={nrtGreeter && airport === 'NRT'}
+                  checked={nrtGreeter}
                   onChange={(e) => setNrtGreeter(e.target.checked)}
-                  className="w-4 h-4 rounded text-[#0068FF] border-[#D1D5DB] focus:ring-[#0068FF] cursor-pointer disabled:cursor-not-allowed"
+                  className="w-4 h-4 rounded text-[#0068FF] border-[#D1D5DB] focus:ring-[#0068FF] cursor-pointer"
                 />
               </div>
 
-              {/* VIP Meet Service Option */}
-              <div className="p-3.5 rounded-xl border border-[#E5E8ED] dark:border-slate-700 bg-white dark:bg-[#131b2c] space-y-2">
+              {/* VIP Meet & Greet Service Option (Tinted Gold Background) */}
+              <div className="p-4 rounded-xl border border-[#C5A059]/40 bg-[#C5A059]/10 dark:bg-[#C5A059]/15 dark:border-[#C5A059]/50 shadow-sm space-y-2.5">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Award className="w-4 h-4 text-[#0068FF]" />
-                    <span className="font-semibold text-xs text-[#1A1A1A] dark:text-white">VIP Meet &amp; Greet Service</span>
+                    <Award className="w-4 h-4 text-[#C5A059]" />
+                    <span className="font-bold text-xs text-[#8C6D3F] dark:text-[#E5C378]">VIP Meet &amp; Greet Service</span>
                   </div>
-                  <span className="text-[10px] text-[#6B7280] dark:text-slate-400 font-mono">
+                  <span className="text-[10px] text-[#8C6D3F] dark:text-[#E5C378] font-mono font-bold">
                     1st: ¥55,000 · +¥22,000/each addl
                   </span>
                 </div>
-                <p className="text-[11px] text-[#6B7280] dark:text-slate-400">
+                <p className="text-[11px] text-[#6B6458] dark:text-slate-300">
                   Airside gate greeting, expedited customs escort, and priority luggage handling.
                 </p>
 
                 <div className="flex items-center justify-between pt-1">
-                  <span className="text-xs text-[#4B5563] dark:text-slate-300 font-medium">VIP Guests:</span>
-                  <div className="flex items-center gap-1.5 border border-[#E5E8ED] dark:border-slate-700 rounded-lg p-0.5 bg-[#F5F7FA] dark:bg-slate-800">
+                  <span className="text-xs text-[#1A1A1A] dark:text-white font-medium">VIP Guests:</span>
+                  <div className="flex items-center gap-1.5 border border-[#C5A059]/30 rounded-lg p-0.5 bg-white dark:bg-slate-900">
                     <button
                       type="button"
                       onClick={() => setVipMeetCount(Math.max(0, vipMeetCount - 1))}
-                      className="w-7 h-7 rounded-md bg-white dark:bg-slate-700 hover:bg-[#E5E8ED] text-[#1A1A1A] dark:text-white font-bold flex items-center justify-center text-sm cursor-pointer"
+                      className="w-7 h-7 rounded-md bg-[#F5F7FA] dark:bg-slate-800 hover:bg-[#E5E8ED] text-[#1A1A1A] dark:text-white font-bold flex items-center justify-center text-sm cursor-pointer"
                     >
                       −
                     </button>
@@ -1175,7 +1146,7 @@ export default function AirportTransferModule({
                     <button
                       type="button"
                       onClick={() => setVipMeetCount(Math.min(passengers, vipMeetCount + 1))}
-                      className="w-7 h-7 rounded-md bg-white dark:bg-slate-700 hover:bg-[#E5E8ED] text-[#1A1A1A] dark:text-white font-bold flex items-center justify-center text-sm cursor-pointer"
+                      className="w-7 h-7 rounded-md bg-[#F5F7FA] dark:bg-slate-800 hover:bg-[#E5E8ED] text-[#1A1A1A] dark:text-white font-bold flex items-center justify-center text-sm cursor-pointer"
                     >
                       +
                     </button>
@@ -1233,14 +1204,14 @@ export default function AirportTransferModule({
                   </span>
                 </div>
 
-                {/* Step 3: NRT Greeter */}
+                {/* Step 3: Dedicated Greeter */}
                 <div className="flex justify-between items-start">
                   <div>
                     <span className="font-semibold text-[#1A1A1A] dark:text-white block">
-                      NRT Greeter
+                      Dedicated Greeter
                     </span>
                     <span className="text-[11px] text-[#9CA3AF] dark:text-slate-400">
-                      {airport === 'NRT' && nrtGreeter ? 'Dedicated Airport Staff' : 'None / Not Selected'}
+                      {nrtGreeter ? 'Arrival Lobby Nameboard Greeting' : 'None / Not Selected'}
                     </span>
                   </div>
                   <span className={`font-mono font-bold ${pricing.nrtGreeterFee > 0 ? 'text-[#0068FF] dark:text-[#3B82F6]' : 'text-[#9CA3AF]'}`}>

@@ -22,6 +22,7 @@ import {
 import { useLanguage } from '@/context/LanguageContext';
 import StripePaymentModal, { BookingPaymentDetails } from '@/components/StripePaymentModal';
 import BookingConfirmationModal from '@/components/BookingConfirmationModal';
+import { getTodayJST, getFutureDateJST, isValidEmail, isValidPhone } from '@/lib/date-utils';
 
 export interface SkiTransferBookingModuleProps {
   initialResort?: string;
@@ -124,11 +125,9 @@ export default function SkiTransferBookingModule({
   const [passengers, setPassengers] = useState<number>(4);
   const [skiGearCount, setSkiGearCount] = useState<number>(4);
   const [addSecondVehicle, setAddSecondVehicle] = useState<boolean>(false);
-  const [travelDate, setTravelDate] = useState<string>(() => {
+  const [travelDate, setTravelDate] = useState(() => {
     if (initialDate) return initialDate;
-    const d = new Date();
-    d.setDate(d.getDate() + 5);
-    return d.toISOString().split('T')[0];
+    return getFutureDateJST(5);
   });
   const [chaletAddress, setChaletAddress] = useState<string>('');
   const [guestName, setGuestName] = useState<string>('');
@@ -399,6 +398,7 @@ export default function SkiTransferBookingModule({
   const bookingDetails: BookingPaymentDetails = {
     bookingType: 'winter_transfer',
     destinationId: currentResort.id,
+    pickupId: pickupPoint,
     destinationTitle: `${pickupLabel} ⇄ ${currentResort.name.en} (4WD Ski Direct)`,
     vehicle: selectedVehicle,
     vehicleName,
@@ -447,6 +447,36 @@ export default function SkiTransferBookingModule({
           : lang === 'zh'
           ? '请输入代表乘客姓名与确认单电子邮箱。'
           : 'Please enter the lead guest name and confirmation email address.'
+      );
+      return;
+    }
+    if (!isValidEmail(guestEmail)) {
+      setValidationError(
+        lang === 'ja'
+          ? '有効なメールアドレスをご入力ください（例: name@example.com）。'
+          : lang === 'zh'
+          ? '请输入有效的电子邮箱地址（例如: name@example.com）。'
+          : 'Please enter a valid email address (e.g. name@example.com).'
+      );
+      return;
+    }
+    if (guestPhone.trim() && !isValidPhone(guestPhone)) {
+      setValidationError(
+        lang === 'ja'
+          ? '国際電話番号（国番号付き 例: +81 90...）をご入力ください。'
+          : lang === 'zh'
+          ? '请输入包含国家区号的有效联系电话（例如: +81 90...）。'
+          : 'Please enter a valid phone number with country code (e.g. +81 90...).'
+      );
+      return;
+    }
+    if (travelDate < getTodayJST()) {
+      setValidationError(
+        lang === 'ja'
+          ? '送迎日程に過去の日付を選択することはできません。本日以降の日程をご指定ください。'
+          : lang === 'zh'
+          ? '滑雪接送日期不能为过去的时间，请选择今天或未来的日期。'
+          : 'Transfer date cannot be in the past. Please select today or a future date.'
       );
       return;
     }
@@ -709,6 +739,7 @@ export default function SkiTransferBookingModule({
                     </label>
                     <input
                       type="date"
+                      min={getTodayJST()}
                       value={travelDate}
                       onChange={(e) => setTravelDate(e.target.value)}
                       className="w-full bg-[#F5F7FA] dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none focus:border-[#0068FF]"

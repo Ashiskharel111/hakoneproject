@@ -86,7 +86,9 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   // Synchronize on client mount
   useEffect(() => {
     const saved = getInitialLanguage();
-    setLangState(saved);
+    if (saved !== 'en') {
+      setLangState(saved);
+    }
   }, []);
 
   const setLang = useCallback((newLang: Language) => {
@@ -113,7 +115,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     const handleCustomChange = (e: Event) => {
       const customEvent = e as CustomEvent<Language>;
       if (customEvent.detail && VALID_LANGUAGES.includes(customEvent.detail)) {
-        setLangState(customEvent.detail);
+        setLangState((prev) => (prev === customEvent.detail ? prev : customEvent.detail));
       }
     };
 
@@ -135,22 +137,6 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
 export function useLanguage() {
   const context = useContext(LanguageContext);
-  // If context is available, use it
-  if (context && context.setLang && context.lang) {
-    return [context.lang, context.setLang] as const;
-  }
-  
-  // Fallback for isolated usages
-  const [localLang, setLocalLang] = useState<Language>(getInitialLanguage);
-  
-  const updateLang = (newLang: Language) => {
-    setLocalLang(newLang);
-    try {
-      localStorage.setItem(STORAGE_KEY, newLang);
-      setCookie(STORAGE_KEY, newLang);
-      window.dispatchEvent(new CustomEvent('sk_limo_lang_change', { detail: newLang }));
-    } catch (e) {}
-  };
-
-  return [localLang, updateLang] as const;
+  return [context.lang, context.setLang] as const;
 }
+

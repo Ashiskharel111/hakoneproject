@@ -18,6 +18,16 @@ const ThemeContext = createContext<ThemeContextType>({
   isMobile: false,
 });
 
+function applyThemeToDocument(newTheme: Theme) {
+  if (typeof document === 'undefined') return;
+  const root = document.documentElement;
+  if (newTheme === 'dark') {
+    root.classList.add('dark');
+  } else {
+    root.classList.remove('dark');
+  }
+}
+
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = useState<Theme>('light');
   const [isMobile, setIsMobile] = useState<boolean>(false);
@@ -37,13 +47,13 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     if (isCurrentMobile) {
       const initialSystemTheme: Theme = systemDarkQuery.matches ? 'dark' : 'light';
       setThemeState(initialSystemTheme);
-      applyTheme(initialSystemTheme);
+      applyThemeToDocument(initialSystemTheme);
     } else {
       // On desktop: check stored preference or default to light
       const savedTheme = localStorage.getItem('sk_theme') as Theme | null;
       const initialTheme = savedTheme || 'light';
       setThemeState(initialTheme);
-      applyTheme(initialTheme);
+      applyThemeToDocument(initialTheme);
     }
 
     // System dark mode listener for mobile devices
@@ -51,7 +61,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       if (window.innerWidth <= 768) {
         const newTheme: Theme = e.matches ? 'dark' : 'light';
         setThemeState(newTheme);
-        applyTheme(newTheme);
+        applyThemeToDocument(newTheme);
       }
     };
 
@@ -69,18 +79,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
-  const applyTheme = (newTheme: Theme) => {
-    const root = document.documentElement;
-    if (newTheme === 'dark') {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
-    }
-  };
-
   const setTheme = (newTheme: Theme) => {
     setThemeState(newTheme);
-    applyTheme(newTheme);
+    applyThemeToDocument(newTheme);
     localStorage.setItem('sk_theme', newTheme);
   };
 
@@ -95,6 +96,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     </ThemeContext.Provider>
   );
 }
+
 
 export function useTheme() {
   return useContext(ThemeContext);

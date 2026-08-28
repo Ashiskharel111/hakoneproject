@@ -24,10 +24,16 @@ import {
   ShieldAlert,
   Wind
 } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
-import SkiTransferBookingModule from '@/components/SkiTransferBookingModule';
 import { useLanguage } from '@/context/LanguageContext';
+
+const SkiTransferBookingModule = dynamic(() => import('@/components/SkiTransferBookingModule'), {
+  loading: () => (
+    <div className="p-8 text-center text-xs text-slate-400">Loading Ski Transfer Wizard...</div>
+  ),
+});
 
 export default function WinterSkiToursPage() {
   const [lang] = useLanguage();

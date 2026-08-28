@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { DETAILED_DESTINATIONS } from '@/lib/destinations-data';
-import { DEFAULT_PRICING_CONFIG, calculateQuote, QuoteInputs } from '@/lib/pricing-store';
+import { DEFAULT_PRICING_CONFIG, calculateQuote, QuoteInputs, PricingConfig } from '@/lib/pricing-store';
 import { calculateAirportTransferPrice, Airport, VehicleType, TimeOfDay } from '@/lib/airport-pricing';
-import { saveUserRequest } from '@/lib/firebase';
+import { saveUserRequest, db } from '@/lib/firebase';
+import { doc, getDoc } from 'firebase/firestore';
+import { checkRateLimit } from '@/lib/rate-limit';
 
 const rawStripeApiKey = process.env.STRIPE_SECRET_KEY || '';
 const stripeApiKey = rawStripeApiKey.trim().split('#')[0].trim().split(/\s+/)[0].replace(/^["']|["']$/g, '');
@@ -13,11 +15,21 @@ const stripe = stripeApiKey
     })
   : null;
 
+// ── SECURITY: Absolute minimum price floor (JPY) ──
+const ABSOLUTE_MINIMUM_PRICE_JPY = 10000;
+const CUSTOM_CHARTER_MINIMUM_JPY = 65000;
+
+// ── SECURITY: Allowed booking types (whitelist) ──
+const VALID_BOOKING_TYPES = ['destination', 'airport_transfer', 'winter_transfer', 'custom_charter'] as const;
+type BookingType = typeof VALID_BOOKING_TYPES[number];
+
+const VALID_VEHICLES = ['alphard', 'granace', 'hiace', 'Foreign Large', 'Wagon'] as const;
+
 interface CreatePaymentIntentRequestBody {
-  bookingType: 'destination' | 'airport_transfer' | 'winter_transfer' | 'custom_charter';
+  bookingType: BookingType;
   destinationId?: string;
   pickupId?: string;
-  vehicle?: 'alphard' | 'granace' | 'hiace' | 'Foreign Large' | 'Wagon';
+  vehicle?: typeof VALID_VEHICLES[number];
   vehicleType?: 'Foreign Large' | 'Wagon';
   vehicleCount?: number;
   timeOfDay?: 'Standard' | 'Late Night';
@@ -35,11 +47,21 @@ interface CreatePaymentIntentRequestBody {
   flightNumber?: string;
   notes?: string;
   currency?: string;
-  amount?: number;
+  // NOTE: 'amount' field intentionally REMOVED — all pricing is server-calculated
 }
 
 export async function POST(request: NextRequest) {
   try {
+    // ── SECURITY: Rate limiting (5 requests/min per IP) ──
+    const clientIp = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
+    const rateLimitResult = checkRateLimit(`payment:${clientIp}`, 5, 60000);
+    if (!rateLimitResult.allowed) {
+      return NextResponse.json(
+        { error: 'Too many requests. Please try again later.' },
+        { status: 429, headers: { 'Retry-After': String(Math.ceil(rateLimitResult.retryAfterMs / 1000)) } }
+      );
+    }
+
     const body: CreatePaymentIntentRequestBody = await request.json();
 
     const {
@@ -60,16 +82,34 @@ export async function POST(request: NextRequest) {
       flightNumber,
       notes,
       currency = 'jpy',
-      amount: clientProvidedAmount,
     } = body;
 
-    // Validate required fields
+    // ── SECURITY: Input Validation ──
     if (!guestName || !guestEmail) {
       return NextResponse.json(
         { error: 'Guest name and email are required for booking confirmation.' },
         { status: 400 }
       );
     }
+
+    if (!VALID_BOOKING_TYPES.includes(bookingType)) {
+      return NextResponse.json(
+        { error: 'Invalid booking type.' },
+        { status: 400 }
+      );
+    }
+
+    if (!VALID_VEHICLES.includes(vehicle)) {
+      return NextResponse.json(
+        { error: 'Invalid vehicle selection.' },
+        { status: 400 }
+      );
+    }
+
+    const sanitizedPassengers = Math.max(1, Math.min(20, Math.floor(Number(passengers) || 2)));
+    const sanitizedLuggage = Math.max(0, Math.min(30, Math.floor(Number(luggageCount) || 2)));
+    const sanitizedSkiBags = Math.max(0, Math.min(20, Math.floor(Number(skiBagCount) || 0)));
+    const sanitizedVehicleCount = Math.max(1, Math.min(5, Math.floor(Number(vehicleCount) || 1)));
 
     let calculatedAmount = 0;
     let description = '';
@@ -88,18 +128,19 @@ export async function POST(request: NextRequest) {
             : dest.hiacePrice;
 
         const maxCap = vehicle === 'alphard' ? 4 : vehicle === 'granace' ? 5 : 9;
-        const isExceeded = passengers > maxCap;
+        const isExceeded = sanitizedPassengers > maxCap;
         const minPerPerson = Math.round(vehicleBasePrice / maxCap);
         const secondVehicleCost = minPerPerson + 30000;
 
         calculatedAmount = vehicleBasePrice + (isExceeded && addSecondVehicle ? secondVehicleCost : 0);
         description = `SK Limo Day Charter: ${dest.name} (${vehicle.toUpperCase()}${isExceeded && addSecondVehicle ? ' + 2nd Support Vehicle' : ''}) on ${travelDate || 'TBD'}`;
       } else {
-        calculatedAmount = clientProvidedAmount || 85000;
+        // Unknown destination — server-enforced minimum, never trust client
+        calculatedAmount = CUSTOM_CHARTER_MINIMUM_JPY;
         description = `SK Limo Day Charter: ${destinationId} (${vehicle.toUpperCase()}) on ${travelDate || 'TBD'}`;
       }
     } else if (bookingType === 'airport_transfer') {
-      // 2. Airport Transfer (Uses official Airport Transfer Pricing Calculator module)
+      // 2. Airport Transfer (server-side pricing calculator)
       const isNarita = pickupId === 'nrt' || destinationId === 'nrt' || destinationId === 'nrt_tokyo';
       const resolvedAirport: Airport = isNarita ? 'NRT' : 'HND';
       destinationLabel = isNarita ? 'Narita Airport (NRT) ⇄ Tokyo' : 'Haneda Airport (HND) ⇄ Tokyo';
@@ -107,44 +148,55 @@ export async function POST(request: NextRequest) {
       const resolvedVehicleType: VehicleType =
         vehicle === 'Foreign Large' || vehicle === 'alphard' ? 'Foreign Large' : 'Wagon';
       const resolvedTimeOfDay: TimeOfDay = (body.timeOfDay === 'Late Night' ? 'Late Night' : 'Standard');
-      const resolvedVehicleCount = Math.max(1, Number(body.vehicleCount || 1));
 
       const pricingResult = calculateAirportTransferPrice({
         airport: resolvedAirport,
         vehicleType: resolvedVehicleType,
-        vehicleCount: resolvedVehicleCount,
+        vehicleCount: sanitizedVehicleCount,
         timeOfDay: resolvedTimeOfDay,
         nrtGreeter: Boolean(body.nrtGreeter),
-        vipMeetCount: Number(body.vipMeetCount || 0),
+        vipMeetCount: Math.max(0, Math.min(10, Number(body.vipMeetCount || 0))),
       });
 
       calculatedAmount = pricingResult.totalAmount;
-      const vehicleDesc = resolvedVehicleCount > 1 ? `${resolvedVehicleCount}x ${resolvedVehicleType}` : resolvedVehicleType;
+      const vehicleDesc = sanitizedVehicleCount > 1 ? `${sanitizedVehicleCount}x ${resolvedVehicleType}` : resolvedVehicleType;
       description = `SK Limo Airport Transfer: ${destinationLabel} (${vehicleDesc} - ${resolvedTimeOfDay}${pricingResult.nrtGreeterFee ? ' + NRT Greeter' : ''}${pricingResult.vipMeetFee ? ` + VIP Meet (${body.vipMeetCount} Pax)` : ''}) on ${travelDate || 'TBD'}`;
     } else if (bookingType === 'winter_transfer') {
-      // 3. Winter Ski Transfer
+      // 3. Winter Ski Transfer (Fetch dynamic cloud pricing config from Firestore if available)
+      let activePricingConfig: PricingConfig = DEFAULT_PRICING_CONFIG;
+      if (db) {
+        try {
+          const docSnap = await getDoc(doc(db, 'config', 'pricing'));
+          if (docSnap.exists()) {
+            activePricingConfig = { ...DEFAULT_PRICING_CONFIG, ...docSnap.data() } as PricingConfig;
+          }
+        } catch (dbErr) {
+          console.warn('Could not read cloud pricing config, using default:', dbErr);
+        }
+      }
+
       const quoteInputs: QuoteInputs = {
         pickupId: pickupId || 'hnd',
         destinationId: destinationId || 'hakuba',
         transferType: 'one_way',
-        passengers: passengers || 4,
-        luggageCount: luggageCount || 4,
-        skiBagCount: skiBagCount || 0,
+        passengers: sanitizedPassengers,
+        luggageCount: sanitizedLuggage,
+        skiBagCount: sanitizedSkiBags,
       };
 
-      const quote = calculateQuote(DEFAULT_PRICING_CONFIG, quoteInputs);
+      const quote = calculateQuote(activePricingConfig, quoteInputs);
       calculatedAmount = quote.finalTotalPrice;
       destinationLabel = `${pickupId || 'Tokyo'} to ${destinationId || 'Ski Resort'}`;
       description = `SK Limo Winter Transfer: ${destinationLabel} (${quote.recommendedVehicleName}) on ${travelDate || 'TBD'}`;
     } else {
-      // Custom / general charter
-      calculatedAmount = clientProvidedAmount && clientProvidedAmount > 0 ? clientProvidedAmount : 65000;
+      // Custom charter — server-enforced minimum, never trust client
+      calculatedAmount = CUSTOM_CHARTER_MINIMUM_JPY;
       description = `SK Limo Private Luxury Charter on ${travelDate || 'TBD'}`;
     }
 
-    // Safeguard minimum pricing threshold (JPY)
-    if (calculatedAmount <= 0) {
-      calculatedAmount = clientProvidedAmount || 50000;
+    // ── SECURITY: Enforce absolute minimum price floor ──
+    if (calculatedAmount < ABSOLUTE_MINIMUM_PRICE_JPY) {
+      calculatedAmount = ABSOLUTE_MINIMUM_PRICE_JPY;
     }
 
     const bookingRef = `SK-${(destinationId || bookingType || 'TRIP').slice(0, 4).toUpperCase()}-${Math.floor(10000 + Math.random() * 90000)}`;
@@ -166,9 +218,9 @@ export async function POST(request: NextRequest) {
         destination: destinationLabel,
         destinationId,
         vehicleType: vehicle.toUpperCase(),
-        passengers,
-        luggageCount,
-        skiBagCount,
+        passengers: sanitizedPassengers,
+        luggageCount: sanitizedLuggage,
+        skiBagCount: sanitizedSkiBags,
         travelDate,
         totalPrice: calculatedAmount,
         currency: currency.toUpperCase(),
@@ -190,7 +242,7 @@ export async function POST(request: NextRequest) {
       console.warn('Could not persist pending booking to Firestore:', dbErr);
     }
 
-    // 4. Create Stripe PaymentIntent if secret key configured
+    // Create Stripe PaymentIntent if secret key configured
     if (stripe) {
       const paymentMethodConfig = process.env.STRIPE_PAYMENT_METHOD_CONFIGURATION?.trim();
       const paymentIntent = await stripe.paymentIntents.create({
@@ -205,8 +257,8 @@ export async function POST(request: NextRequest) {
           destinationLabel,
           pickupId: pickupId || '',
           vehicle,
-          passengers: String(passengers),
-          luggageCount: String(luggageCount),
+          passengers: String(sanitizedPassengers),
+          luggageCount: String(sanitizedLuggage),
           travelDate: travelDate || '',
           guestName,
           guestEmail,
@@ -250,10 +302,11 @@ export async function POST(request: NextRequest) {
       message: 'Payment intent initialized in sandbox mode. Set STRIPE_SECRET_KEY for live processing.',
     });
   } catch (error: any) {
-    console.error('Error creating payment intent:', error);
+    console.error('Error creating payment intent:', error.message);
     return NextResponse.json(
-      { error: error.message || 'Internal server error while creating payment intent.' },
+      { error: 'Internal server error while creating payment intent.' },
       { status: 500 }
     );
   }
 }
+

@@ -21,10 +21,16 @@ import {
   Check,
   Compass
 } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
-import AirportTransferModule from '@/components/AirportTransferModule';
 import { useLanguage } from '@/context/LanguageContext';
+
+const AirportTransferModule = dynamic(() => import('@/components/AirportTransferModule'), {
+  loading: () => (
+    <div className="p-8 text-center text-xs text-slate-400">Loading Airport Transfer Wizard...</div>
+  ),
+});
 
 export default function AirportTransferDedicatedPage() {
   const [lang] = useLanguage();
@@ -44,25 +50,25 @@ export default function AirportTransferDedicatedPage() {
       en: 'Tokyo Airport Executive Chauffeur',
     }[lang],
     subtitle: {
-      ja: '羽田（HND）・成田（NRT）と都内ホテルを直行で結ぶ完全定額送迎。フライト追跡、60分無料待機、手荷物アシスト付き。',
-      zh: '成田/羽田机场与东京都内酒店直达专车。全包一口价、实时航班监控、免费60分钟等候及到达大厅举牌迎宾。',
-      fr: 'Transferts privés d\'excellence entre Haneda, Narita et Tokyo. Tarifs fixes tout compris, suivi de vol et accueil personnalisé.',
-      es: 'Traslados privados de primera clase entre Haneda, Narita y Tokio. Tarifa fija todo incluido, rastreo de vuelos y bienvenida personalizada.',
-      en: 'Seamless private transfers between Haneda (HND), Narita (NRT), and Central Tokyo hotels. All-inclusive fixed pricing, flight tracking, and personalized meet & greet in the arrival hall.',
+      ja: '羽田（HND）・成田（NRT）と都内ホテルを直行で結ぶ完全定額送迎。フライト追跡、遅延完全無料待機（遅延追加料金¥0）、手荷物アシスト付き。',
+      zh: '成田/羽田机场与东京都内酒店直达专车。全包一口价、实时航班监控、航班延误100%免费灵活守候及到达大厅举牌迎宾。',
+      fr: 'Transferts privés d\'excellence entre Haneda, Narita et Tokyo. Tarifs fixes tout compris, suivi de vol et attente 100% flexible et gratuite (zéro frais de retard).',
+      es: 'Traslados privados de primera clase entre Haneda, Narita y Tokio. Tarifa fija todo incluido, rastreo de vuelos y espera 100% flexible y gratuita (0 cargos por retraso).',
+      en: 'Seamless private transfers between Haneda (HND), Narita (NRT), and Central Tokyo hotels. All-inclusive fixed pricing, flight tracking, and 100% free flexible delay wait time (we won’t charge a penny for delays).',
     }[lang],
-    inc1Title: { ja: '60分 無料待機', zh: '60分钟免费等候', fr: 'Attente 60 min gratuite', es: '60 min espera gratis', en: '60-Min Flight Buffer' }[lang],
-    inc1Sub: { ja: '到着後の税関手続きも安心', zh: '落地后通关从容无忧', fr: 'Passage douane sans stress', es: 'Paso por aduanas sin prisas', en: 'Complimentary waiting' }[lang],
+    inc1Title: { ja: '遅延¥0 完全無料待機', zh: '延误0加价 免费守候', fr: 'Attente Flexible Gratuite', es: 'Espera Flexible Gratis', en: '100% Free Flexible Wait' }[lang],
+    inc1Sub: { ja: '遅延追加料金なし・税関も安心', zh: '不加收任何延误费・通关从容', fr: '0 frais retard & passage douane zen', es: '0 cargos retraso y aduanas sin prisas', en: 'Zero delay fees guaranteed' }[lang],
     inc2Title: { ja: '完全 定額料金', zh: '全包一口价', fr: 'Tarif Fixe Garanti', es: 'Tarifa Fija Garantizada', en: 'Fixed Flat Rate' }[lang],
     inc2Sub: { ja: '高速代・深夜料金込', zh: '含高速费与燃油', fr: 'Péages & carburant inclus', es: 'Peajes y combustible incluidos', en: 'Tolls & fuel included' }[lang],
     inc3Title: { ja: 'リアルタイム便名追跡', zh: '实时航班动态同步', fr: 'Suivi de Vol en Direct', es: 'Sincronización en Directo', en: 'Live Radar Sync' }[lang],
     inc3Sub: { ja: '早着・遅延に自動対応', zh: '延误提前自动调整', fr: 'Ajustement auto du chauffeur', es: 'Ajuste auto del chófer', en: 'Auto delay tracking' }[lang],
-    bookOnlineBtn: (open: boolean) => ({
-      ja: open ? '予約フォームを閉じる' : '空港送迎をオンライン予約',
-      zh: open ? '关闭预订表单' : '在线预订机场专车',
-      fr: open ? 'Masquer le Formulaire' : 'Réserver en Ligne',
-      es: open ? 'Ocultar Formulario' : 'Reservar Traslado en Línea',
-      en: open ? 'Hide Booking Form' : 'Book Airport Transfer Online',
-    }[lang]),
+    bookOnlineBtn: {
+      ja: '空港送迎をオンライン予約',
+      zh: '在线预订机场专车',
+      fr: 'Réserver en Ligne',
+      es: 'Reservar Traslado en Línea',
+      en: 'Book Airport Transfer Online',
+    }[lang],
     whatsAppBtn: { ja: 'WhatsApp 24時間コンシェルジュ', zh: 'WhatsApp 24小时客服', fr: 'Conciergerie WhatsApp 24/7', es: 'Conserjería WhatsApp 24/7', en: 'WhatsApp Concierge 24/7' }[lang],
     flagshipBadge: { ja: 'VIP 最高峰フリート', zh: 'VIP 旗舰豪华车队', fr: 'Flotte VIP Haut de Gamme', es: 'Flota VIP de Alta Gama', en: 'VIP Flagship Fleet' }[lang],
     flagshipDesc: { ja: '静粛性の高いキャビン、本革キャプテンシート、充実の手荷物積載スペース。', zh: '静谧舒适座舱、独立真皮航空座椅、充足的行李装载空间。', fr: 'Insonorisation parfaite, fauteuils grand confort et vaste volume de bagages.', es: 'Excelente insonorización, asientos de lujo y amplio espacio para equipaje.', en: 'Quiet cabin acoustics, leather captain seats, and generous luggage capacity.' }[lang],
@@ -70,9 +76,9 @@ export default function AirportTransferDedicatedPage() {
     howHead: { ja: '空港送迎の流れ', zh: '机场接送服务全流程', fr: 'Comment Fonctionne Votre Transfert', es: 'Cómo Funciona su Traslado', en: 'How Your Airport Transfer Works' }[lang],
     howSub: { ja: '飛行機が到着してからホテルにチェックインするまで。', zh: '从航班落地东京到抵达酒店大堂的每一步。', fr: 'Du toucher des roues à Tokyo jusqu\'à l\'arrivée à votre hôtel.', es: 'Desde el aterrizaje en Tokio hasta el registro en su hotel.', en: 'From the moment your flight touches down in Tokyo to your hotel check-in.' }[lang],
     step1Title: { ja: 'フライトのリアルタイム監視', zh: '实时跟踪航班动态', fr: 'Suivi de Vol en Temps Réel', es: 'Seguimiento en Tiempo Real', en: 'Real-Time Flight Tracking' }[lang],
-    step1Desc: { ja: '便名に基づきフライト状況を常時監視。早着や遅延が発生しても配車時間を自動調整します。', zh: '司机根据航班号实时监控进港动态。无论提前到达还是延误，接机时间自动同步调整。', fr: 'Votre chauffeur suit l\'avion en direct. En cas d\'avance ou de retard, la prise en charge s\'adapte sans frais.', es: 'Su chófer rastrea el vuelo en vivo. En caso de adelanto o retraso, la hora se ajusta automáticamente.', en: 'Your chauffeur monitors your inbound aircraft live. If your flight arrives early or is delayed, pickup timing adjusts automatically with zero stress.' }[lang],
-    step2Title: { ja: '60分間の税関待機バッファー', zh: '60分钟从容通关等候', fr: '60 min de Douane Gratuite', es: '60 min para Aduanas sin Prisas', en: '60-Min Customs Buffer' }[lang],
-    step2Desc: { ja: '入国審査・荷物受取・税関検査を急ぐ必要はありません。着陸から60分間無料で待機します。', zh: '无需匆忙通关与提取行李。我们从航班实际落地起提供整整60分钟的免费等候时间。', fr: 'Prenez le temps de passer l\'immigration et de récupérer vos bagages grâce aux 60 minutes offertes.', es: 'Tómese su tiempo en inmigración y recogida de maletas con 60 minutos de espera de cortesía.', en: 'Take your time through immigration, baggage claim, and customs. We provide a full 60 minutes of complimentary wait time starting from actual touchdown.' }[lang],
+    step1Desc: { ja: '便名に基づきフライト状況を常時監視。早着や遅延が発生しても配車時間を自動調整します（追加料金なし）。', zh: '司机根据航班号实时监控进港动态。无论提前到达还是延误，接机时间自动同步调整，绝不加收延误费用。', fr: 'Votre chauffeur suit l\'avion en direct. En cas d\'avance ou de retard, la prise en charge s\'adapte automatiquement sans le moindre supplément.', es: 'Su chófer rastrea el vuelo en vivo. En caso de adelanto o retraso, la hora se ajusta automáticamente sin coste adicional.', en: 'Your chauffeur monitors your inbound aircraft live. If your flight arrives early or is delayed, pickup timing adjusts automatically with zero stress and zero delay fees.' }[lang],
+    step2Title: { ja: '完全無料・柔軟な待機ポリシー', zh: '100%免费灵活守候', fr: 'Attente 100% Flexible & Gratuite', es: 'Espera 100% Flexible y Gratuita', en: '100% Free Flexible Wait' }[lang],
+    step2Desc: { ja: '入国審査・荷物受取・税関検査を急ぐ必要はありません。フライト遅延や混雑時も追加料金は一切いただかず、柔軟にお待ちいたします。', zh: '无需匆忙通关与提取行李。无论航班延误还是入境排队，我们提供100%免费灵活等候，不收一分钱延误费。', fr: 'Prenez tout votre temps pour l\'immigration, les bagages et la douane. Nous offrons une attente flexible 100% gratuite sans aucun frais de retard.', es: 'Tómese su tiempo en inmigración, equipaje y aduanas. Ofrecemos espera flexible 100% gratuita sin cobrarle un céntimo por retrasos.', en: 'Take your time through immigration, baggage claim, and customs. We provide 100% free flexible wait time — we won’t charge a penny for flight delays.' }[lang],
     step3Title: { ja: '到着ロビーでのお出迎え', zh: '到达大厅专属举牌迎宾', fr: 'Accueil aux Arrivées', es: 'Bienvenida en Llegadas', en: 'Arrivals Hall Greeting' }[lang],
     step3Desc: { ja: '税関出口を出ると、お名前入りサインボードを持った専任ドライバーがお待ちしています。手荷物もお運びします。', zh: '走出海关大门，专车司机将手持您姓名的专属标识牌迎候，并即刻协助搬运行李。', fr: 'À la sortie de la douane, votre chauffeur vous attend avec une pancarte à votre nom et prend en charge vos bagages.', es: 'Al salir de la aduana, su chófer le recibirá con un cartel con su nombre y le ayudará con el equipaje.', en: 'As you step out into the arrival lobby, your professional chauffeur awaits with an official nameboard. Immediate baggage assistance is provided.' }[lang],
     step4Title: { ja: 'ホテル玄関まで直行', zh: '直达酒店大堂', fr: 'Arrivée Directe à l\'Hôtel', es: 'Llegada Directa al Hotel', en: 'Direct Hotel Drop-Off' }[lang],
@@ -137,11 +143,19 @@ export default function AirportTransferDedicatedPage() {
               <div className="flex items-center flex-wrap gap-3 pt-2">
                 <button
                   type="button"
-                  onClick={() => setShowBookingWizard(!showBookingWizard)}
-                  className="bg-[#0068FF] hover:bg-[#0050CC] text-white px-6 py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-md transition-all cursor-pointer"
+                  onClick={() => {
+                    setShowBookingWizard(true);
+                    setTimeout(() => {
+                      const el = document.getElementById('booking-section');
+                      if (el) {
+                        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      }
+                    }, 30);
+                  }}
+                  className="bg-[#0068FF] hover:bg-[#0050CC] text-white px-6 py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-md transition-all cursor-pointer group"
                 >
-                  <Lock className="w-4 h-4" />
-                  <span>{t.bookOnlineBtn(showBookingWizard)}</span>
+                  <span>{t.bookOnlineBtn}</span>
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </button>
 
                 <a
@@ -183,13 +197,11 @@ export default function AirportTransferDedicatedPage() {
       </section>
 
       {/* ══════════════════════════════════════════════════
-          2. TOGGLEABLE INTERACTIVE BOOKING WIZARD
+          2. INTERACTIVE BOOKING SECTION
           ══════════════════════════════════════════════════ */}
-      {showBookingWizard && (
-        <section id="booking-wizard" className="py-8 bg-white dark:bg-[#0E131F] border-b border-[#E5E8ED] dark:border-slate-800 transition-colors animate-fade-in">
-          <AirportTransferModule onBackToCatalog={() => setShowBookingWizard(false)} />
-        </section>
-      )}
+      <section id="booking-section" className="py-8 bg-white dark:bg-[#0E131F] border-b border-[#E5E8ED] dark:border-slate-800 transition-colors scroll-mt-20">
+        <AirportTransferModule />
+      </section>
 
       {/* ══════════════════════════════════════════════════
           3. HOW IT WORKS: STEP-BY-STEP ARRIVAL PROTOCOL

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { checkRateLimit } from '@/lib/rate-limit';
 
 interface FlightLookupResponse {
   success: boolean;
@@ -194,6 +195,16 @@ function checkIsLateNight(timeStr: string): boolean {
 }
 
 export async function GET(request: NextRequest) {
+  // ── SECURITY: Rate limiting (15 requests/min per IP) ──
+  const clientIp = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
+  const rateLimitResult = checkRateLimit(`flight:${clientIp}`, 15, 60000);
+  if (!rateLimitResult.allowed) {
+    return NextResponse.json(
+      { success: false, message: 'Too many requests. Please try again later.' },
+      { status: 429, headers: { 'Retry-After': String(Math.ceil(rateLimitResult.retryAfterMs / 1000)) } }
+    );
+  }
+
   const { searchParams } = new URL(request.url);
   const rawFlightNumber = searchParams.get('flightNumber') || '';
   const flightDate = searchParams.get('flightDate') || new Date().toISOString().split('T')[0];
@@ -207,7 +218,8 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  const rapidApiKey = process.env.RAPIDAPI_KEY || '183e99c32fmshd8df681fb7fbaafp1428eejsn9746202f5e8e';
+  // ── SECURITY: Read API key strictly from env — no hardcoded fallback ──
+  const rapidApiKey = process.env.RAPIDAPI_KEY || '';
   const rapidApiHost = process.env.AERODATABOX_HOST || 'aerodatabox.p.rapidapi.com';
 
   // 1. Primary Live Engine: AeroDataBox RapidAPI

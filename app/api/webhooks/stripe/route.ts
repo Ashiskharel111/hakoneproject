@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { db } from '@/lib/firebase';
-import { collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore';
+import { collection, query, where, getDocs, updateDoc } from 'firebase/firestore';
 
 const stripeApiKey = process.env.STRIPE_SECRET_KEY;
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
@@ -11,6 +11,24 @@ const stripe = stripeApiKey
       apiVersion: '2025-02-24.acacia' as any,
     })
   : null;
+
+// ── PII Masking Helpers ──
+function maskEmail(email: string): string {
+  if (!email || !email.includes('@')) return '***@***.***';
+  const [local, domain] = email.split('@');
+  const maskedLocal = local.length <= 2 ? '*'.repeat(local.length) : local[0] + '***' + local[local.length - 1];
+  return `${maskedLocal}@${domain}`;
+}
+
+function maskPhone(phone: string): string {
+  if (!phone || phone.length < 4) return '***';
+  return phone.slice(0, 3) + '***' + phone.slice(-2);
+}
+
+function maskName(name: string): string {
+  if (!name || name.length <= 1) return '***';
+  return name[0] + '***';
+}
 
 // Helper: dispatch notification to ops team & customer
 async function triggerDispatchNotification(bookingData: {
@@ -27,9 +45,10 @@ async function triggerDispatchNotification(bookingData: {
   luggage: string;
   pickupAddress: string;
 }) {
-  console.log(`[STRIPE WEBHOOK] Confirmed booking for ${bookingData.guestName} (${bookingData.bookingRef})`);
-  console.log(`[DISPATCH TRIGGER] Date: ${bookingData.travelDate} | Destination: ${bookingData.destination} | Vehicle: ${bookingData.vehicle}`);
-  console.log(`[CUSTOMER RECEIPT] Email dispatched to ${bookingData.guestEmail} for amount ${bookingData.currency.toUpperCase()} ${bookingData.amount}`);
+  // Log only masked PII — never raw customer data
+  console.log(`[STRIPE WEBHOOK] Confirmed booking ${bookingData.bookingRef}`);
+  console.log(`[DISPATCH] Date: ${bookingData.travelDate} | Dest: ${bookingData.destination} | Vehicle: ${bookingData.vehicle} | Guest: ${maskName(bookingData.guestName)}`);
+  console.log(`[RECEIPT] ${maskEmail(bookingData.guestEmail)} | ${bookingData.currency.toUpperCase()} ${bookingData.amount}`);
   
   // Update Firestore booking status if possible
   if (db && bookingData.bookingRef) {
@@ -53,26 +72,35 @@ async function triggerDispatchNotification(bookingData: {
 
 export async function POST(request: NextRequest) {
   try {
+    // ── SECURITY: Require Stripe signature verification in all environments ──
+    if (!stripe || !webhookSecret) {
+      console.error('[STRIPE WEBHOOK] Missing STRIPE_SECRET_KEY or STRIPE_WEBHOOK_SECRET');
+      return NextResponse.json(
+        { error: 'Webhook endpoint is not configured.' },
+        { status: 503 }
+      );
+    }
+
     const rawBody = await request.text();
     const signature = request.headers.get('stripe-signature');
 
-    let event: Stripe.Event;
+    if (!signature) {
+      console.warn('[STRIPE WEBHOOK] Rejected: Missing stripe-signature header');
+      return NextResponse.json(
+        { error: 'Missing stripe-signature header. Unsigned requests are rejected.' },
+        { status: 401 }
+      );
+    }
 
-    // Verify webhook signature if secret key and signature are present
-    if (stripe && webhookSecret && signature) {
-      try {
-        event = stripe.webhooks.constructEvent(rawBody, signature, webhookSecret);
-      } catch (err: any) {
-        console.error(`Webhook signature verification failed:`, err.message);
-        return NextResponse.json({ error: `Webhook signature verification failed: ${err.message}` }, { status: 400 });
-      }
-    } else {
-      // Parse JSON directly when testing without webhook signature in development
-      try {
-        event = JSON.parse(rawBody) as Stripe.Event;
-      } catch (err) {
-        return NextResponse.json({ error: 'Invalid JSON payload' }, { status: 400 });
-      }
+    let event: Stripe.Event;
+    try {
+      event = stripe.webhooks.constructEvent(rawBody, signature, webhookSecret);
+    } catch (err: any) {
+      console.error(`[STRIPE WEBHOOK] Signature verification failed:`, err.message);
+      return NextResponse.json(
+        { error: 'Webhook signature verification failed.' },
+        { status: 400 }
+      );
     }
 
     // Handle specific event types
@@ -81,7 +109,7 @@ export async function POST(request: NextRequest) {
         const paymentIntent = event.data.object as Stripe.PaymentIntent;
         const meta = paymentIntent.metadata || {};
 
-        console.log(`PaymentIntent succeeded: ${paymentIntent.id} for amount ${paymentIntent.amount} ${paymentIntent.currency}`);
+        console.log(`[STRIPE WEBHOOK] PaymentIntent succeeded: ${paymentIntent.id} amount=${paymentIntent.amount} ${paymentIntent.currency}`);
 
         await triggerDispatchNotification({
           bookingRef: meta.bookingRef || paymentIntent.id,
@@ -102,26 +130,27 @@ export async function POST(request: NextRequest) {
 
       case 'payment_intent.payment_failed': {
         const paymentIntent = event.data.object as Stripe.PaymentIntent;
-        console.warn(`Payment failed for PaymentIntent: ${paymentIntent.id}. Reason: ${paymentIntent.last_payment_error?.message}`);
+        console.warn(`[STRIPE WEBHOOK] Payment failed: ${paymentIntent.id}. Reason: ${paymentIntent.last_payment_error?.message}`);
         break;
       }
 
       case 'checkout.session.completed': {
         const session = event.data.object as Stripe.Checkout.Session;
-        console.log(`Checkout session completed: ${session.id}`);
+        console.log(`[STRIPE WEBHOOK] Checkout session completed: ${session.id}`);
         break;
       }
 
       default:
-        console.log(`Unhandled Stripe event type: ${event.type}`);
+        console.log(`[STRIPE WEBHOOK] Unhandled event type: ${event.type}`);
     }
 
     return NextResponse.json({ received: true });
   } catch (error: any) {
-    console.error('Error processing Stripe webhook:', error);
+    console.error('[STRIPE WEBHOOK] Processing error:', error.message);
     return NextResponse.json(
-      { error: error.message || 'Webhook processing failed' },
+      { error: 'Webhook processing failed' },
       { status: 500 }
     );
   }
 }
+

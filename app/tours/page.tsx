@@ -26,15 +26,25 @@ import {
   Search,
   ArrowLeftRight,
 } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
-import StripePaymentModal, { BookingPaymentDetails } from '@/components/StripePaymentModal';
-import BookingConfirmationModal from '@/components/BookingConfirmationModal';
-import AirportTransferModule, { TransferDirection } from '@/components/AirportTransferModule';
-import DayTourBookingModule from '@/components/DayTourBookingModule';
-import SkiTransferBookingModule from '@/components/SkiTransferBookingModule';
+import type { BookingPaymentDetails } from '@/components/StripePaymentModal';
+import type { TransferDirection } from '@/components/AirportTransferModule';
 import { useLanguage } from '@/context/LanguageContext';
 import { Airport } from '@/lib/airport-pricing';
+
+const StripePaymentModal = dynamic(() => import('@/components/StripePaymentModal'), { ssr: false });
+const BookingConfirmationModal = dynamic(() => import('@/components/BookingConfirmationModal'), { ssr: false });
+const AirportTransferModule = dynamic(() => import('@/components/AirportTransferModule'), {
+  loading: () => <div className="p-8 text-center text-xs text-slate-400">Loading Airport Transfer...</div>,
+});
+const DayTourBookingModule = dynamic(() => import('@/components/DayTourBookingModule'), {
+  loading: () => <div className="p-8 text-center text-xs text-slate-400">Loading Charter Booking...</div>,
+});
+const SkiTransferBookingModule = dynamic(() => import('@/components/SkiTransferBookingModule'), {
+  loading: () => <div className="p-8 text-center text-xs text-slate-400">Loading Ski Transfer...</div>,
+});
 
 type ServiceCategory = 'all' | 'airport' | 'sightseeing' | 'ski';
 
@@ -115,7 +125,7 @@ export default function GrandToursHomePage() {
       reviewCount: 580,
       duration: '45–75 mins',
       highlights: [
-        { ja: '60分無料フライト遅延待機', zh: '60分钟免费航班延误等待', fr: '60 min d\'attente gratuite', es: '60 min espera cortesía', en: '60-Min Flight Delay Buffer' }[lang],
+        { ja: 'フライト遅延¥0・完全無料待機', zh: '航班延误¥0加价・免费灵活守候', fr: 'Attente flexible gratuite — 0 frais retard', es: 'Espera flexible gratis — 0 cargos retraso', en: '100% Free Flexible Wait — No Delay Fees' }[lang],
         { ja: '高速代・空港受入手数料込', zh: '包含高速费与机场接机费', fr: 'Péages & Accueil inclus', es: 'Peajes y bienvenida incl.', en: 'Highway Tolls & Meet & Greet Included' }[lang],
         { ja: 'ロビー名札出迎え', zh: '大堂举牌协助行李', fr: 'Accueil nominatif hall', es: 'Recepción con cartel', en: 'Lobby Name-Board Greeting' }[lang],
       ],

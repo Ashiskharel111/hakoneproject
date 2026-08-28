@@ -29,6 +29,7 @@ import { useLanguage } from '@/context/LanguageContext';
 import StripePaymentModal, { BookingPaymentDetails } from '@/components/StripePaymentModal';
 import BookingConfirmationModal from '@/components/BookingConfirmationModal';
 import GoogleRouteMap from '@/components/GoogleRouteMap';
+import { getTodayJST, getFutureDateJST, isValidEmail, isValidPhone } from '@/lib/date-utils';
 
 export interface DayTourBookingModuleProps {
   initialDestination?: string;
@@ -965,9 +966,7 @@ export default function DayTourBookingModule({
   const [passengers, setPassengers] = useState<number>(3);
   const [travelDate, setTravelDate] = useState<string>(() => {
     if (initialDate) return initialDate;
-    const d = new Date();
-    d.setDate(d.getDate() + 3);
-    return d.toISOString().split('T')[0];
+    return getFutureDateJST(3);
   });
   const [pickupHotel, setPickupHotel] = useState<string>('');
   const [guestName, setGuestName] = useState<string>('');
@@ -1241,6 +1240,36 @@ export default function DayTourBookingModule({
           : lang === 'zh'
           ? '请输入代表乘客姓名与确认单电子邮箱。'
           : 'Please enter the lead guest name and confirmation email.'
+      );
+      return;
+    }
+    if (!isValidEmail(guestEmail)) {
+      setValidationError(
+        lang === 'ja'
+          ? '有効なメールアドレスをご入力ください（例: name@example.com）。'
+          : lang === 'zh'
+          ? '请输入有效的电子邮箱地址（例如: name@example.com）。'
+          : 'Please enter a valid email address (e.g. name@example.com).'
+      );
+      return;
+    }
+    if (guestPhone.trim() && !isValidPhone(guestPhone)) {
+      setValidationError(
+        lang === 'ja'
+          ? '国際電話番号（国番号付き 例: +81 90...）をご入力ください。'
+          : lang === 'zh'
+          ? '请输入包含国家区号的有效联系电话（例如: +81 90...）。'
+          : 'Please enter a valid phone number with country code (e.g. +81 90...).'
+      );
+      return;
+    }
+    if (travelDate < getTodayJST()) {
+      setValidationError(
+        lang === 'ja'
+          ? '乗車日程に過去の日付を選択することはできません。本日以降の日程をご指定ください。'
+          : lang === 'zh'
+          ? '出行日期不能为过去的时间，请选择今天或未来的日期。'
+          : 'Tour date cannot be in the past. Please select today or a future date.'
       );
       return;
     }
@@ -1535,6 +1564,7 @@ export default function DayTourBookingModule({
                     </label>
                     <input
                       type="date"
+                      min={getTodayJST()}
                       value={travelDate}
                       onChange={(e) => setTravelDate(e.target.value)}
                       className="w-full bg-[#F5F7FA] dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none focus:border-[#0068FF]"

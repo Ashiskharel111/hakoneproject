@@ -52,7 +52,7 @@ export default function SiteHeader({
     explore: { ja: '探索', zh: '探索', fr: 'Explorer', es: 'Explorar', en: 'Explore' }[currentLang],
     services: { ja: 'サービス', zh: '服务', fr: 'Services', es: 'Servicios', en: 'Services' }[currentLang],
     airports: { ja: '空港送迎', zh: '机场接送', fr: 'Aéroports', es: 'Aeropuertos', en: 'Airports' }[currentLang],
-    ski: { ja: 'スキー', zh: '滑雪专车', fr: 'Ski 4x4', es: 'Esquí 4x4', en: 'Ski 4WD' }[currentLang],
+    ski: { ja: 'スキー', zh: '滑雪专车', fr: 'Ski', es: 'Esquí', en: 'Ski' }[currentLang],
     blog: { ja: 'ブログ', zh: '专栏', fr: 'Blog', es: 'Blog', en: 'Blog' }[currentLang],
     contact: { ja: 'お問い合わせ', zh: '联系', fr: 'Contact', es: 'Contacto', en: 'Contact' }[currentLang],
   };
@@ -191,15 +191,15 @@ export default function SiteHeader({
 
       {/* ── Mobile drawer ── */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-[100] lg:hidden">
+        <div className="fixed inset-0 z-[100] lg:hidden animate-fade-in">
           {/* Backdrop */}
           <div
-            className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity"
             onClick={() => setIsMobileMenuOpen(false)}
           />
 
           {/* Drawer panel */}
-          <div className="absolute right-0 top-0 bottom-0 w-[85%] max-w-sm bg-white dark:bg-[#0E131F] flex flex-col shadow-2xl transition-colors">
+          <div className="absolute right-0 top-0 bottom-0 w-[85%] max-w-sm bg-white dark:bg-[#0E131F] flex flex-col shadow-2xl transition-transform animate-slide-up">
             {/* Drawer header */}
             <div className="p-4 border-b border-[#E5E8ED] dark:border-slate-800 flex items-center justify-between">
               <Link href="/explore" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2">

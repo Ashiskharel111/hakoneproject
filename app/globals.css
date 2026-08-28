@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -19,7 +18,7 @@
   --success: #00B37E;
   --warning: #FF9500;
   --gold: #C5A059;
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-sans: var(--font-sans, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
 }
 
 .dark {
@@ -67,6 +66,7 @@ body {
   max-width: 100vw;
   overflow-x: hidden;
   position: relative;
+  text-rendering: optimizeLegibility;
 }
 
 /* ========================================
@@ -125,16 +125,120 @@ textarea {
   background: #9CA3AF;
 }
 
-/* Trip.com clean card style */
-.card-hover {
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+/* ========================================
+   SNAPPY GPU-ACCELERATED MICRO-ANIMATIONS
+   ======================================== */
+
+/* Snappy tactile button / interactive press */
+.btn-press,
+button,
+[role="button"] {
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.18s ease,
+              border-color 0.18s ease,
+              color 0.18s ease,
+              opacity 0.18s ease;
+  will-change: transform;
 }
-.card-hover:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+
+.btn-press:active,
+button:active:not(:disabled),
+[role="button"]:active {
+  transform: scale(0.975);
+}
+
+/* Trip.com & Apple-style snappy card lift */
+.card-hover,
+.card-snappy {
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.22s ease;
+  will-change: transform, box-shadow;
+  backface-visibility: hidden;
+}
+
+.card-hover:hover,
+.card-snappy:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px -4px rgba(0, 0, 0, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.04);
+}
+
+.dark .card-hover:hover,
+.dark .card-snappy:hover {
+  box-shadow: 0 12px 28px -4px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(197, 160, 89, 0.15);
+}
+
+/* Snappy tab transition */
+.tab-snappy {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, background-color;
+}
+
+.tab-snappy:active {
+  transform: scale(0.96);
+}
+
+/* Subtle entrance fade & slide animations */
+@keyframes fadeInSubtle {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUpSubtle {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeInSubtle 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-slide-up {
+  animation: slideUpSubtle 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 3s ease-in-out infinite;
 }
 
 /* Ensure no overlay blocks touch events */
 .pointer-events-none {
   pointer-events: none !important;
 }
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+

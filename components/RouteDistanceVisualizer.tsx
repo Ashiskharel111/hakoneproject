@@ -16,8 +16,20 @@ import {
   ArrowRight,
   ExternalLink
 } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import { useLanguage } from '@/context/LanguageContext';
-import GoogleRouteMap from '@/components/GoogleRouteMap';
+
+const GoogleRouteMap = dynamic(() => import('@/components/GoogleRouteMap'), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full min-h-[320px] rounded-2xl bg-[#080B11] flex items-center justify-center text-slate-400">
+      <div className="flex flex-col items-center gap-2">
+        <div className="w-6 h-6 border-2 border-[#C5A059] border-t-transparent rounded-full animate-spin" />
+        <span className="text-xs font-semibold">Loading Map...</span>
+      </div>
+    </div>
+  ),
+});
 
 export interface RouteItem {
   id: string;

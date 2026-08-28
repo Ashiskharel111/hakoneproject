@@ -16,7 +16,12 @@ export interface BookingPaymentDetails {
   destinationTitle: string;
   pickupId?: string;
   pickupAddress?: string;
-  vehicle: 'alphard' | 'granace' | 'hiace';
+  vehicle: 'alphard' | 'granace' | 'hiace' | 'Foreign Large' | 'Wagon';
+  vehicleType?: 'Foreign Large' | 'Wagon';
+  vehicleCount?: number;
+  timeOfDay?: 'Standard' | 'Late Night';
+  nrtGreeter?: boolean;
+  vipMeetCount?: number;
   vehicleName: string;
   passengers: number;
   luggageCount: number;
@@ -77,9 +82,24 @@ function CheckoutForm({
     } else if (paymentIntent && paymentIntent.status === 'succeeded') {
       setIsProcessing(false);
       onSuccess(bookingRef, paymentIntent.id);
-    } else {
+    } else if (paymentIntent && paymentIntent.status === 'processing') {
+      setErrorMessage(
+        lang === 'ja'
+          ? 'お支払いを処理中です。完了次第メールにて予約確認書をお送りいたします。'
+          : lang === 'zh'
+          ? '支付处理中，处理完成后将通过邮件发送预订确认单。'
+          : 'Your payment is processing. We will email your confirmation once completed.'
+      );
       setIsProcessing(false);
-      onSuccess(bookingRef, paymentIntent?.id || bookingRef);
+    } else {
+      setErrorMessage(
+        lang === 'ja'
+          ? '決済を完了できませんでした。お支払い情報をご確認ください。'
+          : lang === 'zh'
+          ? '支付未完成，请核对支付方式后重试。'
+          : 'Payment could not be completed. Please check your payment details.'
+      );
+      setIsProcessing(false);
     }
   };
 
@@ -113,9 +133,24 @@ function CheckoutForm({
     } else if (paymentIntent && paymentIntent.status === 'succeeded') {
       setIsProcessing(false);
       onSuccess(bookingRef, paymentIntent.id);
-    } else {
+    } else if (paymentIntent && paymentIntent.status === 'processing') {
+      setErrorMessage(
+        lang === 'ja'
+          ? 'お支払いを処理中です。完了次第メールにて予約確認書をお送りいたします。'
+          : lang === 'zh'
+          ? '支付处理中，处理完成后将通过邮件发送预订确认单。'
+          : 'Your payment is processing. We will email your confirmation once completed.'
+      );
       setIsProcessing(false);
-      onSuccess(bookingRef, paymentIntent?.id || bookingRef);
+    } else {
+      setErrorMessage(
+        lang === 'ja'
+          ? '決済を完了できませんでした。カード情報をご確認の上もう一度お試しください。'
+          : lang === 'zh'
+          ? '支付未完成，请核对卡片信息后重试。'
+          : 'Payment could not be completed. Please check your details and try again.'
+      );
+      setIsProcessing(false);
     }
   };
 
@@ -374,17 +409,48 @@ export default function StripePaymentModal({
   const [isSandbox, setIsSandbox] = useState<boolean>(false);
   const [isLoadingIntent, setIsLoadingIntent] = useState<boolean>(true);
   const [initError, setInitError] = useState<string | null>(null);
+  const lastPayloadRef = React.useRef<string>('');
 
   useEffect(() => {
     if (!isOpen) {
-      setClientSecret(null);
-      setInitError(null);
+      return;
+    }
+
+    const payloadString = JSON.stringify({
+      bookingType: bookingDetails.bookingType,
+      destinationId: bookingDetails.destinationId,
+      pickupId: bookingDetails.pickupId,
+      vehicle: bookingDetails.vehicle,
+      vehicleType: bookingDetails.vehicleType,
+      vehicleCount: bookingDetails.vehicleCount,
+      timeOfDay: bookingDetails.timeOfDay,
+      nrtGreeter: bookingDetails.nrtGreeter,
+      vipMeetCount: bookingDetails.vipMeetCount,
+      passengers: bookingDetails.passengers,
+      luggageCount: bookingDetails.luggageCount,
+      skiBagCount: bookingDetails.skiBagCount,
+      addSecondVehicle: bookingDetails.addSecondVehicle,
+      travelDate: bookingDetails.travelDate,
+      guestName: bookingDetails.guestName,
+      guestEmail: bookingDetails.guestEmail,
+      guestPhone: bookingDetails.guestPhone,
+      pickupAddress: bookingDetails.pickupAddress,
+      flightNumber: bookingDetails.flightNumber,
+      notes: bookingDetails.notes,
+      amount: bookingDetails.amount,
+      currency: bookingDetails.currency || 'jpy',
+    });
+
+    // If payload hasn't changed and we already have a clientSecret, don't re-fetch
+    if (clientSecret && lastPayloadRef.current === payloadString) {
+      setIsLoadingIntent(false);
       return;
     }
 
     let isMounted = true;
     setIsLoadingIntent(true);
     setInitError(null);
+    lastPayloadRef.current = payloadString;
 
     async function initPaymentIntent() {
       try {
@@ -393,25 +459,7 @@ export default function StripePaymentModal({
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            bookingType: bookingDetails.bookingType,
-            destinationId: bookingDetails.destinationId,
-            pickupId: bookingDetails.pickupId,
-            vehicle: bookingDetails.vehicle,
-            passengers: bookingDetails.passengers,
-            luggageCount: bookingDetails.luggageCount,
-            skiBagCount: bookingDetails.skiBagCount,
-            addSecondVehicle: bookingDetails.addSecondVehicle,
-            travelDate: bookingDetails.travelDate,
-            guestName: bookingDetails.guestName,
-            guestEmail: bookingDetails.guestEmail,
-            guestPhone: bookingDetails.guestPhone,
-            pickupAddress: bookingDetails.pickupAddress,
-            flightNumber: bookingDetails.flightNumber,
-            notes: bookingDetails.notes,
-            amount: bookingDetails.amount,
-            currency: bookingDetails.currency || 'jpy',
-          }),
+          body: payloadString,
         });
 
         const data = await response.json();
@@ -440,7 +488,7 @@ export default function StripePaymentModal({
     return () => {
       isMounted = false;
     };
-  }, [isOpen, bookingDetails]);
+  }, [isOpen, bookingDetails, clientSecret]);
 
   if (!isOpen) return null;
 
