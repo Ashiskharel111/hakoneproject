@@ -67,24 +67,6 @@ export default function ExplorePage() {
   const [selectedFleet, setSelectedFleet] = useState<'hiace' | 'alphard' | 'granace'>('alphard');
   const [fleetPhotoView, setFleetPhotoView] = useState<'exterior' | 'interior' | 'trunk'>('exterior');
 
-  // Render modernized Yahoo! JAPAN News & Auctions portal view on the home landing page
-  if (!isModernViewForced) {
-    return (
-      <div className="min-h-screen bg-[#F4F4F4]">
-        <SiteHeader
-          activePage="home"
-          currentLang={lang}
-          onLanguageChange={(newLang) => {
-            setLang(newLang);
-          }}
-        />
-        <div className="pt-16">
-          <YahooJapanHomeView onSwitchToModernView={() => setIsModernViewForced(true)} />
-        </div>
-      </div>
-    );
-  }
-
   const handleFloatingSearch = (e: React.FormEvent) => {
     e.preventDefault();
     router.push(`/booking?category=${serviceCategory}&from=${fromLocation}&date=${quoteDate}&pax=${quotePax}`);

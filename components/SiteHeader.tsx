@@ -70,7 +70,7 @@ export default function SiteHeader({
   };
 
   const navLinks = [
-    { href: '/explore', label: nav.explore, page: 'home' as const },
+    { href: '/', label: nav.explore, page: 'home' as const },
     { href: '/services', label: nav.services, page: undefined },
     { href: '/tours/airport-transfer', label: nav.airports, page: 'airport' as const },
     { href: '/tours/winter', label: nav.ski, page: 'winter' as const, icon: <Snowflake className="w-3.5 h-3.5" /> },
@@ -85,7 +85,7 @@ export default function SiteHeader({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
 
           {/* Brand */}
-          <Link href="/explore" className="flex items-center gap-2.5 shrink-0">
+          <Link href="/" className="flex items-center gap-2.5 shrink-0">
             <div className="relative h-8 w-20 sm:h-9 sm:w-24">
               <Image
                 src="/images/brand-sklimo-official-logo-250x250.png"
@@ -129,8 +129,8 @@ export default function SiteHeader({
           <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
             
             {/* Dedicated JA View Button (Yahoo Japan Portal Mode) */}
-            <button
-              type="button"
+            <Link
+              href="/"
               onClick={() => onLanguageChange('ja')}
               className={`h-9 px-2.5 sm:px-3 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer border ${
                 currentLang === 'ja'
@@ -143,7 +143,7 @@ export default function SiteHeader({
                 JA
               </span>
               <span className="hidden sm:inline">VIEW</span>
-            </button>
+            </Link>
 
             {/* Desktop-Only Crescent Moon Dark Mode Toggle (h-9) */}
             <button
@@ -219,7 +219,7 @@ export default function SiteHeader({
           <div className="absolute right-0 top-0 bottom-0 w-[85%] max-w-sm bg-white dark:bg-[#0E131F] flex flex-col shadow-2xl transition-transform animate-slide-up">
             {/* Drawer header */}
             <div className="p-4 border-b border-[#E5E8ED] dark:border-slate-800 flex items-center justify-between">
-              <Link href="/explore" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2">
+              <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2">
                 <div className="relative h-7 w-20">
                   <Image src="/images/brand-sklimo-official-logo-250x250.png" alt="SK Limo" fill className="object-contain dark:brightness-110" />
                 </div>
