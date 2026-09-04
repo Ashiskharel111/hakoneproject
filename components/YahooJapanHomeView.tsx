@@ -32,6 +32,7 @@ import {
   Flame,
   Tag,
   Eye,
+  Zap,
 } from 'lucide-react';
 
 interface YahooJapanHomeViewProps {
@@ -54,7 +55,7 @@ export default function YahooJapanHomeView({ onSwitchToModernView }: YahooJapanH
     { label: '白馬スキー送迎', href: '/tours/winter' },
     { label: 'ニセコ貸切ハイヤー', href: '/tours/winter' },
     { label: 'アルファード指定', href: '/services' },
-    { label: 'グランエース4WD', href: '/services' },
+    { label: 'ハイヤー見積もり.com', href: 'http://hiremitsumori.com' },
   ];
 
   const newsData = {
@@ -69,6 +70,15 @@ export default function YahooJapanHomeView({ onSwitchToModernView }: YahooJapanH
       },
       {
         id: 2,
+        title: '【新登場】ハイヤー見積もり.com（http://hiremitsumori.com）自動料金シミュレーター公開',
+        tag: '新機能',
+        date: '9/4(水) 14:00',
+        href: 'http://hiremitsumori.com',
+        isHot: true,
+        isExternal: true,
+      },
+      {
+        id: 3,
         title: '秋の箱根・芦ノ湖・大涌谷 1日満喫プライベートチャーター特集（アルファード確約）',
         tag: '特集',
         date: '9/4(水) 12:15',
@@ -76,25 +86,18 @@ export default function YahooJapanHomeView({ onSwitchToModernView }: YahooJapanH
         isHot: true,
       },
       {
-        id: 3,
+        id: 4,
         title: '冬季スキートランスファー（白馬・志賀高原・野沢温泉）グランエース4WD雪道装備完了',
         tag: '速報',
         date: '9/3(火) 18:00',
         href: '/tours/winter',
       },
       {
-        id: 4,
+        id: 5,
         title: '国土交通省許可 緑ナンバー運行・専任ドライバーによる24時間運行管理体制を強化',
         tag: '安心',
         date: '9/3(火) 10:20',
         href: '/services',
-      },
-      {
-        id: 5,
-        title: '訪日外国人VIP・企業役員向けバイリンガルハイヤーサービスのご案内',
-        tag: '企業',
-        date: '9/2(月) 16:45',
-        href: '/contact',
       },
       {
         id: 6,
@@ -276,24 +279,41 @@ export default function YahooJapanHomeView({ onSwitchToModernView }: YahooJapanH
   return (
     <div className="min-h-screen bg-[#F4F4F4] text-[#333333] font-sans antialiased text-[13px] leading-relaxed pb-12">
       
-      {/* ── CSS for the Flashing Red Square Book Now Banner ── */}
+      {/* ── CSS for Car Lights Animation (Flashing Red Taillight + Blinking Yellow Turn Signal) ── */}
       <style jsx>{`
-        @keyframes flashRedGlow {
+        @keyframes flashRedBrakeGlow {
           0%, 100% {
-            background-color: #CC0000;
-            border-color: #FF2222;
-            box-shadow: 0 0 20px rgba(204, 0, 0, 0.7), inset 0 0 10px rgba(255, 255, 255, 0.4);
-            transform: scale(1);
+            background: linear-gradient(135deg, #B30000 0%, #8A0000 100%);
+            border-color: #FF3333;
+            box-shadow: 0 0 16px rgba(220, 0, 0, 0.75), inset 0 0 12px rgba(255, 80, 80, 0.35);
           }
           50% {
-            background-color: #FF0000;
-            border-color: #FFEE00;
-            box-shadow: 0 0 35px rgba(255, 0, 0, 0.95), 0 0 10px rgba(255, 238, 0, 0.8), inset 0 0 15px rgba(255, 255, 255, 0.8);
-            transform: scale(1.02);
+            background: linear-gradient(135deg, #FF0000 0%, #CC0000 100%);
+            border-color: #FFAAAA;
+            box-shadow: 0 0 35px rgba(255, 0, 0, 0.95), 0 0 12px rgba(255, 100, 100, 0.8), inset 0 0 16px rgba(255, 255, 255, 0.6);
           }
         }
-        .flashing-red-banner {
-          animation: flashRedGlow 1.2s infinite ease-in-out;
+        @keyframes carTurnSignalBlinker {
+          0%, 35% {
+            background-color: #FFB800;
+            border-color: #FFEE55;
+            box-shadow: 0 0 25px rgba(255, 184, 0, 1), 0 0 12px rgba(255, 238, 85, 0.95), inset 0 0 8px rgba(255, 255, 255, 0.9);
+            opacity: 1;
+            transform: scale(1.05);
+          }
+          45%, 100% {
+            background-color: #4A3300;
+            border-color: #664400;
+            box-shadow: 0 0 4px rgba(74, 51, 0, 0.3);
+            opacity: 0.25;
+            transform: scale(1);
+          }
+        }
+        .flashing-red-car-light {
+          animation: flashRedBrakeGlow 1.2s infinite ease-in-out;
+        }
+        .blinking-yellow-blip {
+          animation: carTurnSignalBlinker 0.85s infinite ease-in-out;
         }
       `}</style>
 
@@ -308,6 +328,10 @@ export default function YahooJapanHomeView({ onSwitchToModernView }: YahooJapanH
             <Link href="/tours" className="text-[#0033CC] font-bold hover:underline">
               ツアー・送迎ホーム (sk.limo/tours)
             </Link>
+            <span>|</span>
+            <a href="http://hiremitsumori.com" target="_blank" rel="noopener noreferrer" className="text-[#CC0000] font-bold hover:underline">
+              新ページ：ハイヤー見積もり.com
+            </a>
             <span>|</span>
             <Link href="/tours/airport-transfer" className="text-[#0033CC] hover:underline">空港定額運賃表</Link>
             <span>|</span>
@@ -332,7 +356,7 @@ export default function YahooJapanHomeView({ onSwitchToModernView }: YahooJapanH
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             {/* Logo */}
             <div className="flex items-center gap-3">
-              <Link href="/explore" className="flex items-center gap-2">
+              <Link href="/" className="flex items-center gap-2">
                 <span className="text-3xl font-black tracking-tighter text-[#CC0000] font-serif">
                   SK! JAPAN
                 </span>
@@ -383,9 +407,15 @@ export default function YahooJapanHomeView({ onSwitchToModernView }: YahooJapanH
                 <span className="font-bold text-[#333333]">注目のキーワード:</span>
                 {quickKeywords.map((kw, idx) => (
                   <React.Fragment key={kw.label}>
-                    <Link href={kw.href} className="text-[#0033CC] hover:underline">
-                      {kw.label}
-                    </Link>
+                    {kw.href.startsWith('http') ? (
+                      <a href={kw.href} target="_blank" rel="noopener noreferrer" className="text-[#CC0000] font-bold hover:underline">
+                        {kw.label}
+                      </a>
+                    ) : (
+                      <Link href={kw.href} className="text-[#0033CC] hover:underline">
+                        {kw.label}
+                      </Link>
+                    )}
                     {idx < quickKeywords.length - 1 && <span className="text-[#CCCCCC]">/</span>}
                   </React.Fragment>
                 ))}
@@ -413,52 +443,97 @@ export default function YahooJapanHomeView({ onSwitchToModernView }: YahooJapanH
       {/* ── Main Container ── */}
       <main className="max-w-[1200px] mx-auto px-4 mt-3 space-y-3.5">
         
+        {/* ══════════════════════════════════════════════════════════════════════════
+            🚨 DUAL CAR-LIGHT CONSOLE:
+            • LEFT: Flashing Red 'BOOK NOW' Light (links to sk.limo/tours)
+            • RIGHT: Red Car-Body Box with Blinking Yellow Turn Signal (links to http://hiremitsumori.com)
+        ══════════════════════════════════════════════════════════════════════════ */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+          
+          {/* ── 1. LEFT BOX: Flashing Red 'BOOK NOW' Car Taillight Box ── */}
+          <Link
+            href="/tours"
+            className="flashing-red-car-light block rounded-xs p-4 sm:p-5 text-white text-center border-3 transition-transform cursor-pointer group shadow-2xl relative overflow-hidden"
+          >
+            <div className="space-y-2">
+              <div className="flex items-center justify-center gap-1.5 text-[11px] font-black tracking-widest text-[#FFEE00] uppercase">
+                <Flame className="w-4 h-4 animate-bounce" />
+                <span>公式オンライン予約（即時空車確認）</span>
+                <Flame className="w-4 h-4 animate-bounce" />
+              </div>
+
+              <h2 className="text-3xl sm:text-4xl font-black tracking-tighter text-white drop-shadow-md">
+                BOOK NOW
+              </h2>
+
+              <div className="bg-black/30 backdrop-blur-xs rounded py-1 px-2 border border-white/40">
+                <span className="block text-xs sm:text-sm font-extrabold text-white">
+                  【今すぐオンライン予約・空車確認】
+                </span>
+                <span className="block text-[10px] text-[#FFEE00] font-bold mt-0.5">
+                  羽田・成田空港送迎／箱根・富士山観光／白馬スキー送迎
+                </span>
+              </div>
+
+              <div className="pt-1 flex items-center justify-center gap-1.5 text-xs font-black text-white bg-black/40 py-1.5 rounded border border-white/30 group-hover:bg-black/60 transition-colors">
+                <span>sk.limo/tours 予約画面へ進む</span>
+                <ArrowRight className="w-4 h-4 stroke-[3]" />
+              </div>
+            </div>
+          </Link>
+
+          {/* ── 2. RIGHT BOX: Red Car Body with Blinking Yellow Turn Indicator Light ── */}
+          <a
+            href="http://hiremitsumori.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flashing-red-car-light block rounded-xs p-4 sm:p-5 text-white text-center border-3 transition-transform cursor-pointer group shadow-2xl relative overflow-hidden"
+          >
+            <div className="space-y-2">
+              <div className="flex items-center justify-center gap-2 text-[11px] font-black tracking-widest text-[#FFEE00] uppercase">
+                {/* 🚗 Small Yellow Blinking Car Turn Signal Light (blips like turn indicator) */}
+                <span className="blinking-yellow-blip w-4 h-4 rounded-xs border-2 border-[#FFEE55] inline-block shadow-md" />
+                <span>ハイヤー見積もり.com 新登場</span>
+                <span className="blinking-yellow-blip w-4 h-4 rounded-xs border-2 border-[#FFEE55] inline-block shadow-md" />
+              </div>
+
+              <div className="flex items-center justify-center gap-3">
+                <h2 className="text-2xl sm:text-3xl font-black tracking-tighter text-white drop-shadow-md">
+                  HIRE MITSUMORI
+                </h2>
+                {/* Small Yellow Blinker Box embedded in title */}
+                <div className="blinking-yellow-blip px-2 py-0.5 rounded-xs border-2 border-[#FFEE55] text-black font-black text-[10px] tracking-tighter flex items-center gap-1">
+                  <Zap className="w-3 h-3 fill-black" />
+                  <span>TURN ➔</span>
+                </div>
+              </div>
+
+              <div className="bg-black/30 backdrop-blur-xs rounded py-1 px-2 border border-white/40">
+                <span className="block text-xs sm:text-sm font-extrabold text-white">
+                  【ハイヤー見積もり.com 公式ポータル】
+                </span>
+                <span className="block text-[10px] text-[#FFEE00] font-bold mt-0.5">
+                  全国ハイヤー・送迎料金 自動シミュレーター＆無料お見積り
+                </span>
+              </div>
+
+              <div className="pt-1 flex items-center justify-center gap-1.5 text-xs font-black text-white bg-black/40 py-1.5 rounded border border-white/30 group-hover:bg-black/60 transition-colors">
+                <span>http://hiremitsumori.com を開く</span>
+                <ExternalLink className="w-4 h-4 stroke-[3]" />
+              </div>
+            </div>
+          </a>
+
+        </div>
+
         {/* ── 3-Column Classic Yahoo! JAPAN Portal Layout ── */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5">
 
           {/* ═══════════════════════════════════════════════════════
               LEFT COLUMN (col-span-4):
-              🚨 TOP-LEFT SQUARED FLASHING RED BOOK NOW BANNER
-              + Service Directory + Fleet Specs
+              Directory + Fleet Specs
           ═══════════════════════════════════════════════════════ */}
           <aside className="lg:col-span-4 space-y-3.5">
-            
-            {/* ══════════════════════════════════════════════════════════════
-                🚨 SQUARED FLASHING RED 'BOOK NOW' BANNER (USER SPECIFIED)
-                Takes user to /tours (the landing page)
-            ══════════════════════════════════════════════════════════════ */}
-            <div className="w-full">
-              <Link
-                href="/tours"
-                className="flashing-red-banner block w-full rounded-sm p-4 sm:p-5 text-white text-center border-4 transition-transform cursor-pointer group shadow-2xl relative overflow-hidden"
-              >
-                <div className="space-y-2">
-                  <div className="flex items-center justify-center gap-1.5 text-[11px] font-black tracking-widest text-[#FFEE00] uppercase">
-                    <Flame className="w-4 h-4 animate-bounce" />
-                    <span>リアルタイム即時予約 受付中</span>
-                    <Flame className="w-4 h-4 animate-bounce" />
-                  </div>
-
-                  <h2 className="text-3xl sm:text-4xl font-black tracking-tighter text-white drop-shadow-md">
-                    BOOK NOW
-                  </h2>
-
-                  <div className="bg-white/20 backdrop-blur-xs rounded py-1 px-2 border border-white/40">
-                    <span className="block text-xs sm:text-sm font-extrabold text-white">
-                      【今すぐオンライン予約・空車確認】
-                    </span>
-                    <span className="block text-[10px] text-[#FFEE00] font-bold mt-0.5">
-                      羽田・成田空港 / 箱根富士山観光 / 白馬スキー
-                    </span>
-                  </div>
-
-                  <div className="pt-1 flex items-center justify-center gap-1 text-xs font-black text-white bg-black/30 py-1.5 rounded border border-white/20 group-hover:bg-black/50 transition-colors">
-                    <span>sk.limo/tours 予約画面へ進む</span>
-                    <ArrowRight className="w-4 h-4 stroke-[3]" />
-                  </div>
-                </div>
-              </Link>
-            </div>
 
             {/* Category Directory Box (Yahoo style) */}
             <div className="bg-white border border-[#DCDCDC] rounded-xs shadow-2xs">
@@ -469,6 +544,15 @@ export default function YahooJapanHomeView({ onSwitchToModernView }: YahooJapanH
                 </Link>
               </div>
               <ul className="divide-y divide-[#EEEEEE] text-[12px]">
+                <li>
+                  <a href="http://hiremitsumori.com" target="_blank" rel="noopener noreferrer" className="p-2.5 flex items-center justify-between hover:bg-[#FFF8E7] hover:text-[#CC0000] group transition-colors bg-[#FFFDF0]">
+                    <span className="flex items-center gap-2 font-bold text-[#CC0000] group-hover:underline">
+                      <span className="blinking-yellow-blip w-2.5 h-2.5 rounded-xs border border-amber-500 inline-block shrink-0" />
+                      <span>ハイヤー見積もり.com (新サイト)</span>
+                    </span>
+                    <span className="text-[10px] bg-[#CC0000] text-white px-1.5 py-0.2 rounded font-bold">NEW</span>
+                  </a>
+                </li>
                 <li>
                   <Link href="/tours/airport-transfer" className="p-2.5 flex items-center justify-between hover:bg-[#F9FAFB] hover:text-[#CC0000] group transition-colors">
                     <span className="flex items-center gap-2 font-bold text-[#0033CC] group-hover:text-[#CC0000]">
@@ -645,12 +729,24 @@ export default function YahooJapanHomeView({ onSwitchToModernView }: YahooJapanH
                     <li key={item.id} className="flex items-start justify-between gap-2 group">
                       <div className="flex items-start gap-2 min-w-0">
                         <span className="text-[#CC0000] font-bold select-none">{idx + 1}.</span>
-                        <Link
-                          href={item.href}
-                          className="text-[#0033CC] group-hover:text-[#CC0000] group-hover:underline font-medium truncate"
-                        >
-                          {item.title}
-                        </Link>
+                        {item.href.startsWith('http') ? (
+                          <a
+                            href={item.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-[#CC0000] group-hover:underline font-bold truncate flex items-center gap-1"
+                          >
+                            <span>{item.title}</span>
+                            <ExternalLink className="w-3 h-3 shrink-0" />
+                          </a>
+                        ) : (
+                          <Link
+                            href={item.href}
+                            className="text-[#0033CC] group-hover:text-[#CC0000] group-hover:underline font-medium truncate"
+                          >
+                            {item.title}
+                          </Link>
+                        )}
                         {item.isHot && (
                           <span className="text-[10px] bg-[#CC0000] text-white px-1 font-bold rounded-xs shrink-0">
                             NEW
@@ -665,7 +761,7 @@ export default function YahooJapanHomeView({ onSwitchToModernView }: YahooJapanH
                 </ul>
 
                 <div className="pt-2 border-t border-[#EEEEEE] flex items-center justify-between text-[11px]">
-                  <span className="text-[#666666]">最終更新: 2026年9月4日 16:30 JST</span>
+                  <span className="text-[#666666]">最終更新: 2026年9月4日 16:40 JST</span>
                   <Link href="/tours" className="text-[#0033CC] font-bold hover:underline flex items-center gap-1">
                     <span>オンライン空車一覧を見る ＞</span>
                   </Link>
