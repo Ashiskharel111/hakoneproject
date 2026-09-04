@@ -125,9 +125,26 @@ export default function SiteHeader({
             ))}
           </nav>
 
-          {/* Right actions: Desktop Theme Moon + Language + Book Now Gold Button + WhatsApp - Evenly Spaced & Same Height */}
-          <div className="flex items-center gap-2.5 shrink-0">
+          {/* Right actions: JA View + Desktop Theme Moon + Language + Book Now Gold Button + WhatsApp */}
+          <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
             
+            {/* Dedicated JA View Button (Yahoo Japan Portal Mode) */}
+            <button
+              type="button"
+              onClick={() => onLanguageChange('ja')}
+              className={`h-9 px-2.5 sm:px-3 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer border ${
+                currentLang === 'ja'
+                  ? 'bg-[#CC0000] text-white border-[#CC0000] shadow-sm shadow-[#CC0000]/20'
+                  : 'bg-white dark:bg-[#0E131F] text-[#CC0000] border-[#CC0000]/40 hover:bg-[#CC0000]/10'
+              }`}
+              title="JA View (Yahoo! JAPAN風 日本語ポータル表示)"
+            >
+              <span className={`text-[10px] px-1 py-0.2 rounded-xs font-bold ${currentLang === 'ja' ? 'bg-white text-[#CC0000]' : 'bg-[#CC0000] text-white'}`}>
+                JA
+              </span>
+              <span className="hidden sm:inline">VIEW</span>
+            </button>
+
             {/* Desktop-Only Crescent Moon Dark Mode Toggle (h-9) */}
             <button
               type="button"
@@ -238,11 +255,33 @@ export default function SiteHeader({
                 </Link>
               ))}
 
+              {/* Mobile JA Portal Mode Toggle Button */}
+              <button
+                type="button"
+                onClick={() => {
+                  onLanguageChange('ja');
+                  setIsMobileMenuOpen(false);
+                }}
+                className={`w-full flex items-center justify-between p-3 rounded-xl border text-sm font-bold transition-colors cursor-pointer mt-3 ${
+                  currentLang === 'ja'
+                    ? 'bg-[#CC0000] text-white border-[#CC0000]'
+                    : 'bg-white dark:bg-[#0E131F] text-[#CC0000] border-[#CC0000]/40'
+                }`}
+              >
+                <span className="flex items-center gap-2">
+                  <span className={`text-[10px] px-1.5 py-0.5 rounded font-black ${currentLang === 'ja' ? 'bg-white text-[#CC0000]' : 'bg-[#CC0000] text-white'}`}>
+                    JA
+                  </span>
+                  <span>Yahoo! JAPAN風 日本語ポータル表示</span>
+                </span>
+                <ChevronRight className="w-4 h-4 opacity-70" />
+              </button>
+
               {/* Mobile Book Now Link */}
               <Link
                 href="/booking"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="w-full flex items-center justify-center p-3 rounded-xl bg-[#C5A059] text-[#0A0D14] font-extrabold text-sm uppercase tracking-wider shadow-sm mt-3"
+                className="w-full flex items-center justify-center p-3 rounded-xl bg-[#C5A059] text-[#0A0D14] font-extrabold text-sm uppercase tracking-wider shadow-sm mt-2"
               >
                 <span>{ui.bookNow}</span>
               </Link>

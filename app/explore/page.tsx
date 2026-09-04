@@ -29,6 +29,7 @@ import {
 import dynamic from 'next/dynamic';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
+import YahooJapanHomeView from '@/components/YahooJapanHomeView';
 import { useLanguage } from '@/context/LanguageContext';
 
 const RouteDistanceVisualizer = dynamic(() => import('@/components/RouteDistanceVisualizer'), {
@@ -43,7 +44,8 @@ const RouteDistanceVisualizer = dynamic(() => import('@/components/RouteDistance
 });
 
 export default function ExplorePage() {
-  const [lang] = useLanguage();
+  const [lang, setLang] = useLanguage();
+  const [isModernViewForced, setIsModernViewForced] = useState(false);
   const router = useRouter();
 
   // Floating Quick Quote State (RydAgent inspired)
@@ -64,6 +66,27 @@ export default function ExplorePage() {
   // Fleet View Switcher
   const [selectedFleet, setSelectedFleet] = useState<'hiace' | 'alphard' | 'granace'>('alphard');
   const [fleetPhotoView, setFleetPhotoView] = useState<'exterior' | 'interior' | 'trunk'>('exterior');
+
+  // If in Japanese mode and not forced to modern view, render classic Yahoo! JAPAN portal view
+  if (lang === 'ja' && !isModernViewForced) {
+    return (
+      <div className="min-h-screen bg-[#F4F4F4]">
+        <SiteHeader
+          activePage="home"
+          currentLang={lang}
+          onLanguageChange={(newLang) => {
+            if (newLang !== 'ja') {
+              setIsModernViewForced(false);
+            }
+            setLang(newLang);
+          }}
+        />
+        <div className="pt-16">
+          <YahooJapanHomeView onSwitchToModernView={() => setIsModernViewForced(true)} />
+        </div>
+      </div>
+    );
+  }
 
   const handleFloatingSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -320,12 +343,35 @@ export default function ExplorePage() {
 
   return (
     <div className="min-h-screen bg-[#FAF8F4] dark:bg-[#080B11] text-[#1D1A16] dark:text-[#F1F5F9] transition-colors duration-200">
-      <SiteHeader activePage="home" />
+      <SiteHeader
+        activePage="home"
+        currentLang={lang}
+        onLanguageChange={(newLang) => {
+          if (newLang === 'ja') {
+            setIsModernViewForced(false);
+          }
+          setLang(newLang);
+        }}
+      />
+
+      {/* If Japanese language is active and in modern view, provide top switch banner back to Yahoo Japan view */}
+      {lang === 'ja' && isModernViewForced && (
+        <div className="fixed top-16 left-0 right-0 z-40 bg-[#CC0000] text-white py-1.5 px-4 text-center text-xs font-bold shadow-md flex items-center justify-center gap-2">
+          <span>🇯🇵 現在【グローバルモダン表示】で表示中</span>
+          <button
+            type="button"
+            onClick={() => setIsModernViewForced(false)}
+            className="bg-white text-[#CC0000] px-2.5 py-0.5 rounded text-[11px] font-black hover:bg-slate-100 transition-colors cursor-pointer"
+          >
+            Yahoo! JAPAN風 日本語ポータル表示に切り替える ＞
+          </button>
+        </div>
+      )}
 
       {/* ═════════════════════════════════════════════════════════════════
           1. CINEMATIC HERO SECTION
       ═════════════════════════════════════════════════════════════════ */}
-      <section className="relative flex min-h-[90svh] items-center justify-center overflow-hidden pt-16 pb-20">
+      <section className={`relative flex min-h-[90svh] items-center justify-center overflow-hidden pb-20 ${lang === 'ja' && isModernViewForced ? 'pt-24' : 'pt-16'}`}>
         
         {/* Background Photorealistic Image */}
         <div className="absolute inset-0 z-0">
