@@ -279,20 +279,37 @@ export default function YahooJapanHomeView({ onSwitchToModernView }: YahooJapanH
   return (
     <div className="min-h-screen bg-[#F4F4F4] text-[#333333] font-sans antialiased text-[13px] leading-relaxed pb-12">
       
-      {/* ── CSS for Car Lights Animation (Flashing Red Taillight + Blinking Yellow Turn Signal) ── */}
+      {/* ── CSS for Car Lights Animation (Distinct Red Tones + Blinking Yellow Turn Signal) ── */}
       <style jsx>{`
-        @keyframes flashRedBrakeGlow {
+        /* 🚨 Left Box & Button: High-Intensity Neon Ruby / Scarlet Red Flash Tone */
+        @keyframes flashBookNowRubyTone {
           0%, 100% {
-            background: linear-gradient(135deg, #B30000 0%, #8A0000 100%);
-            border-color: #FF3333;
-            box-shadow: 0 0 16px rgba(220, 0, 0, 0.75), inset 0 0 12px rgba(255, 80, 80, 0.35);
+            background: linear-gradient(135deg, #B80028 0%, #7A0015 100%);
+            border-color: #FF3B62;
+            box-shadow: 0 0 18px rgba(255, 20, 60, 0.8), inset 0 0 12px rgba(255, 100, 130, 0.4);
           }
           50% {
-            background: linear-gradient(135deg, #FF0000 0%, #CC0000 100%);
-            border-color: #FFAAAA;
-            box-shadow: 0 0 35px rgba(255, 0, 0, 0.95), 0 0 12px rgba(255, 100, 100, 0.8), inset 0 0 16px rgba(255, 255, 255, 0.6);
+            background: linear-gradient(135deg, #FF1443 0%, #CC0029 100%);
+            border-color: #FFB3C2;
+            box-shadow: 0 0 40px rgba(255, 20, 70, 1), 0 0 16px rgba(255, 80, 120, 0.9), inset 0 0 18px rgba(255, 255, 255, 0.7);
           }
         }
+
+        /* 🚨 Right Box: Deep Automotive Cherry / Carmine Red Tone */
+        @keyframes flashCherryTaillightTone {
+          0%, 100% {
+            background: linear-gradient(135deg, #8B0000 0%, #540000 100%);
+            border-color: #CC0000;
+            box-shadow: 0 0 16px rgba(180, 0, 0, 0.7), inset 0 0 10px rgba(255, 60, 60, 0.3);
+          }
+          50% {
+            background: linear-gradient(135deg, #D40000 0%, #9E0000 100%);
+            border-color: #FF8888;
+            box-shadow: 0 0 32px rgba(220, 0, 0, 0.9), 0 0 12px rgba(255, 60, 60, 0.8), inset 0 0 14px rgba(255, 220, 220, 0.5);
+          }
+        }
+
+        /* 🚗 Yellow Car Turn Indicator Light (Blinks like vehicle about to turn) */
         @keyframes carTurnSignalBlinker {
           0%, 35% {
             background-color: #FFB800;
@@ -309,11 +326,32 @@ export default function YahooJapanHomeView({ onSwitchToModernView }: YahooJapanH
             transform: scale(1);
           }
         }
-        .flashing-red-car-light {
-          animation: flashRedBrakeGlow 1.2s infinite ease-in-out;
+
+        /* Inner Book Now Button Flash */
+        @keyframes flashRubyButtonTone {
+          0%, 100% {
+            background-color: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+          }
+          50% {
+            background-color: rgba(255, 255, 255, 0.35);
+            border-color: #FFFFFF;
+            box-shadow: 0 0 18px rgba(255, 255, 255, 0.6), inset 0 0 8px rgba(255, 255, 255, 0.4);
+          }
+        }
+
+        .flashing-booknow-ruby {
+          animation: flashBookNowRubyTone 1.1s infinite ease-in-out;
+        }
+        .flashing-cherry-car-light {
+          animation: flashCherryTaillightTone 1.35s infinite ease-in-out;
         }
         .blinking-yellow-blip {
           animation: carTurnSignalBlinker 0.85s infinite ease-in-out;
+        }
+        .flashing-ruby-inner-btn {
+          animation: flashRubyButtonTone 1.1s infinite ease-in-out;
         }
       `}</style>
 
@@ -445,15 +483,15 @@ export default function YahooJapanHomeView({ onSwitchToModernView }: YahooJapanH
         
         {/* ══════════════════════════════════════════════════════════════════════════
             🚨 DUAL CAR-LIGHT CONSOLE:
-            • LEFT: Flashing Red 'BOOK NOW' Light (links to sk.limo/tours)
-            • RIGHT: Red Car-Body Box with Blinking Yellow Turn Signal (links to http://hiremitsumori.com)
+            • LEFT: Flashing Ruby/Scarlet Red 'BOOK NOW' Light (links to sk.limo/tours)
+            • RIGHT: Flashing Deep Cherry Red Car-Body Box with Blinking Yellow Turn Signal (links to http://hiremitsumori.com)
         ══════════════════════════════════════════════════════════════════════════ */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
           
-          {/* ── 1. LEFT BOX: Flashing Red 'BOOK NOW' Car Taillight Box ── */}
+          {/* ── 1. LEFT BOX: Flashing Ruby-Red 'BOOK NOW' Car Taillight Box ── */}
           <Link
             href="/tours"
-            className="flashing-red-car-light block rounded-xs p-4 sm:p-5 text-white text-center border-3 transition-transform cursor-pointer group shadow-2xl relative overflow-hidden"
+            className="flashing-booknow-ruby block rounded-xs p-4 sm:p-5 text-white text-center border-3 transition-transform cursor-pointer group shadow-2xl relative overflow-hidden"
           >
             <div className="space-y-2">
               <div className="flex items-center justify-center gap-1.5 text-[11px] font-black tracking-widest text-[#FFEE00] uppercase">
@@ -475,19 +513,20 @@ export default function YahooJapanHomeView({ onSwitchToModernView }: YahooJapanH
                 </span>
               </div>
 
-              <div className="pt-1 flex items-center justify-center gap-1.5 text-xs font-black text-white bg-black/40 py-1.5 rounded border border-white/30 group-hover:bg-black/60 transition-colors">
+              {/* Flashing Ruby Tone Action Button */}
+              <div className="flashing-ruby-inner-btn pt-1 flex items-center justify-center gap-1.5 text-xs font-black text-white py-1.5 rounded border border-white/40 group-hover:bg-white/30 transition-colors">
                 <span>sk.limo/tours 予約画面へ進む</span>
                 <ArrowRight className="w-4 h-4 stroke-[3]" />
               </div>
             </div>
           </Link>
 
-          {/* ── 2. RIGHT BOX: Red Car Body with Blinking Yellow Turn Indicator Light ── */}
+          {/* ── 2. RIGHT BOX: Deep Cherry Red Car Body with Blinking Yellow Turn Indicator Light ── */}
           <a
             href="http://hiremitsumori.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="flashing-red-car-light block rounded-xs p-4 sm:p-5 text-white text-center border-3 transition-transform cursor-pointer group shadow-2xl relative overflow-hidden"
+            className="flashing-cherry-car-light block rounded-xs p-4 sm:p-5 text-white text-center border-3 transition-transform cursor-pointer group shadow-2xl relative overflow-hidden"
           >
             <div className="space-y-2">
               <div className="flex items-center justify-center gap-2 text-[11px] font-black tracking-widest text-[#FFEE00] uppercase">
