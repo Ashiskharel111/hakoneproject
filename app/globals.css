@@ -230,6 +230,86 @@ button:active:not(:disabled),
   pointer-events: none !important;
 }
 
+/* ==========================================================================
+   🚨 AUTOMOTIVE LIGHTING & PORTAL ANIMATIONS (Yahoo Portal & Car Console)
+   ========================================================================== */
+
+/* 1. Left "BOOK NOW" Box: Distinct Vibrant Ruby/Scarlet Red Pulsing Flash */
+@keyframes flashBookNowRuby {
+  0%, 100% {
+    background: linear-gradient(135deg, #B91C1C 0%, #7F1D1D 100%);
+    border-color: #EF4444;
+    box-shadow: 0 0 14px rgba(220, 38, 38, 0.6), inset 0 0 10px rgba(254, 202, 202, 0.2);
+    transform: scale(1);
+  }
+  50% {
+    background: linear-gradient(135deg, #FF1A4B 0%, #DC2626 100%);
+    border-color: #FECACA;
+    box-shadow: 0 0 32px rgba(255, 26, 75, 0.95), 0 0 12px rgba(254, 202, 202, 0.8), inset 0 0 14px rgba(255, 255, 255, 0.5);
+    transform: scale(1.012);
+  }
+}
+
+/* Inner Book Now CTA Button Flash */
+@keyframes flashBookNowButton {
+  0%, 100% {
+    background-color: rgba(0, 0, 0, 0.35);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.2);
+  }
+  50% {
+    background-color: rgba(255, 255, 255, 0.25);
+    border-color: #FFFFFF;
+    box-shadow: 0 0 16px rgba(255, 255, 255, 0.6), inset 0 0 8px rgba(255, 255, 255, 0.4);
+  }
+}
+
+/* 2. Right Box: Deep Automotive Cherry Red Taillight Body */
+@keyframes flashCherryTaillight {
+  0%, 100% {
+    background: linear-gradient(135deg, #7F1D1D 0%, #450A0A 100%);
+    border-color: #B91C1C;
+    box-shadow: 0 0 12px rgba(185, 28, 28, 0.5), inset 0 0 8px rgba(254, 202, 202, 0.15);
+  }
+  50% {
+    background: linear-gradient(135deg, #991B1B 0%, #5F0E0E 100%);
+    border-color: #F87171;
+    box-shadow: 0 0 24px rgba(220, 38, 38, 0.75), inset 0 0 10px rgba(255, 255, 255, 0.25);
+  }
+}
+
+/* 3. Mitsumori Gentle Yellow Turn Signal Indicator (Soft, Eye-Friendly Amber Breathe) */
+@keyframes gentleYellowPulse {
+  0%, 100% {
+    background-color: #D97706;
+    border-color: #F59E0B;
+    box-shadow: 0 0 6px rgba(245, 158, 11, 0.35);
+    opacity: 0.75;
+  }
+  50% {
+    background-color: #FBBF24;
+    border-color: #FDE68A;
+    box-shadow: 0 0 12px rgba(251, 191, 36, 0.65);
+    opacity: 0.95;
+  }
+}
+
+.flashing-booknow-ruby {
+  animation: flashBookNowRuby 1.4s infinite ease-in-out !important;
+}
+
+.flashing-booknow-btn {
+  animation: flashBookNowButton 1.4s infinite ease-in-out !important;
+}
+
+.flashing-cherry-car-light {
+  animation: flashCherryTaillight 1.8s infinite ease-in-out !important;
+}
+
+.gentle-yellow-blip {
+  animation: gentleYellowPulse 2.4s infinite ease-in-out !important;
+}
+
 /* Reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
   *,

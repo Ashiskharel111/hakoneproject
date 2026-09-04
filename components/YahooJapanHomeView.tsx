@@ -279,82 +279,6 @@ export default function YahooJapanHomeView({ onSwitchToModernView }: YahooJapanH
   return (
     <div className="min-h-screen bg-[#F4F4F4] text-[#333333] font-sans antialiased text-[13px] leading-relaxed pb-12">
       
-      {/* ── CSS for Car Lights Animation (Distinct Red Tones + Blinking Yellow Turn Signal) ── */}
-      <style jsx>{`
-        /* 🚨 Left Box & Button: High-Intensity Neon Ruby / Scarlet Red Flash Tone */
-        @keyframes flashBookNowRubyTone {
-          0%, 100% {
-            background: linear-gradient(135deg, #B80028 0%, #7A0015 100%);
-            border-color: #FF3B62;
-            box-shadow: 0 0 18px rgba(255, 20, 60, 0.8), inset 0 0 12px rgba(255, 100, 130, 0.4);
-          }
-          50% {
-            background: linear-gradient(135deg, #FF1443 0%, #CC0029 100%);
-            border-color: #FFB3C2;
-            box-shadow: 0 0 40px rgba(255, 20, 70, 1), 0 0 16px rgba(255, 80, 120, 0.9), inset 0 0 18px rgba(255, 255, 255, 0.7);
-          }
-        }
-
-        /* 🚨 Right Box: Deep Automotive Cherry / Carmine Red Tone */
-        @keyframes flashCherryTaillightTone {
-          0%, 100% {
-            background: linear-gradient(135deg, #8B0000 0%, #540000 100%);
-            border-color: #CC0000;
-            box-shadow: 0 0 16px rgba(180, 0, 0, 0.7), inset 0 0 10px rgba(255, 60, 60, 0.3);
-          }
-          50% {
-            background: linear-gradient(135deg, #D40000 0%, #9E0000 100%);
-            border-color: #FF8888;
-            box-shadow: 0 0 32px rgba(220, 0, 0, 0.9), 0 0 12px rgba(255, 60, 60, 0.8), inset 0 0 14px rgba(255, 220, 220, 0.5);
-          }
-        }
-
-        /* 🚗 Yellow Car Turn Indicator Light (Blinks like vehicle about to turn) */
-        @keyframes carTurnSignalBlinker {
-          0%, 35% {
-            background-color: #FFB800;
-            border-color: #FFEE55;
-            box-shadow: 0 0 25px rgba(255, 184, 0, 1), 0 0 12px rgba(255, 238, 85, 0.95), inset 0 0 8px rgba(255, 255, 255, 0.9);
-            opacity: 1;
-            transform: scale(1.05);
-          }
-          45%, 100% {
-            background-color: #4A3300;
-            border-color: #664400;
-            box-shadow: 0 0 4px rgba(74, 51, 0, 0.3);
-            opacity: 0.25;
-            transform: scale(1);
-          }
-        }
-
-        /* Inner Book Now Button Flash */
-        @keyframes flashRubyButtonTone {
-          0%, 100% {
-            background-color: rgba(255, 255, 255, 0.15);
-            border-color: rgba(255, 255, 255, 0.4);
-            box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
-          }
-          50% {
-            background-color: rgba(255, 255, 255, 0.35);
-            border-color: #FFFFFF;
-            box-shadow: 0 0 18px rgba(255, 255, 255, 0.6), inset 0 0 8px rgba(255, 255, 255, 0.4);
-          }
-        }
-
-        .flashing-booknow-ruby {
-          animation: flashBookNowRubyTone 1.1s infinite ease-in-out;
-        }
-        .flashing-cherry-car-light {
-          animation: flashCherryTaillightTone 1.35s infinite ease-in-out;
-        }
-        .blinking-yellow-blip {
-          animation: carTurnSignalBlinker 0.85s infinite ease-in-out;
-        }
-        .flashing-ruby-inner-btn {
-          animation: flashRubyButtonTone 1.1s infinite ease-in-out;
-        }
-      `}</style>
-
       {/* ── Classic Top Announcement / Yahoo Utility Strip ── */}
       <div className="bg-[#EEEEEE] border-b border-[#CCCCCC] text-[#555555] text-[11px] py-1 px-4">
         <div className="max-w-[1200px] mx-auto flex flex-wrap items-center justify-between gap-2">
@@ -484,7 +408,7 @@ export default function YahooJapanHomeView({ onSwitchToModernView }: YahooJapanH
         {/* ══════════════════════════════════════════════════════════════════════════
             🚨 DUAL CAR-LIGHT CONSOLE:
             • LEFT: Flashing Ruby/Scarlet Red 'BOOK NOW' Light (links to sk.limo/tours)
-            • RIGHT: Flashing Deep Cherry Red Car-Body Box with Blinking Yellow Turn Signal (links to http://hiremitsumori.com)
+            • RIGHT: Flashing Deep Cherry Red Car-Body Box with Gentle Yellow Turn Signal (links to http://hiremitsumori.com)
         ══════════════════════════════════════════════════════════════════════════ */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
           
@@ -514,14 +438,14 @@ export default function YahooJapanHomeView({ onSwitchToModernView }: YahooJapanH
               </div>
 
               {/* Flashing Ruby Tone Action Button */}
-              <div className="flashing-ruby-inner-btn pt-1 flex items-center justify-center gap-1.5 text-xs font-black text-white py-1.5 rounded border border-white/40 group-hover:bg-white/30 transition-colors">
+              <div className="flashing-booknow-btn pt-1 flex items-center justify-center gap-1.5 text-xs font-black text-white py-1.5 rounded border border-white/40 group-hover:bg-white/30 transition-colors">
                 <span>sk.limo/tours 予約画面へ進む</span>
                 <ArrowRight className="w-4 h-4 stroke-[3]" />
               </div>
             </div>
           </Link>
 
-          {/* ── 2. RIGHT BOX: Deep Cherry Red Car Body with Blinking Yellow Turn Indicator Light ── */}
+          {/* ── 2. RIGHT BOX: Deep Cherry Red Car Body with Gentle Yellow Turn Indicator Light ── */}
           <a
             href="http://hiremitsumori.com"
             target="_blank"
@@ -530,18 +454,18 @@ export default function YahooJapanHomeView({ onSwitchToModernView }: YahooJapanH
           >
             <div className="space-y-2">
               <div className="flex items-center justify-center gap-2 text-[11px] font-black tracking-widest text-[#FFEE00] uppercase">
-                {/* 🚗 Small Yellow Blinking Car Turn Signal Light (blips like turn indicator) */}
-                <span className="blinking-yellow-blip w-4 h-4 rounded-xs border-2 border-[#FFEE55] inline-block shadow-md" />
+                {/* 🚗 Small Gentle Yellow Breathing Turn Signal Indicator */}
+                <span className="gentle-yellow-blip w-3.5 h-3.5 rounded-xs border-2 border-amber-300 inline-block shadow-xs" />
                 <span>ハイヤー見積もり.com 新登場</span>
-                <span className="blinking-yellow-blip w-4 h-4 rounded-xs border-2 border-[#FFEE55] inline-block shadow-md" />
+                <span className="gentle-yellow-blip w-3.5 h-3.5 rounded-xs border-2 border-amber-300 inline-block shadow-xs" />
               </div>
 
               <div className="flex items-center justify-center gap-3">
                 <h2 className="text-2xl sm:text-3xl font-black tracking-tighter text-white drop-shadow-md">
                   HIRE MITSUMORI
                 </h2>
-                {/* Small Yellow Blinker Box embedded in title */}
-                <div className="blinking-yellow-blip px-2 py-0.5 rounded-xs border-2 border-[#FFEE55] text-black font-black text-[10px] tracking-tighter flex items-center gap-1">
+                {/* Small Gentle Yellow Box embedded in title */}
+                <div className="gentle-yellow-blip px-2 py-0.5 rounded-xs border border-amber-300 text-black font-black text-[10px] tracking-tighter flex items-center gap-1">
                   <Zap className="w-3 h-3 fill-black" />
                   <span>TURN ➔</span>
                 </div>
@@ -586,7 +510,7 @@ export default function YahooJapanHomeView({ onSwitchToModernView }: YahooJapanH
                 <li>
                   <a href="http://hiremitsumori.com" target="_blank" rel="noopener noreferrer" className="p-2.5 flex items-center justify-between hover:bg-[#FFF8E7] hover:text-[#CC0000] group transition-colors bg-[#FFFDF0]">
                     <span className="flex items-center gap-2 font-bold text-[#CC0000] group-hover:underline">
-                      <span className="blinking-yellow-blip w-2.5 h-2.5 rounded-xs border border-amber-500 inline-block shrink-0" />
+                      <span className="gentle-yellow-blip w-2.5 h-2.5 rounded-xs border border-amber-500 inline-block shrink-0" />
                       <span>ハイヤー見積もり.com (新サイト)</span>
                     </span>
                     <span className="text-[10px] bg-[#CC0000] text-white px-1.5 py-0.2 rounded font-bold">NEW</span>
