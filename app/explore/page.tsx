@@ -67,17 +67,14 @@ export default function ExplorePage() {
   const [selectedFleet, setSelectedFleet] = useState<'hiace' | 'alphard' | 'granace'>('alphard');
   const [fleetPhotoView, setFleetPhotoView] = useState<'exterior' | 'interior' | 'trunk'>('exterior');
 
-  // If in Japanese mode and not forced to modern view, render classic Yahoo! JAPAN portal view
-  if (lang === 'ja' && !isModernViewForced) {
+  // Render modernized Yahoo! JAPAN News & Auctions portal view on the home landing page
+  if (!isModernViewForced) {
     return (
       <div className="min-h-screen bg-[#F4F4F4]">
         <SiteHeader
           activePage="home"
           currentLang={lang}
           onLanguageChange={(newLang) => {
-            if (newLang !== 'ja') {
-              setIsModernViewForced(false);
-            }
             setLang(newLang);
           }}
         />
