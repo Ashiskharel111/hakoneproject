@@ -333,16 +333,16 @@ export default function ExplorePage() {
         }}
       />
 
-      {/* If Japanese language is active and in modern view, provide top switch banner back to Yahoo Japan view */}
+      {/* If Japanese language is active and in modern view, provide top switch banner back to JA Portal view */}
       {lang === 'ja' && isModernViewForced && (
-        <div className="fixed top-16 left-0 right-0 z-40 bg-[#CC0000] text-white py-1.5 px-4 text-center text-xs font-bold shadow-md flex items-center justify-center gap-2">
+        <div className="fixed top-16 left-0 right-0 z-40 bg-[#0F172A] text-white py-1.5 px-4 text-center text-xs font-bold shadow-md flex items-center justify-center gap-2 border-b border-[#334155]">
           <span>🇯🇵 現在【グローバルモダン表示】で表示中</span>
           <button
             type="button"
             onClick={() => setIsModernViewForced(false)}
-            className="bg-white text-[#CC0000] px-2.5 py-0.5 rounded text-[11px] font-black hover:bg-slate-100 transition-colors cursor-pointer"
+            className="bg-[#C5A059] text-[#0A0D14] px-2.5 py-0.5 rounded text-[11px] font-black hover:bg-[#b08e4d] transition-colors cursor-pointer"
           >
-            Yahoo! JAPAN風 日本語ポータル表示に切り替える ＞
+            日本語ポータル表示に切り替える ＞
           </button>
         </div>
       )}

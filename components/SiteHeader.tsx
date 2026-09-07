@@ -128,21 +128,21 @@ export default function SiteHeader({
           {/* Right actions: JA View + Desktop Theme Moon + Language + Book Now Gold Button + WhatsApp */}
           <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
             
-            {/* Dedicated JA View Button (Yahoo Japan Portal Mode) */}
+            {/* Dedicated JA View Button (Corporate Japanese Portal Mode) */}
             <Link
               href="/"
               onClick={() => onLanguageChange('ja')}
               className={`h-9 px-2.5 sm:px-3 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer border ${
                 currentLang === 'ja'
-                  ? 'bg-[#CC0000] text-white border-[#CC0000] shadow-sm shadow-[#CC0000]/20'
-                  : 'bg-white dark:bg-[#0E131F] text-[#CC0000] border-[#CC0000]/40 hover:bg-[#CC0000]/10'
+                  ? 'bg-[#0F172A] text-[#C5A059] border-[#0F172A] shadow-sm'
+                  : 'bg-white dark:bg-[#0E131F] text-[#0F172A] dark:text-slate-200 border-[#CBD5E1] dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800'
               }`}
-              title="JA View (Yahoo! JAPAN風 日本語ポータル表示)"
+              title="JA Portal (日本語ポータル表示)"
             >
-              <span className={`text-[10px] px-1 py-0.2 rounded-xs font-bold ${currentLang === 'ja' ? 'bg-white text-[#CC0000]' : 'bg-[#CC0000] text-white'}`}>
+              <span className={`text-[10px] px-1 py-0.2 rounded-xs font-bold ${currentLang === 'ja' ? 'bg-[#C5A059] text-[#0F172A]' : 'bg-[#0F172A] text-[#C5A059]'}`}>
                 JA
               </span>
-              <span className="hidden sm:inline">VIEW</span>
+              <span className="hidden sm:inline">PORTAL</span>
             </Link>
 
             {/* Desktop-Only Crescent Moon Dark Mode Toggle (h-9) */}
@@ -264,15 +264,15 @@ export default function SiteHeader({
                 }}
                 className={`w-full flex items-center justify-between p-3 rounded-xl border text-sm font-bold transition-colors cursor-pointer mt-3 ${
                   currentLang === 'ja'
-                    ? 'bg-[#CC0000] text-white border-[#CC0000]'
-                    : 'bg-white dark:bg-[#0E131F] text-[#CC0000] border-[#CC0000]/40'
+                    ? 'bg-[#0F172A] text-[#C5A059] border-[#0F172A]'
+                    : 'bg-white dark:bg-[#0E131F] text-[#0F172A] dark:text-slate-200 border-[#CBD5E1] dark:border-slate-700'
                 }`}
               >
                 <span className="flex items-center gap-2">
-                  <span className={`text-[10px] px-1.5 py-0.5 rounded font-black ${currentLang === 'ja' ? 'bg-white text-[#CC0000]' : 'bg-[#CC0000] text-white'}`}>
+                  <span className={`text-[10px] px-1.5 py-0.5 rounded font-black ${currentLang === 'ja' ? 'bg-[#C5A059] text-[#0F172A]' : 'bg-[#0F172A] text-[#C5A059]'}`}>
                     JA
                   </span>
-                  <span>Yahoo! JAPAN風 日本語ポータル表示</span>
+                  <span>日本語ポータル表示 (JA PORTAL)</span>
                 </span>
                 <ChevronRight className="w-4 h-4 opacity-70" />
               </button>
