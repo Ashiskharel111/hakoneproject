@@ -14,6 +14,7 @@ import {
   UserCheck,
   Award,
   Shield,
+  ShieldCheck,
   Search,
   Users,
   Luggage,
@@ -443,6 +444,20 @@ export default function AirportTransferModule({
       fr: 'Attente 100% flexible & gratuite (zéro frais de retard)',
       es: 'Espera 100% flexible y gratuita (0 cargos por retraso)',
     }[lang],
+    transferDistancePolicy: {
+      en: '3-Hour transfers are based on distance travelled.',
+      ja: '3時間送迎サービスは走行距離ベースで算出いたします。',
+      zh: '3小时包车接送服务按实际行驶里程计算。',
+      fr: 'Les transferts de 3 heures sont calculés sur la base de la distance parcourue.',
+      es: 'Los traslados de 3 horas se calculan en función de la distancia recorrida.',
+    }[lang],
+    prefectureInquiryNotice: {
+      en: '(in case of transfer to a different prefecture inquire through WhatsApp)',
+      ja: '（他県・県外への送迎をご希望の場合はWhatsAppよりお問い合わせください）',
+      zh: '（跨县/跨都道府县接送请通过 WhatsApp 咨询）',
+      fr: '(en cas de transfert vers une autre préfecture, veuillez vous renseigner via WhatsApp)',
+      es: '(en caso de traslado a otra prefectura consulte por WhatsApp)',
+    }[lang],
     mandatoryAgreement: {
       en: 'I confirm that my flight schedule, passenger count, and destination hotel are correct, and I agree to the MLIT-licensed transfer terms.',
       ja: 'フライト情報・乗車人数・お届け先ホテル名に誤りがないことを確認し、一般乗用旅客運送約款に同意します。',
@@ -656,6 +671,23 @@ export default function AirportTransferModule({
                     {sample}
                   </button>
                 ))}
+              </div>
+
+              {/* Live Flight Delay Protection Guarantee Note */}
+              <div className="bg-[#EFF6FF] dark:bg-[#0068FF]/10 border border-[#BFDBFE] dark:border-[#0068FF]/30 rounded-xl p-3 flex items-start gap-2.5 text-xs text-[#1E3A8A] dark:text-[#93C5FD]">
+                <ShieldCheck className="w-4 h-4 text-[#2563EB] shrink-0 mt-0.5" />
+                <div className="space-y-0.5">
+                  <span className="font-bold block">
+                    {lang === 'ja'
+                      ? '✈️ フライト常時監視＆遅延料金¥0完全無料保証'
+                      : '✈️ Live Flight Tracking & Free Delay Guarantee'}
+                  </span>
+                  <p className="text-[11px] text-[#2563EB] dark:text-slate-300 leading-relaxed">
+                    {lang === 'ja'
+                      ? '便名をリアルタイム監視し、実際の着陸時間に合わせて配車を行います。空港での無駄な待機が発生しない限り、フライトが遅延しても追加料金は一切いただきません（¥0完全無料）。'
+                      : 'We track your inbound flight in real time and synchronize chauffeur dispatch with your actual landing. As long as we are not waiting at the airport, flight delays incur zero delay fees.'}
+                  </p>
+                </div>
               </div>
 
               {/* Auto-Fetched Flight Card */}
@@ -1235,8 +1267,8 @@ export default function AirportTransferModule({
                 </div>
               </div>
 
-              {/* Trip.com Inclusions Guarantee */}
-              <div className="bg-[#F5F7FA] dark:bg-[#131b2c] rounded-xl p-3 space-y-1.5 text-[11px] text-[#4B5563] dark:text-slate-300">
+              {/* Inclusions Guarantee & Distance Policy */}
+              <div className="bg-[#F5F7FA] dark:bg-[#131b2c] rounded-xl p-3 space-y-2 text-[11px] text-[#4B5563] dark:text-slate-300">
                 <p className="flex items-center gap-1.5 text-[#00B37E] font-medium">
                   <Check className="w-3.5 h-3.5 shrink-0" />
                   <span>{t.tollsInclusions}</span>
@@ -1245,6 +1277,15 @@ export default function AirportTransferModule({
                   <Check className="w-3.5 h-3.5 shrink-0" />
                   <span>{t.delayBufferInclusions}</span>
                 </p>
+                <div className="pt-1.5 border-t border-[#E5E8ED] dark:border-slate-800/80 space-y-1">
+                  <p className="flex items-center gap-1.5 text-[#0068FF] dark:text-[#3B82F6] font-semibold text-[11px]">
+                    <Sparkles className="w-3.5 h-3.5 shrink-0" />
+                    <span>{t.transferDistancePolicy}</span>
+                  </p>
+                  <p className="text-[10px] text-amber-700 dark:text-amber-400 font-medium">
+                    {t.prefectureInquiryNotice}
+                  </p>
+                </div>
               </div>
 
               {/* Mandatory Confirmation Tick Before Payment */}

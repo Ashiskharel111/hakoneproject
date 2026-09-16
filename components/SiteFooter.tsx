@@ -162,9 +162,8 @@ export default function SiteFooter() {
           <div className="md:col-span-3 space-y-2">
             <span className="text-[11px] uppercase font-semibold text-[#1A1A1A] dark:text-white tracking-wider block">{t.quickLinksTitle}</span>
             <ul className="space-y-1.5 text-xs text-[#6B7280] dark:text-slate-400">
-              <li><Link href="/explore" className="hover:text-[#0068FF] dark:hover:text-[#3B82F6] transition-colors">{t.linkExplore}</Link></li>
+              <li><Link href="/tours" className="hover:text-[#0068FF] dark:hover:text-[#3B82F6] transition-colors">{t.linkExplore}</Link></li>
               <li><Link href="/booking" className="hover:text-[#C5A059] dark:hover:text-[#E5C378] font-bold transition-colors">{t.linkBooking}</Link></li>
-              <li><Link href="/services" className="hover:text-[#0068FF] dark:hover:text-[#3B82F6] transition-colors">{t.linkServices}</Link></li>
               <li><Link href="/tours/airport-transfer" className="hover:text-[#0068FF] dark:hover:text-[#3B82F6] transition-colors">{t.linkAirports}</Link></li>
               <li><Link href="/tours/winter" className="hover:text-[#0068FF] dark:hover:text-[#3B82F6] transition-colors">{t.linkSki}</Link></li>
               <li><Link href="/blog" className="hover:text-[#0068FF] dark:hover:text-[#3B82F6] transition-colors">{t.linkBlog}</Link></li>

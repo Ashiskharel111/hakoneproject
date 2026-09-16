@@ -424,7 +424,7 @@ export default function ExplorePage() {
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
-                href="/services"
+                href="/contact"
                 className="bg-white/10 hover:bg-white/20 text-white backdrop-blur-md border border-white/30 font-bold px-6 py-4 rounded-xl text-xs uppercase tracking-wider transition-all"
               >
                 <span>{t.guaranteesBtn}</span>
@@ -639,7 +639,7 @@ export default function ExplorePage() {
                   10 Hours · 118 km
                 </div>
                 <div className="absolute bottom-3 right-3 bg-black/80 backdrop-blur-md px-2.5 py-1 rounded text-[#E5C378] font-mono font-bold text-xs border border-[#C5A059]/40">
-                  {t.fromUnit} ¥75,000
+                  {t.fromUnit} ¥100,000
                 </div>
               </div>
               <div className="p-5 space-y-2">

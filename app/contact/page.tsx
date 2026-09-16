@@ -31,11 +31,36 @@ export default function ContactPage() {
     guests: '2',
     message: '',
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [submittedDocId, setSubmittedDocId] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitted(true);
+    setIsSubmitting(true);
+    setErrorMessage(null);
+
+    try {
+      const res = await fetch('/api/inquiries', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...formData, lang }),
+      });
+
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || 'Failed to submit inquiry.');
+      }
+
+      setSubmittedDocId(data.docId || null);
+      setIsSubmitted(true);
+    } catch (err: any) {
+      console.error('Inquiry submission error:', err);
+      setErrorMessage(err.message || 'An error occurred. Please try again or reach out via WhatsApp.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const whatsAppDirectUrl = `https://wa.me/818012345678?text=${encodeURIComponent(
@@ -221,19 +246,42 @@ export default function ContactPage() {
               <div className="bg-[#E8F1FF] dark:bg-[#0068FF]/15 border border-[#0068FF]/30 rounded-2xl p-8 text-center space-y-3">
                 <CheckCircle2 className="w-10 h-10 text-[#0068FF] mx-auto" />
                 <h4 className="text-lg font-bold text-[#1A1A1A] dark:text-white">{t.successTitle}</h4>
+                {submittedDocId && (
+                  <div className="inline-block bg-white dark:bg-[#080B11] border border-[#0068FF]/30 px-3 py-1 rounded-lg text-xs font-mono font-bold text-[#0068FF]">
+                    Ref: {submittedDocId}
+                  </div>
+                )}
                 <p className="text-xs text-[#4B5563] dark:text-slate-300 max-w-md mx-auto leading-relaxed">
                   {t.successDesc(formData.email || 'your email')}
                 </p>
                 <button
                   type="button"
-                  onClick={() => setIsSubmitted(false)}
-                  className="mt-2 text-xs font-bold text-[#0068FF] hover:underline"
+                  onClick={() => {
+                    setIsSubmitted(false);
+                    setSubmittedDocId(null);
+                    setFormData({
+                      name: '',
+                      email: '',
+                      phone: '',
+                      serviceType: 'airport',
+                      date: '',
+                      guests: '2',
+                      message: '',
+                    });
+                  }}
+                  className="mt-2 text-xs font-bold text-[#0068FF] hover:underline cursor-pointer"
                 >
                   {t.sendAnotherBtn}
                 </button>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
+                {errorMessage && (
+                  <div className="p-3.5 rounded-xl bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-400 text-xs font-medium">
+                    {errorMessage}
+                  </div>
+                )}
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="text-xs font-semibold text-[#4B5563] dark:text-slate-300 block mb-1">
@@ -322,10 +370,20 @@ export default function ContactPage() {
 
                 <button
                   type="submit"
-                  className="w-full bg-[#0068FF] hover:bg-[#0050CC] text-white font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-sm transition-colors cursor-pointer"
+                  disabled={isSubmitting}
+                  className="w-full bg-[#0068FF] hover:bg-[#0050CC] disabled:opacity-60 text-white font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-sm transition-all cursor-pointer disabled:cursor-not-allowed"
                 >
-                  <Send className="w-4 h-4" />
-                  <span>{t.submitBtn}</span>
+                  {isSubmitting ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      <span>Submitting...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-4 h-4" />
+                      <span>{t.submitBtn}</span>
+                    </>
+                  )}
                 </button>
               </form>
             )}

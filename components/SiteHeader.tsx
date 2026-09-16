@@ -70,10 +70,9 @@ export default function SiteHeader({
   };
 
   const navLinks = [
-    { href: '/', label: nav.explore, page: 'home' as const },
-    { href: '/services', label: nav.services, page: undefined },
+    { href: '/tours', label: nav.explore, page: 'home' as const },
     { href: '/tours/airport-transfer', label: nav.airports, page: 'airport' as const },
-    { href: '/tours/winter', label: nav.ski, page: 'winter' as const, icon: <Snowflake className="w-3.5 h-3.5" /> },
+    { href: '/tours/winter', label: nav.ski, page: 'winter' as const },
     { href: '/blog', label: nav.blog, page: undefined },
     { href: '/contact', label: nav.contact, page: undefined },
   ];
@@ -85,7 +84,7 @@ export default function SiteHeader({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
 
           {/* Brand */}
-          <Link href="/" className="flex items-center gap-2.5 shrink-0">
+          <Link href="/tours" className="flex items-center gap-2.5 shrink-0" title="SK Limo Global Home">
             <div className="relative h-8 w-20 sm:h-9 sm:w-24">
               <Image
                 src="/images/brand-sklimo-official-logo-250x250.png"
@@ -118,7 +117,6 @@ export default function SiteHeader({
                 }`}
               >
                 <span className="flex items-center gap-1.5">
-                  {link.icon}
                   <span>{link.label}</span>
                 </span>
               </Link>
@@ -248,7 +246,7 @@ export default function SiteHeader({
                   }`}
                 >
                   <span className="flex items-center gap-3">
-                    {link.icon || <Compass className="w-4 h-4 text-[#9CA3AF]" />}
+
                     <span className="font-medium text-sm">{link.label}</span>
                   </span>
                   <ChevronRight className="w-4 h-4 text-[#D1D5DB]" />
