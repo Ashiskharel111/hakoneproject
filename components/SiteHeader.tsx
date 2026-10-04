@@ -10,7 +10,6 @@ import {
   X,
   Plane,
   Compass,
-  Car,
   ChevronRight,
   Moon,
   Sun,
@@ -23,13 +22,15 @@ import { useTheme } from '@/context/ThemeContext';
 interface SiteHeaderProps {
   currentLang?: Language;
   onLanguageChange?: (lang: Language) => void;
-  activePage?: 'home' | 'winter' | 'airport' | 'sightseeing';
+  activeService?: 'airport' | 'sightseeing' | 'ski';
+  onSelectService?: (service: 'airport' | 'sightseeing' | 'ski') => void;
 }
 
 export default function SiteHeader({
   currentLang: propCurrentLang,
   onLanguageChange: propOnLanguageChange,
-  activePage = 'home',
+  activeService = 'airport',
+  onSelectService,
 }: SiteHeaderProps) {
   const [contextLang, setContextLang] = useLanguage();
   const currentLang = propCurrentLang || contextLang;
@@ -49,42 +50,43 @@ export default function SiteHeader({
   }, [isMobileMenuOpen]);
 
   const nav = {
-    explore: { ja: '探索', zh: '探索', fr: 'Explorer', es: 'Explorar', en: 'Explore' }[currentLang],
-    services: { ja: 'サービス', zh: '服务', fr: 'Services', es: 'Servicios', en: 'Services' }[currentLang],
-    airports: { ja: '空港送迎', zh: '机场接送', fr: 'Aéroports', es: 'Aeropuertos', en: 'Airports' }[currentLang],
-    ski: { ja: 'スキー', zh: '滑雪专车', fr: 'Ski', es: 'Esquí', en: 'Ski' }[currentLang],
-    blog: { ja: 'ブログ', zh: '专栏', fr: 'Blog', es: 'Blog', en: 'Blog' }[currentLang],
-    contact: { ja: 'お問い合わせ', zh: '联系', fr: 'Contact', es: 'Contacto', en: 'Contact' }[currentLang],
+    airport: { ja: '空港送迎', zh: '机场接送', fr: 'Aéroports', es: 'Aeropuertos', en: 'Airport Transfers' }[currentLang],
+    sightseeing: { ja: '観光チャーター', zh: '观光包车', fr: 'Excursions', es: 'Tours', en: 'Sightseeing' }[currentLang],
+    ski: { ja: 'スキー送迎', zh: '滑雪专车', fr: 'Ski VIP', es: 'Esquí VIP', en: 'Ski Transfers' }[currentLang],
   };
 
-  const whatsAppUrl = `https://wa.me/818012345678?text=${encodeURIComponent(
-    `Hello SK Limo! I am inquiring about private chauffeur services in Japan.`
+  const whatsAppUrl = `https://wa.me/818038582729?text=${encodeURIComponent(
+    `Hello SK Limo! I am inquiring about booking a private chauffeur in Japan.`
   )}`;
 
   const ui = {
     bookNow: { ja: '今すぐ予約', zh: '在线预订', fr: 'Réserver', es: 'Reservar', en: 'Book Now' }[currentLang],
+    liveDesk: { ja: '予約デスク 稼働中', zh: '在线预订实时受理', fr: 'Réservation Ouverte', es: 'Reservas Activas', en: 'Live Booking Desk' }[currentLang],
     whatsAppConcierge: { ja: 'WhatsApp 24時間コンシェルジュ', zh: 'WhatsApp 24小时专属管家', fr: 'Conciergerie WhatsApp 24/7', es: 'Conserjería WhatsApp 24/7', en: 'WhatsApp 24/7 Concierge' }[currentLang],
-    lightMode: { ja: 'ライトモード (明るい表示)', zh: '浅色明亮模式', fr: 'Mode Clair', es: 'Modo Claro', en: 'Light Mode' }[currentLang],
-    darkMode: { ja: 'ダークモード (夜間表示)', zh: '深色夜间模式', fr: 'Mode Sombre', es: 'Modo Oscuro', en: 'Dark Mode' }[currentLang],
+    lightMode: { ja: 'ライトモード', zh: '浅色模式', fr: 'Mode Clair', es: 'Modo Claro', en: 'Light Mode' }[currentLang],
+    darkMode: { ja: 'ダークモード', zh: '深色模式', fr: 'Mode Sombre', es: 'Modo Oscuro', en: 'Dark Mode' }[currentLang],
     mlitLicensed: { ja: '国土交通省許可 緑ナンバー正規運行', zh: '日本国土交通省正规绿牌认证', fr: 'Opérateur Agréé MLIT Plaque Verte', es: 'Operador Oficial Licenciado MLIT', en: 'MLIT Licensed Green-Plate Operator' }[currentLang],
   };
 
-  const navLinks = [
-    { href: '/tours', label: nav.explore, page: 'home' as const },
-    { href: '/tours/airport-transfer', label: nav.airports, page: 'airport' as const },
-    { href: '/tours/winter', label: nav.ski, page: 'winter' as const },
-    { href: '/blog', label: nav.blog, page: undefined },
-    { href: '/contact', label: nav.contact, page: undefined },
-  ];
+  const handleServiceClick = (service: 'airport' | 'sightseeing' | 'ski') => {
+    if (onSelectService) {
+      onSelectService(service);
+    }
+    const el = document.getElementById('booking-engine');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    setIsMobileMenuOpen(false);
+  };
 
   return (
     <>
-      {/* ── Clean Header (Trip.com & RydAgent style with Dark Mode support) ── */}
+      {/* ── Modern Booking Portal Header ── */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 dark:bg-[#080B11]/95 backdrop-blur-md border-b border-[#E5E8ED] dark:border-slate-800 shadow-sm transition-colors duration-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
 
           {/* Brand */}
-          <Link href="/tours" className="flex items-center gap-2.5 shrink-0" title="SK Limo Global Home">
+          <Link href="/" className="flex items-center gap-2.5 shrink-0" title="booking.sk.limo">
             <div className="relative h-8 w-20 sm:h-9 sm:w-24">
               <Image
                 src="/images/brand-sklimo-official-logo-250x250.png"
@@ -94,54 +96,65 @@ export default function SiteHeader({
                 priority
               />
             </div>
-            <div className="hidden sm:block">
-              <span className="text-[11px] font-bold text-[#1A1A1A] dark:text-white tracking-tight block leading-tight">
-                SK LIMO
-              </span>
+            <div>
+              <div className="flex items-center gap-1.5">
+                <span className="text-[12px] font-extrabold text-[#1A1A1A] dark:text-white tracking-tight leading-tight">
+                  SK LIMO
+                </span>
+                <span className="text-[9px] font-black uppercase px-1.5 py-0.5 rounded-sm bg-[#C5A059]/15 text-[#8C6D3F] dark:text-[#E5C378] border border-[#C5A059]/30">
+                  BOOKING
+                </span>
+              </div>
               <span className="text-[9px] text-[#9CA3AF] block leading-tight">
-                Private Chauffeur Japan
+                booking.sk.limo
               </span>
             </div>
           </Link>
 
-          {/* Desktop Nav - Clean Single-Line Items */}
-          <nav className="hidden lg:flex items-center gap-1">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`h-9 px-3.5 rounded-xl text-[13px] font-semibold transition-colors flex items-center whitespace-nowrap ${
-                  link.page && activePage === link.page
-                    ? 'text-[#0068FF] bg-[#E8F1FF] dark:bg-[#0068FF]/15 dark:text-[#3B82F6]'
-                    : 'text-[#4B5563] dark:text-slate-300 hover:text-[#1A1A1A] dark:hover:text-white hover:bg-[#F5F7FA] dark:hover:bg-slate-800/60'
-                }`}
-              >
-                <span className="flex items-center gap-1.5">
-                  <span>{link.label}</span>
-                </span>
-              </Link>
-            ))}
+          {/* Desktop Nav - Active Service Tabs */}
+          <nav className="hidden lg:flex items-center gap-1 bg-[#F5F7FA] dark:bg-slate-900/80 p-1 rounded-2xl border border-[#E5E8ED] dark:border-slate-800">
+            <button
+              type="button"
+              onClick={() => handleServiceClick('airport')}
+              className={`h-8 px-3.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                activeService === 'airport'
+                  ? 'bg-white dark:bg-slate-800 text-[#0F172A] dark:text-white shadow-xs border border-slate-200/80 dark:border-slate-700'
+                  : 'text-[#64748B] dark:text-slate-400 hover:text-black dark:hover:text-white'
+              }`}
+            >
+              <Plane className="w-3.5 h-3.5 text-[#C5A059]" />
+              <span>{nav.airport}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleServiceClick('sightseeing')}
+              className={`h-8 px-3.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                activeService === 'sightseeing'
+                  ? 'bg-white dark:bg-slate-800 text-[#0F172A] dark:text-white shadow-xs border border-slate-200/80 dark:border-slate-700'
+                  : 'text-[#64748B] dark:text-slate-400 hover:text-black dark:hover:text-white'
+              }`}
+            >
+              <Compass className="w-3.5 h-3.5 text-[#C5A059]" />
+              <span>{nav.sightseeing}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleServiceClick('ski')}
+              className={`h-8 px-3.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                activeService === 'ski'
+                  ? 'bg-white dark:bg-slate-800 text-[#0F172A] dark:text-white shadow-xs border border-slate-200/80 dark:border-slate-700'
+                  : 'text-[#64748B] dark:text-slate-400 hover:text-black dark:hover:text-white'
+              }`}
+            >
+              <Snowflake className="w-3.5 h-3.5 text-[#C5A059]" />
+              <span>{nav.ski}</span>
+            </button>
           </nav>
 
-          {/* Right actions: JA View + Desktop Theme Moon + Language + Book Now Gold Button + WhatsApp */}
+          {/* Right actions: Theme + Language + WhatsApp */}
           <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
-            
-            {/* Dedicated JA View Button (Corporate Japanese Portal Mode) */}
-            <Link
-              href="/"
-              onClick={() => onLanguageChange('ja')}
-              className={`h-9 px-2.5 sm:px-3 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer border ${
-                currentLang === 'ja'
-                  ? 'bg-[#0F172A] text-[#C5A059] border-[#0F172A] shadow-sm'
-                  : 'bg-white dark:bg-[#0E131F] text-[#0F172A] dark:text-slate-200 border-[#CBD5E1] dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800'
-              }`}
-              title="JA Portal (日本語ポータル表示)"
-            >
-              <span className={`text-[10px] px-1 py-0.2 rounded-xs font-bold ${currentLang === 'ja' ? 'bg-[#C5A059] text-[#0F172A]' : 'bg-[#0F172A] text-[#C5A059]'}`}>
-                JA
-              </span>
-              <span className="hidden sm:inline">PORTAL</span>
-            </Link>
 
             {/* Desktop-Only Crescent Moon Dark Mode Toggle (h-9) */}
             <button
@@ -162,12 +175,12 @@ export default function SiteHeader({
             <LanguageSelector currentLang={currentLang} onLanguageChange={onLanguageChange} />
 
             {/* RydAgent Gold Book Now CTA (h-9) */}
-            <Link
-              href="/booking"
-              className="hidden sm:inline-flex h-9 items-center justify-center bg-[#C5A059] hover:bg-[#d8b46b] text-[#0A0D14] font-extrabold px-4 rounded-xl text-xs uppercase tracking-wider shadow-sm transition-all whitespace-nowrap"
+            <a
+              href="#booking-engine"
+              className="hidden sm:inline-flex h-9 items-center justify-center bg-[#C5A059] hover:bg-[#d8b46b] text-[#0A0D14] font-extrabold px-4 rounded-xl text-xs uppercase tracking-wider shadow-sm transition-all whitespace-nowrap cursor-pointer"
             >
               <span>{ui.bookNow}</span>
-            </Link>
+            </a>
 
             {/* WhatsApp CTA (h-9) */}
             <a
@@ -233,56 +246,54 @@ export default function SiteHeader({
             </div>
 
             {/* Nav links */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-1">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className={`flex items-center justify-between p-3 rounded-xl transition-colors ${
-                    link.page && activePage === link.page
-                      ? 'bg-[#E8F1FF] text-[#0068FF] dark:bg-[#0068FF]/15 dark:text-[#3B82F6]'
-                      : 'text-[#1A1A1A] dark:text-slate-100 hover:bg-[#F5F7FA] dark:hover:bg-slate-800/60'
-                  }`}
-                >
-                  <span className="flex items-center gap-3">
-
-                    <span className="font-medium text-sm">{link.label}</span>
-                  </span>
-                  <ChevronRight className="w-4 h-4 text-[#D1D5DB]" />
-                </Link>
-              ))}
-
-              {/* Mobile JA Portal Mode Toggle Button */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-2">
               <button
                 type="button"
-                onClick={() => {
-                  onLanguageChange('ja');
-                  setIsMobileMenuOpen(false);
-                }}
-                className={`w-full flex items-center justify-between p-3 rounded-xl border text-sm font-bold transition-colors cursor-pointer mt-3 ${
-                  currentLang === 'ja'
-                    ? 'bg-[#0F172A] text-[#C5A059] border-[#0F172A]'
-                    : 'bg-white dark:bg-[#0E131F] text-[#0F172A] dark:text-slate-200 border-[#CBD5E1] dark:border-slate-700'
+                onClick={() => handleServiceClick('airport')}
+                className={`w-full flex items-center justify-between p-3.5 rounded-xl transition-all cursor-pointer ${
+                  activeService === 'airport'
+                    ? 'bg-[#0F172A] text-[#C5A059] font-bold shadow-sm'
+                    : 'text-[#1A1A1A] dark:text-slate-100 hover:bg-[#F5F7FA] dark:hover:bg-slate-800'
                 }`}
               >
-                <span className="flex items-center gap-2">
-                  <span className={`text-[10px] px-1.5 py-0.5 rounded font-black ${currentLang === 'ja' ? 'bg-[#C5A059] text-[#0F172A]' : 'bg-[#0F172A] text-[#C5A059]'}`}>
-                    JA
-                  </span>
-                  <span>日本語ポータル表示 (JA PORTAL)</span>
+                <span className="flex items-center gap-3">
+                  <Plane className="w-4 h-4 text-[#C5A059]" />
+                  <span className="font-semibold text-sm">{nav.airport}</span>
                 </span>
-                <ChevronRight className="w-4 h-4 opacity-70" />
+                <ChevronRight className="w-4 h-4 text-[#D1D5DB]" />
               </button>
 
-              {/* Mobile Book Now Link */}
-              <Link
-                href="/booking"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="w-full flex items-center justify-center p-3 rounded-xl bg-[#C5A059] text-[#0A0D14] font-extrabold text-sm uppercase tracking-wider shadow-sm mt-2"
+              <button
+                type="button"
+                onClick={() => handleServiceClick('sightseeing')}
+                className={`w-full flex items-center justify-between p-3.5 rounded-xl transition-all cursor-pointer ${
+                  activeService === 'sightseeing'
+                    ? 'bg-[#0F172A] text-[#C5A059] font-bold shadow-sm'
+                    : 'text-[#1A1A1A] dark:text-slate-100 hover:bg-[#F5F7FA] dark:hover:bg-slate-800'
+                }`}
               >
-                <span>{ui.bookNow}</span>
-              </Link>
+                <span className="flex items-center gap-3">
+                  <Compass className="w-4 h-4 text-[#C5A059]" />
+                  <span className="font-semibold text-sm">{nav.sightseeing}</span>
+                </span>
+                <ChevronRight className="w-4 h-4 text-[#D1D5DB]" />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleServiceClick('ski')}
+                className={`w-full flex items-center justify-between p-3.5 rounded-xl transition-all cursor-pointer ${
+                  activeService === 'ski'
+                    ? 'bg-[#0F172A] text-[#C5A059] font-bold shadow-sm'
+                    : 'text-[#1A1A1A] dark:text-slate-100 hover:bg-[#F5F7FA] dark:hover:bg-slate-800'
+                }`}
+              >
+                <span className="flex items-center gap-3">
+                  <Snowflake className="w-4 h-4 text-[#C5A059]" />
+                  <span className="font-semibold text-sm">{nav.ski}</span>
+                </span>
+                <ChevronRight className="w-4 h-4 text-[#D1D5DB]" />
+              </button>
 
               {/* Mobile Theme Toggle Button */}
               <button

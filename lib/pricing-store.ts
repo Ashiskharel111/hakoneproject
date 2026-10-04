@@ -319,7 +319,7 @@ export function calculateQuote(
     `Please confirm vehicle availability and driver assignment.`
   );
 
-  const whatsAppMessage = `https://wa.me/819000000000?text=${whatsAppText}`;
+  const whatsAppMessage = `https://wa.me/818038582729?text=${whatsAppText}`;
 
   return {
     recommendedVehicle: selectedVehicle,

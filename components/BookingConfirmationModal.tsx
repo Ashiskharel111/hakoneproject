@@ -172,7 +172,7 @@ export default function BookingConfirmationModal({
         {/* Action Buttons */}
         <div className="space-y-2.5">
           <a
-            href={`https://wa.me/818012345678?text=${whatsAppAiText}`}
+            href={`https://wa.me/818038582729?text=${whatsAppAiText}`}
             target="_blank"
             rel="noopener noreferrer"
             className="w-full bg-[#25D366] hover:bg-[#20ba5a] text-[#0A0D14] font-bold py-3.5 rounded-2xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition-all"

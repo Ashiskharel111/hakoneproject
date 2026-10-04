@@ -20,6 +20,17 @@ const nextConfig: NextConfig = {
     '10.*',
     '172.*',
   ],
+  async redirects() {
+    return [
+      { source: '/booking', destination: '/', permanent: true },
+      { source: '/tours/:path*', destination: '/', permanent: true },
+      { source: '/blog/:path*', destination: '/', permanent: true },
+      { source: '/services/:path*', destination: '/', permanent: true },
+      { source: '/destinations/:path*', destination: '/', permanent: true },
+      { source: '/explore/:path*', destination: '/', permanent: true },
+      { source: '/contact/:path*', destination: '/', permanent: true },
+    ];
+  },
 };
 
 export default nextConfig;

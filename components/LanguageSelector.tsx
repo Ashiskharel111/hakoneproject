@@ -74,7 +74,7 @@ export default function LanguageSelector({
               }}
               className={`w-full flex items-center justify-between px-3 py-2 text-xs text-left transition-colors cursor-pointer ${
                 currentLang === opt.code
-                  ? 'bg-[#E8F1FF] text-[#0068FF] dark:bg-[#0068FF]/15 dark:text-[#3B82F6] font-semibold'
+                  ? 'bg-[#C5A059]/10 text-[#C5A059] font-bold'
                   : 'text-[#4B5563] dark:text-slate-200 hover:bg-[#F5F7FA] dark:hover:bg-slate-800 hover:text-[#1A1A1A] dark:hover:text-white'
               }`}
             >
@@ -82,7 +82,7 @@ export default function LanguageSelector({
                 <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#F5F7FA] dark:bg-slate-800 text-[#6B7280] dark:text-slate-300 font-semibold">{opt.badge}</span>
                 <span>{opt.nativeLabel}</span>
               </div>
-              {currentLang === opt.code && <Check className="w-3.5 h-3.5 text-[#0068FF] dark:text-[#3B82F6]" />}
+              {currentLang === opt.code && <Check className="w-3.5 h-3.5 text-[#C5A059]" />}
             </button>
           ))}
         </div>

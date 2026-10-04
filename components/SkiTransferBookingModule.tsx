@@ -28,6 +28,8 @@ export interface SkiTransferBookingModuleProps {
   initialResort?: string;
   initialPickup?: string;
   initialDate?: string;
+  initialPassengers?: number;
+  initialSkiGearCount?: number;
   onBackToCatalog?: () => void;
 }
 
@@ -115,15 +117,20 @@ export default function SkiTransferBookingModule({
   initialResort = 'hakuba',
   initialPickup = 'hnd',
   initialDate,
+  initialPassengers = 4,
+  initialSkiGearCount = 4,
   onBackToCatalog,
 }: SkiTransferBookingModuleProps) {
   const [lang] = useLanguage();
 
   const [selectedResortId, setSelectedResortId] = useState<string>(initialResort);
   const [pickupPoint, setPickupPoint] = useState<'hnd' | 'nrt' | 'tokyo'>((initialPickup as any) || 'hnd');
-  const [selectedVehicle, setSelectedVehicle] = useState<'alphard' | 'granace' | 'hiace'>('granace');
-  const [passengers, setPassengers] = useState<number>(4);
-  const [skiGearCount, setSkiGearCount] = useState<number>(4);
+  const [selectedVehicle, setSelectedVehicle] = useState<'alphard' | 'granace' | 'hiace'>(() => {
+    if (initialPassengers > 5) return 'hiace';
+    return 'granace';
+  });
+  const [passengers, setPassengers] = useState<number>(initialPassengers);
+  const [skiGearCount, setSkiGearCount] = useState<number>(initialSkiGearCount);
   const [addSecondVehicle, setAddSecondVehicle] = useState<boolean>(false);
   const [travelDate, setTravelDate] = useState(() => {
     if (initialDate) return initialDate;
@@ -494,7 +501,7 @@ export default function SkiTransferBookingModule({
     setIsStripeModalOpen(true);
   };
 
-  const whatsAppSkiUrl = `https://wa.me/818012345678?text=${encodeURIComponent(
+  const whatsAppSkiUrl = `https://wa.me/818038582729?text=${encodeURIComponent(
     `✨ *SK LIMO 4WD SKI CHARTER RESERVATION*\n\n` +
     `• Resort: ${currentResort.name.en}\n` +
     `• Departure: ${pickupLabel}\n` +

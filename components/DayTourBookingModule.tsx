@@ -34,6 +34,8 @@ import { getTodayJST, getFutureDateJST, isValidEmail, isValidPhone } from '@/lib
 export interface DayTourBookingModuleProps {
   initialDestination?: string;
   initialDate?: string;
+  initialPassengers?: number;
+  initialPickupHotel?: string;
   onBackToCatalog?: () => void;
 }
 
@@ -944,6 +946,8 @@ const TOUR_VEHICLES = [
 export default function DayTourBookingModule({
   initialDestination = 'fuji-kawaguchiko',
   initialDate,
+  initialPassengers = 3,
+  initialPickupHotel = '',
   onBackToCatalog,
 }: DayTourBookingModuleProps) {
   const [lang] = useLanguage();
@@ -962,13 +966,17 @@ export default function DayTourBookingModule({
   }, [initialDestination]);
 
   const [selectedDestId, setSelectedDestId] = useState<string>(matchedInitial);
-  const [selectedVehicle, setSelectedVehicle] = useState<'alphard' | 'granace' | 'hiace'>('alphard');
-  const [passengers, setPassengers] = useState<number>(3);
+  const [selectedVehicle, setSelectedVehicle] = useState<'alphard' | 'granace' | 'hiace'>(() => {
+    if (initialPassengers > 5) return 'hiace';
+    if (initialPassengers > 4) return 'granace';
+    return 'alphard';
+  });
+  const [passengers, setPassengers] = useState<number>(initialPassengers);
   const [travelDate, setTravelDate] = useState<string>(() => {
     if (initialDate) return initialDate;
     return getFutureDateJST(3);
   });
-  const [pickupHotel, setPickupHotel] = useState<string>('');
+  const [pickupHotel, setPickupHotel] = useState<string>(initialPickupHotel);
   const [guestName, setGuestName] = useState<string>('');
   const [guestEmail, setGuestEmail] = useState<string>('');
   const [guestPhone, setGuestPhone] = useState<string>('');
@@ -1287,7 +1295,7 @@ export default function DayTourBookingModule({
     setIsStripeModalOpen(true);
   };
 
-  const whatsAppCharterUrl = `https://wa.me/818012345678?text=${encodeURIComponent(
+  const whatsAppCharterUrl = `https://wa.me/818038582729?text=${encodeURIComponent(
     `✨ *SK LIMO DAY CHARTER INQUIRY*\n\n` +
     `• Destination: ${currentDest.name.en} (${currentDest.charterHours})\n` +
     `• Vehicle: ${vehicleName}\n` +

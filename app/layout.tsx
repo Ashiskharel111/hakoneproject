@@ -8,12 +8,11 @@ const inter = Inter({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-sans",
-  weight: ["300", "400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
-  title: "【公式】株式会社SKリモ | SK Limo Executive Private Charters Japan",
-  description: "羽田空港・成田空港・東京都内発 長野エリア（白馬・野沢温泉・志賀高原・妙高）スキー送迎プライベートハイヤー。国土交通省認可 一般乗用旅客自動車運送事業 関自旅第1234号。",
+  title: "SK Limo Booking | Luxury Chauffeur & Private Transfers Japan (Official)",
+  description: "Official booking portal for SK Limo Japan (booking.sk.limo). Haneda & Narita Airport transfers, Tokyo sightseeing private charters, and Hakuba/Nagano 4WD ski transfers. MLIT Licensed Green-Plate Operator.",
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",
