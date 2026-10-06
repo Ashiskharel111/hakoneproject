@@ -118,7 +118,7 @@ export default function BookingPortalHomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FDFCFB] dark:bg-[#07090E] text-[#1A1A1A] dark:text-[#F1F5F9] transition-colors duration-200">
+    <div className="min-h-screen bg-white dark:bg-[#07090E] text-[#1A1A1A] dark:text-[#F1F5F9] transition-colors duration-200">
       {/* ── Sleek Portal Header ── */}
       <SiteHeader
         activeService={activeService}

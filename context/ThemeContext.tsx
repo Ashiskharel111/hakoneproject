@@ -29,6 +29,7 @@ function applyThemeToDocument(newTheme: Theme) {
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  // Default strictly to 'light' (white color scheme)
   const [theme, setThemeState] = useState<Theme>('light');
   const [isMobile, setIsMobile] = useState<boolean>(false);
 
@@ -39,44 +40,25 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       setIsMobile(mobileQuery.matches);
       return mobileQuery.matches;
     };
+    checkMobile();
 
-    const isCurrentMobile = checkMobile();
-    const systemDarkQuery = window.matchMedia('(prefers-color-scheme: dark)');
-
-    // On phone/mobile: Auto detect system theme
-    if (isCurrentMobile) {
-      const initialSystemTheme: Theme = systemDarkQuery.matches ? 'dark' : 'light';
-      setThemeState(initialSystemTheme);
-      applyThemeToDocument(initialSystemTheme);
+    // Check stored user preference, otherwise strictly default to 'light'
+    const savedTheme = localStorage.getItem('sk_theme') as Theme | null;
+    if (savedTheme === 'dark') {
+      setThemeState('dark');
+      applyThemeToDocument('dark');
     } else {
-      // On desktop: check stored preference or default to light
-      const savedTheme = localStorage.getItem('sk_theme') as Theme | null;
-      const initialTheme = savedTheme || 'light';
-      setThemeState(initialTheme);
-      applyThemeToDocument(initialTheme);
+      // Default is always white / light
+      setThemeState('light');
+      applyThemeToDocument('light');
     }
 
-    // System dark mode listener for mobile devices
-    const handleSystemThemeChange = (e: MediaQueryListEvent) => {
-      if (window.innerWidth <= 768) {
-        const newTheme: Theme = e.matches ? 'dark' : 'light';
-        setThemeState(newTheme);
-        applyThemeToDocument(newTheme);
-      }
-    };
-
-    // Resize listener
     const handleResize = () => {
       checkMobile();
     };
 
-    systemDarkQuery.addEventListener('change', handleSystemThemeChange);
     window.addEventListener('resize', handleResize);
-
-    return () => {
-      systemDarkQuery.removeEventListener('change', handleSystemThemeChange);
-      window.removeEventListener('resize', handleResize);
-    };
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const setTheme = (newTheme: Theme) => {
@@ -96,7 +78,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     </ThemeContext.Provider>
   );
 }
-
 
 export function useTheme() {
   return useContext(ThemeContext);

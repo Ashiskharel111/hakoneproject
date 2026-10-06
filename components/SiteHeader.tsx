@@ -156,11 +156,11 @@ export default function SiteHeader({
           {/* Right actions: Theme + Language + WhatsApp */}
           <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
 
-            {/* Desktop-Only Crescent Moon Dark Mode Toggle (h-9) */}
+            {/* Crescent Moon / Sun Theme Toggle (h-9) */}
             <button
               type="button"
               onClick={toggleTheme}
-              className="hidden md:flex h-9 w-9 items-center justify-center rounded-xl border border-[#E5E8ED] dark:border-slate-700 bg-white dark:bg-[#0E131F] text-[#4B5563] dark:text-slate-200 hover:bg-[#F5F7FA] dark:hover:bg-slate-800 transition-colors cursor-pointer"
+              className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#E5E8ED] dark:border-slate-700 bg-white dark:bg-[#0E131F] text-[#4B5563] dark:text-slate-200 hover:bg-[#F5F7FA] dark:hover:bg-slate-800 transition-colors cursor-pointer"
               aria-label={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
               title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
             >

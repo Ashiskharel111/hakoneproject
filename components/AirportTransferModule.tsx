@@ -554,7 +554,7 @@ export default function AirportTransferModule({
         <div className="space-y-6">
           
           {/* Header & Route Summary Bar */}
-          <div className="bg-stone-900 dark:bg-[#0A0D14] border border-stone-800 dark:border-white/[0.08] rounded-2xl p-4 sm:p-5 text-stone-200 shadow-sm">
+          <div className="bg-white dark:bg-[#0A0D14] border border-stone-200 dark:border-white/[0.08] rounded-2xl p-4 sm:p-5 text-stone-900 dark:text-stone-200 shadow-sm">
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
@@ -562,23 +562,23 @@ export default function AirportTransferModule({
                     STEP 2 OF 3 / VEHICLE SELECTION
                   </span>
                   <span className="w-1.5 h-1.5 rounded-full bg-[#C5A059]" />
-                  <span className="text-xs text-stone-400">
+                  <span className="text-xs text-stone-500 dark:text-stone-400">
                     {t.step1Subtitle}
                   </span>
                 </div>
-                <h2 className="text-lg sm:text-xl font-bold text-white tracking-tight">
+                <h2 className="text-lg sm:text-xl font-bold text-stone-900 dark:text-white tracking-tight">
                   {t.step1Title}
                 </h2>
               </div>
 
               {/* Compact Route Summary Pill */}
               <div className="flex items-center gap-2 flex-wrap">
-                <div className="inline-flex items-center gap-2 bg-stone-800/80 border border-stone-700/80 px-3.5 py-1.5 rounded-xl text-xs text-stone-300">
+                <div className="inline-flex items-center gap-2 bg-stone-50 dark:bg-stone-800/80 border border-stone-200 dark:border-stone-700/80 px-3.5 py-1.5 rounded-xl text-xs text-stone-700 dark:text-stone-300">
                   <Plane className="w-3.5 h-3.5 text-[#C5A059]" />
-                  <span className="font-semibold text-white">{directionText}</span>
-                  <span className="text-stone-500">•</span>
+                  <span className="font-semibold text-stone-900 dark:text-white">{directionText}</span>
+                  <span className="text-stone-300 dark:text-stone-500">•</span>
                   <span>{travelDate}</span>
-                  <span className="text-stone-500">•</span>
+                  <span className="text-stone-300 dark:text-stone-500">•</span>
                   <span>{passengers} Pax, {luggageCount} Bags</span>
                 </div>
 
@@ -838,7 +838,7 @@ export default function AirportTransferModule({
         <div className="space-y-6">
 
           {/* Top Bar: Selected Vehicle Summary & Return Button */}
-          <div className="bg-stone-900 dark:bg-[#0A0D14] border border-stone-800 dark:border-white/[0.08] rounded-2xl p-4 sm:p-5 text-stone-200 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div className="bg-white dark:bg-[#0A0D14] border border-stone-200 dark:border-white/[0.08] rounded-2xl p-4 sm:p-5 text-stone-900 dark:text-stone-200 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
             <div className="flex items-center gap-3">
               <button
                 type="button"
@@ -848,19 +848,19 @@ export default function AirportTransferModule({
                 <ArrowLeft className="w-4 h-4" />
                 <span>{t.changeVehicle}</span>
               </button>
-              <span className="text-stone-600">•</span>
+              <span className="text-stone-300 dark:text-stone-600">•</span>
               <div>
-                <span className="text-xs text-stone-400 block font-mono">SELECTED VEHICLE:</span>
-                <span className="text-sm font-bold text-white">
+                <span className="text-xs text-stone-500 dark:text-stone-400 block font-mono">SELECTED VEHICLE:</span>
+                <span className="text-sm font-bold text-stone-900 dark:text-white">
                   {vehicleNameDisplay} · ¥{pricing.totalAmount.toLocaleString()} JPY
                 </span>
               </div>
             </div>
 
-            <div className="text-xs text-stone-400 flex items-center gap-2">
+            <div className="text-xs text-stone-500 dark:text-stone-400 flex items-center gap-2">
               <Plane className="w-3.5 h-3.5 text-[#C5A059]" />
               <span>{directionText}</span>
-              <span className="text-stone-600">•</span>
+              <span className="text-stone-300 dark:text-stone-600">•</span>
               <span>{travelDate}</span>
             </div>
           </div>
