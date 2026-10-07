@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   ShieldCheck,
   Clock,
@@ -11,6 +11,8 @@ import dynamic from 'next/dynamic';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import StepProgressBar from '@/components/StepProgressBar';
+import BookingConfirmationModal from '@/components/BookingConfirmationModal';
+import { BookingPaymentDetails } from '@/components/StripePaymentModal';
 import TripSearchTab, {
   AirportSearchParams,
   SightseeingSearchParams,
@@ -87,6 +89,63 @@ export default function BookingPortalHomePage() {
     passengers: 4,
     skiGearCount: 4,
   });
+
+  // Session / Reload rehydration state
+  const [rehydratedBooking, setRehydratedBooking] = useState<{
+    bookingRef: string;
+    paymentIntentId: string;
+    bookingDetails: BookingPaymentDetails;
+  } | null>(null);
+  const [isRehydratedModalOpen, setIsRehydratedModalOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const searchParams = new URLSearchParams(window.location.search);
+    const isBookingSuccess =
+      searchParams.get('booking_success') === 'true' ||
+      searchParams.get('redirect_status') === 'succeeded';
+    const urlRef = searchParams.get('booking_ref');
+    const paymentIntentId = searchParams.get('payment_intent') || 'pi_confirmed';
+
+    try {
+      const savedConfirmed = sessionStorage.getItem('sk_confirmed_booking');
+      if (savedConfirmed) {
+        const parsed = JSON.parse(savedConfirmed);
+        if (parsed && parsed.bookingRef && parsed.bookingDetails) {
+          setRehydratedBooking({
+            bookingRef: parsed.bookingRef,
+            paymentIntentId: parsed.paymentIntentId || paymentIntentId,
+            bookingDetails: parsed.bookingDetails,
+          });
+          setIsRehydratedModalOpen(true);
+          return;
+        }
+      }
+
+      if (isBookingSuccess) {
+        const savedPending = sessionStorage.getItem('sk_pending_booking');
+        if (savedPending) {
+          const parsedPending = JSON.parse(savedPending);
+          const resolvedRef = urlRef || parsedPending.bookingRef || 'SK-CONFIRMED';
+          const confirmedObj = {
+            bookingRef: resolvedRef,
+            paymentIntentId: paymentIntentId,
+            bookingDetails: parsedPending.bookingDetails,
+          };
+          sessionStorage.setItem('sk_confirmed_booking', JSON.stringify({
+            ...confirmedObj,
+            timestamp: Date.now(),
+          }));
+          sessionStorage.removeItem('sk_pending_booking');
+          setRehydratedBooking(confirmedObj);
+          setIsRehydratedModalOpen(true);
+        }
+      }
+    } catch (e) {
+      console.warn('Session rehydration notice:', e);
+    }
+  }, []);
 
   // Smooth scroll helper
   const scrollToBookingEngine = () => {
@@ -203,6 +262,44 @@ export default function BookingPortalHomePage() {
 
       {/* ── Main Booking Portal Content ── */}
       <main className="pt-20 sm:pt-24 pb-16">
+
+        {/* ── Active Confirmed Booking Recovery Banner (when modal was dismissed) ── */}
+        {rehydratedBooking && !isRehydratedModalOpen && (
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 animate-fade-in">
+            <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-emerald-300">
+              <div className="flex items-center gap-3">
+                <ShieldCheck className="w-5 h-5 text-emerald-400 shrink-0" />
+                <span className="text-xs sm:text-sm font-semibold">
+                  {lang === 'ja'
+                    ? `確定済みの予約: ${rehydratedBooking.bookingRef} (決済完了・運行保証)`
+                    : lang === 'zh'
+                    ? `当前已确认预约: ${rehydratedBooking.bookingRef} (已支付·席位保障)`
+                    : `Active Confirmed Booking: ${rehydratedBooking.bookingRef} (Paid & Guaranteed)`}
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setIsRehydratedModalOpen(true)}
+                  className="bg-emerald-500 text-stone-950 font-bold px-3.5 py-1.5 rounded-xl text-xs hover:bg-emerald-400 transition-colors cursor-pointer"
+                >
+                  {lang === 'ja' ? '予約確認書を表示' : lang === 'zh' ? '查看预订凭证' : 'View Voucher'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    sessionStorage.removeItem('sk_confirmed_booking');
+                    sessionStorage.removeItem('sk_pending_booking');
+                    setRehydratedBooking(null);
+                  }}
+                  className="text-xs text-stone-400 hover:text-stone-200 underline px-2 py-1 cursor-pointer"
+                >
+                  {lang === 'ja' ? '新規予約を作成' : lang === 'zh' ? '新建预约' : 'New Booking'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
         
         {/* 1. Refined Editorial Heading */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 sm:mb-8 text-center">
@@ -341,6 +438,17 @@ export default function BookingPortalHomePage() {
         </section>
 
       </main>
+
+      {/* ── Rehydrated Booking Confirmation Modal (Preserved on Reload & 3DS Return) ── */}
+      {rehydratedBooking && (
+        <BookingConfirmationModal
+          isOpen={isRehydratedModalOpen}
+          onClose={() => setIsRehydratedModalOpen(false)}
+          bookingRef={rehydratedBooking.bookingRef}
+          paymentIntentId={rehydratedBooking.paymentIntentId}
+          bookingDetails={rehydratedBooking.bookingDetails}
+        />
+      )}
 
       {/* ── Minimalist Clean Footer ── */}
       <SiteFooter />
