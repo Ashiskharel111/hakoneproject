@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState, useMemo } from 'react';
-import { MapPin, Check, Building2, ChevronRight } from 'lucide-react';
+import { MapPin, Check, Building2, ChevronRight, AlertCircle } from 'lucide-react';
 import { searchTokyoPlaces, TokyoPlace } from '@/lib/tokyo-places';
 
 interface GooglePlacesAutocompleteProps {
@@ -10,6 +10,9 @@ interface GooglePlacesAutocompleteProps {
   placeholder?: string;
   className?: string;
   onPlaceSelect?: (place: { name: string; formatted_address: string; lat?: number; lng?: number }) => void;
+  hasError?: boolean;
+  errorMessage?: string;
+  id?: string;
 }
 
 declare global {
@@ -55,6 +58,9 @@ export default function GooglePlacesAutocomplete({
   placeholder = 'Search hotel, airport, or address in Tokyo...',
   className = '',
   onPlaceSelect,
+  hasError = false,
+  errorMessage,
+  id,
 }: GooglePlacesAutocompleteProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -141,8 +147,11 @@ export default function GooglePlacesAutocomplete({
   return (
     <div ref={containerRef} className="relative w-full space-y-2">
       <div className="relative flex items-center">
-        <MapPin className="absolute left-3 w-4 h-4 text-[#8C6D3F] dark:text-[#C5A059] pointer-events-none" />
+        <MapPin className={`absolute left-3 w-4 h-4 pointer-events-none transition-colors ${
+          hasError ? 'text-red-500' : 'text-[#8C6D3F] dark:text-[#C5A059]'
+        }`} />
         <input
+          id={id}
           ref={inputRef}
           type="text"
           value={value}
@@ -154,7 +163,11 @@ export default function GooglePlacesAutocomplete({
             if (value.length >= 2) setShowDropdown(true);
           }}
           placeholder={placeholder}
-          className={`w-full pl-9 pr-8 h-11 bg-white dark:bg-[#0E131F] border border-[#E5E8ED] dark:border-slate-700 rounded-xl text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none focus:border-[#C5A059] transition-colors ${className}`}
+          className={`w-full pl-9 pr-8 h-11 rounded-xl text-xs font-medium transition-all ${
+            hasError
+              ? 'bg-red-50/30 dark:bg-red-950/20 border-2 border-red-500 ring-2 ring-red-500/20 text-stone-900 dark:text-white placeholder:text-red-400 focus:outline-none focus:border-red-600'
+              : 'bg-white dark:bg-[#0E131F] border border-[#E5E8ED] dark:border-slate-700 text-[#1A1A1A] dark:text-white focus:outline-none focus:border-[#C5A059]'
+          } ${className}`}
         />
         {isScriptLoaded && (
           <span
@@ -165,6 +178,13 @@ export default function GooglePlacesAutocomplete({
           </span>
         )}
       </div>
+
+      {hasError && errorMessage && (
+        <div className="flex items-center gap-1.5 text-[11px] font-bold text-red-600 dark:text-red-400 animate-in fade-in-50 duration-150">
+          <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+          <span>{errorMessage}</span>
+        </div>
+      )}
 
       {/* Instant Local Suggestions Dropdown (Zero Google API Quota Consumed) */}
       {showDropdown && localMatches.length > 0 && (

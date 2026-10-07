@@ -16,6 +16,7 @@ import {
   ShieldCheck,
   ChevronDown,
   Sparkles,
+  AlertCircle,
 } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import { Airport } from '@/lib/airport-pricing';
@@ -103,6 +104,11 @@ export default function TripSearchTab({
   const [skiPax, setSkiPax] = useState<number>(4);
   const [skiGearCount, setSkiGearCount] = useState<number>(4);
 
+  // Validation State
+  const [destinationError, setDestinationError] = useState<string | null>(null);
+  const [dateError, setDateError] = useState<string | null>(null);
+  const hotelInputRef = useRef<HTMLInputElement>(null);
+
   const paxDropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -147,10 +153,29 @@ export default function TripSearchTab({
 
   const handleAirportSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!hotelAddress.trim()) {
+      setDestinationError(
+        lang === 'ja'
+          ? '目的地・ご宿泊ホテル名をご入力ください（下の人気エリアからも即時選択できます）。'
+          : lang === 'zh'
+          ? '请输入目的地酒店名称或东京区域（也可直接点击下方热门区域快速填充）。'
+          : 'Please enter your destination hotel or Tokyo district (or select a popular area below) to proceed.'
+      );
+      hotelInputRef.current?.focus();
+      return;
+    }
+    if (!airportDate) {
+      setDateError(
+        lang === 'ja' ? '乗車日をご指定ください。' : lang === 'zh' ? '请选择乘车日期。' : 'Please select your travel date.'
+      );
+      return;
+    }
+    setDestinationError(null);
+    setDateError(null);
     onSearchAirport({
       airport,
       direction,
-      hotelAddress,
+      hotelAddress: hotelAddress.trim(),
       travelDate: airportDate,
       pickupTime: airportTime,
       passengers: airportPax,
@@ -338,20 +363,41 @@ export default function TripSearchTab({
                 </div>
 
                 {/* Field 2: Drop-off Hotel / Destination with Quick District Chips */}
-                <div className="md:col-span-4 p-3 bg-stone-50/80 dark:bg-[#101420] border border-stone-200/80 dark:border-white/[0.07] rounded-xl hover:border-[#C5A059]/40 focus-within:border-[#C5A059] transition-all flex flex-col justify-center">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#C5A059] block mb-1">
-                    {direction === 'airport_to_hotel' ? t.dropoffLocation : t.pickupLocation}
-                  </span>
+                <div className={`md:col-span-4 p-3 rounded-xl transition-all flex flex-col justify-center relative ${
+                  destinationError
+                    ? 'bg-red-50/40 dark:bg-red-950/25 border-2 border-red-500 ring-2 ring-red-500/20'
+                    : 'bg-stone-50/80 dark:bg-[#101420] border border-stone-200/80 dark:border-white/[0.07] hover:border-[#C5A059]/40 focus-within:border-[#C5A059]'
+                }`}>
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#C5A059]">
+                      {direction === 'airport_to_hotel' ? t.dropoffLocation : t.pickupLocation}
+                    </span>
+                    <span className={`text-[9px] font-mono font-bold uppercase tracking-wider px-1.5 py-0.5 rounded ${
+                      destinationError ? 'bg-red-500 text-white animate-pulse' : 'text-stone-400'
+                    }`}>
+                      * Required
+                    </span>
+                  </div>
                   <div className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-stone-400 shrink-0" />
+                    <MapPin className={`w-4 h-4 shrink-0 transition-colors ${destinationError ? 'text-red-500' : 'text-stone-400'}`} />
                     <input
+                      ref={hotelInputRef}
                       type="text"
                       value={hotelAddress}
-                      onChange={(e) => setHotelAddress(e.target.value)}
+                      onChange={(e) => {
+                        setHotelAddress(e.target.value);
+                        if (destinationError) setDestinationError(null);
+                      }}
                       placeholder={lang === 'ja' ? 'ホテル名・新宿・銀座・港区…' : lang === 'zh' ? '输入酒店名称或东京区域 (如新宿/银座)' : 'Hotel name or district (e.g. Shinjuku)'}
                       className="w-full bg-transparent text-xs sm:text-sm font-bold text-stone-900 dark:text-white placeholder:text-stone-400 focus:outline-none"
                     />
                   </div>
+                  {destinationError && (
+                    <div className="flex items-center gap-1.5 mt-2 pt-1.5 border-t border-red-200 dark:border-red-900/60 text-[11px] font-bold text-red-600 dark:text-red-400 animate-in fade-in-50 duration-150">
+                      <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                      <span>{destinationError}</span>
+                    </div>
+                  )}
                 </div>
 
                 {/* Field 3: Date & Time */}
@@ -467,6 +513,21 @@ export default function TripSearchTab({
 
               </div>
 
+              {/* Destination Prompt Banner if Empty */}
+              {destinationError && (
+                <div className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800/80 rounded-xl text-xs text-red-700 dark:text-red-300 flex items-center justify-between gap-3 shadow-xs">
+                  <div className="flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 text-red-600 dark:text-red-400 shrink-0" />
+                    <span>
+                      <strong>Destination required:</strong> Please type your hotel above, or click a popular area below to autofill and see vehicle fares.
+                    </span>
+                  </div>
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-red-600 dark:text-red-400 shrink-0 hidden sm:inline-block">
+                    Action Required
+                  </span>
+                </div>
+              )}
+
               {/* Bottom Quick Chips + Submit Button */}
               <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-1">
                 
@@ -477,8 +538,17 @@ export default function TripSearchTab({
                     <button
                       key={dst}
                       type="button"
-                      onClick={() => setHotelAddress(dst)}
-                      className="px-2.5 py-1 rounded-lg text-[10px] font-semibold bg-stone-100 dark:bg-white/[0.05] border border-stone-200/70 dark:border-white/[0.06] text-stone-600 dark:text-stone-300 hover:text-[#C5A059] hover:border-[#C5A059]/30 transition-colors cursor-pointer"
+                      onClick={() => {
+                        setHotelAddress(dst);
+                        if (destinationError) setDestinationError(null);
+                      }}
+                      className={`px-2.5 py-1 rounded-lg text-[10px] font-semibold border transition-all cursor-pointer ${
+                        hotelAddress === dst
+                          ? 'bg-[#C5A059] text-stone-950 border-[#C5A059] font-bold shadow-xs'
+                          : destinationError
+                          ? 'bg-[#C5A059]/10 border-[#C5A059]/40 text-[#C5A059] hover:bg-[#C5A059] hover:text-stone-950'
+                          : 'bg-stone-100 dark:bg-white/[0.05] border-stone-200/70 dark:border-white/[0.06] text-stone-600 dark:text-stone-300 hover:text-[#C5A059] hover:border-[#C5A059]/30'
+                      }`}
                     >
                       {dst}
                     </button>

@@ -126,6 +126,13 @@ export default function AirportTransferModule({
   // Confirmation & Error State
   const [isConfirmedAgreement, setIsConfirmedAgreement] = useState<boolean>(false);
   const [validationError, setValidationError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<{
+    hotelAddress?: string;
+    guestName?: string;
+    guestEmail?: string;
+    guestPhone?: string;
+    agreement?: string;
+  }>({});
 
   // Modals
   const [isStripeModalOpen, setIsStripeModalOpen] = useState(false);
@@ -495,56 +502,92 @@ export default function AirportTransferModule({
   };
 
   const handleInitiatePayment = () => {
+    const newErrors: {
+      hotelAddress?: string;
+      guestName?: string;
+      guestEmail?: string;
+      guestPhone?: string;
+      agreement?: string;
+    } = {};
+
     if (!hotelAddress.trim()) {
-      setValidationError(
+      newErrors.hotelAddress =
         lang === 'ja'
           ? 'お届け先ホテル名または東京都内住所をご入力ください。'
           : lang === 'zh'
           ? '请输入送达目的地酒店名称或东京都内详细地址。'
-          : 'Please enter your destination hotel or Tokyo address.'
-      );
-      return;
+          : 'Please enter your destination hotel or Tokyo address.';
     }
     if (!guestName.trim()) {
-      setValidationError(
+      newErrors.guestName =
         lang === 'ja'
           ? '代表者様のお名前をご入力ください。'
           : lang === 'zh'
           ? '请输入代表乘客姓名。'
-          : 'Please enter the lead guest full name.'
-      );
-      return;
+          : 'Please enter the lead guest full name.';
     }
-    if (!guestEmail.trim() || !isValidEmail(guestEmail)) {
-      setValidationError(
+    if (!guestEmail.trim()) {
+      newErrors.guestEmail =
         lang === 'ja'
-          ? '有効な予約確認書送信用メールアドレスをご入力ください。'
+          ? '予約確認書送信用メールアドレスをご入力ください。'
           : lang === 'zh'
           ? '请输入接收预订确认凭证的有效电子邮箱。'
-          : 'Please enter a valid email address for confirmation.'
-      );
-      return;
+          : 'Please enter a valid email address for confirmation.';
+    } else if (!isValidEmail(guestEmail)) {
+      newErrors.guestEmail =
+        lang === 'ja'
+          ? '有効なメールアドレス形式をご入力ください（例: name@example.com）。'
+          : lang === 'zh'
+          ? '请输入有效格式的电子邮箱（例如: name@example.com）。'
+          : 'Please enter a valid email address (e.g. name@example.com).';
     }
     if (guestPhone.trim() && !isValidPhone(guestPhone)) {
-      setValidationError(
+      newErrors.guestPhone =
         lang === 'ja'
           ? '国際電話番号（国番号付き 例: +81 90...）をご入力ください。'
           : lang === 'zh'
           ? '请输入包含国家区号的有效联系电话（例如: +81 90...）。'
-          : 'Please enter a valid phone number with country code.'
-      );
-      return;
+          : 'Please enter a valid phone number with country code.';
     }
     if (!isConfirmedAgreement) {
-      setValidationError(
+      newErrors.agreement =
         lang === 'ja'
           ? 'お支払い手続きの前に、利用規約への同意にチェックを入れてください。'
           : lang === 'zh'
           ? '请在支付前勾选确认条款。'
-          : 'Please accept the transport agreement before proceeding to checkout.'
-      );
+          : 'Please accept the transport agreement before proceeding to checkout.';
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setFieldErrors(newErrors);
+      const firstError = Object.values(newErrors)[0];
+      setValidationError(firstError);
+
+      // Smoothly scroll to and focus the first invalid field
+      if (newErrors.hotelAddress) {
+        const el = document.getElementById('hotel-address-input') || document.getElementById('section-hotel-address');
+        el?.focus?.();
+        el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else if (newErrors.guestName) {
+        const el = document.getElementById('guest-name-input');
+        el?.focus?.();
+        el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else if (newErrors.guestEmail) {
+        const el = document.getElementById('guest-email-input');
+        el?.focus?.();
+        el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else if (newErrors.guestPhone) {
+        const el = document.getElementById('guest-phone-input');
+        el?.focus?.();
+        el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else if (newErrors.agreement) {
+        const el = document.getElementById('section-agreement');
+        el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
       return;
     }
+
+    setFieldErrors({});
     setValidationError(null);
     setIsStripeModalOpen(true);
   };
@@ -929,6 +972,21 @@ export default function AirportTransferModule({
             </div>
           </div>
 
+          {/* Missing Required Details Alert Callout */}
+          {Object.keys(fieldErrors).length > 0 && (
+            <div className="p-4 bg-red-50 dark:bg-red-950/40 border-2 border-red-500 rounded-2xl text-xs text-red-700 dark:text-red-300 flex items-start gap-3 shadow-sm animate-in fade-in-50 duration-200">
+              <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
+              <div className="space-y-1">
+                <span className="font-bold text-sm block text-red-900 dark:text-red-200">
+                  {lang === 'ja' ? 'ご入力が必要な項目があります' : lang === 'zh' ? '请完善以下标红的必填项' : 'Please Complete Highlighted Fields'}
+                </span>
+                <p className="text-xs leading-relaxed text-red-800 dark:text-red-300">
+                  {validationError}
+                </p>
+              </div>
+            </div>
+          )}
+
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
 
             {/* Left Column: Flight Tracking & Guest Details (7 Cols) */}
@@ -951,12 +1009,12 @@ export default function AirportTransferModule({
                 {/* Flight Number Search Input */}
                 <div>
                   <label className="text-xs font-semibold text-stone-700 dark:text-stone-300 block mb-1.5">
-                    {t.flightNumberLabel}
+                    {t.flightNumberLabel} <span className="text-stone-400 font-normal">(e.g. NH110 or TBD)</span>
                   </label>
                   <div className="flex items-center gap-2">
                     <input
                       type="text"
-                      placeholder="e.g. EK312, NH110, JL5, SQ638"
+                      placeholder="e.g. EK312, NH110, JL5, SQ638, or TBD"
                       value={flightNumber}
                       onChange={(e) => setFlightNumber(e.target.value)}
                       onKeyDown={(e) => {
@@ -978,11 +1036,31 @@ export default function AirportTransferModule({
                       <span>{isLookingUpFlight ? t.checkingText : t.checkButton}</span>
                     </button>
                   </div>
+                  <p className="text-[11px] text-stone-500 dark:text-stone-400 mt-1.5 flex items-center gap-1.5">
+                    <Sparkles className="w-3.5 h-3.5 text-[#C5A059] shrink-0" />
+                    <span>
+                      Enter flight code for live radar delay sync, or select <strong>TBD</strong> below if not yet booked.
+                    </span>
+                  </p>
                 </div>
 
-                {/* Popular Flight Sample Chips */}
+                {/* Popular Flight Sample Chips + TBD Quick Button */}
                 <div className="flex items-center gap-1.5 flex-wrap pt-1">
-                  <span className="text-[11px] text-stone-400">Popular:</span>
+                  <span className="text-[11px] text-stone-400 font-mono">Quick:</span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFlightNumber('TBD');
+                      setFlightData(null);
+                    }}
+                    className={`text-[10px] font-mono font-bold px-2.5 py-1 rounded-lg border transition-all cursor-pointer ${
+                      flightNumber.toUpperCase() === 'TBD'
+                        ? 'bg-[#C5A059] text-stone-950 border-[#C5A059]'
+                        : 'bg-[#C5A059]/10 border-[#C5A059]/30 text-[#C5A059] hover:bg-[#C5A059]/20'
+                    }`}
+                  >
+                    ✈️ TBD (Pending Booking)
+                  </button>
                   {quickFlightSamples.map((sample) => (
                     <button
                       key={sample}
@@ -1124,18 +1202,35 @@ export default function AirportTransferModule({
               </div>
 
               {/* Section 2: Hotel & Tokyo Destination Address */}
-              <div className="bg-white dark:bg-[#0E131F] rounded-3xl border border-stone-200 dark:border-stone-800 p-6 space-y-4 shadow-sm">
-                <div className="flex items-center gap-2 pb-3 border-b border-stone-100 dark:border-stone-800">
-                  <MapPin className="w-4 h-4 text-[#C5A059]" />
-                  <h3 className="text-sm sm:text-base font-bold text-stone-900 dark:text-white">
-                    {t.hotelLabel} <span className="text-red-500">*</span>
-                  </h3>
+              <div id="section-hotel-address" className={`bg-white dark:bg-[#0E131F] rounded-3xl border p-6 space-y-4 shadow-sm transition-all ${
+                fieldErrors.hotelAddress
+                  ? 'border-red-500 ring-2 ring-red-500/20 bg-red-50/10 dark:bg-red-950/10'
+                  : 'border-stone-200 dark:border-stone-800'
+              }`}>
+                <div className="flex items-center justify-between pb-3 border-b border-stone-100 dark:border-stone-800">
+                  <div className="flex items-center gap-2">
+                    <MapPin className={`w-4 h-4 ${fieldErrors.hotelAddress ? 'text-red-500' : 'text-[#C5A059]'}`} />
+                    <h3 className="text-sm sm:text-base font-bold text-stone-900 dark:text-white">
+                      {t.hotelLabel} <span className="text-red-500">*</span>
+                    </h3>
+                  </div>
+                  {fieldErrors.hotelAddress && (
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-red-500">
+                      Destination Required
+                    </span>
+                  )}
                 </div>
 
                 <GooglePlacesAutocomplete
+                  id="hotel-address-input"
                   value={hotelAddress}
+                  hasError={!!fieldErrors.hotelAddress}
+                  errorMessage={fieldErrors.hotelAddress}
                   onChange={(val) => {
                     setHotelAddress(val);
+                    if (fieldErrors.hotelAddress) {
+                      setFieldErrors((prev) => ({ ...prev, hotelAddress: undefined }));
+                    }
                     if (validationError) setValidationError(null);
                   }}
                   placeholder="Search hotel (e.g. Aman Tokyo, Grand Hyatt, Ritz-Carlton) or Tokyo address..."
@@ -1157,12 +1252,29 @@ export default function AirportTransferModule({
                       {t.guestNameLabel} <span className="text-red-500">*</span>
                     </label>
                     <input
+                      id="guest-name-input"
                       type="text"
                       placeholder="e.g. Alexander Hamilton"
                       value={guestName}
-                      onChange={(e) => setGuestName(e.target.value)}
-                      className="w-full bg-stone-50 dark:bg-[#161B26] border border-stone-200 dark:border-stone-700/80 rounded-xl px-3.5 py-2.5 text-xs text-stone-900 dark:text-white font-medium focus:outline-none focus:border-[#C5A059]"
+                      onChange={(e) => {
+                        setGuestName(e.target.value);
+                        if (fieldErrors.guestName) {
+                          setFieldErrors((prev) => ({ ...prev, guestName: undefined }));
+                        }
+                        if (validationError) setValidationError(null);
+                      }}
+                      className={`w-full bg-stone-50 dark:bg-[#161B26] border rounded-xl px-3.5 py-2.5 text-xs text-stone-900 dark:text-white font-medium focus:outline-none transition-all ${
+                        fieldErrors.guestName
+                          ? 'border-2 border-red-500 ring-2 ring-red-500/20 bg-red-50/20 dark:bg-red-950/20'
+                          : 'border-stone-200 dark:border-stone-700/80 focus:border-[#C5A059]'
+                      }`}
                     />
+                    {fieldErrors.guestName && (
+                      <div className="flex items-center gap-1.5 mt-1.5 text-[11px] font-bold text-red-600 dark:text-red-400">
+                        <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                        <span>{fieldErrors.guestName}</span>
+                      </div>
+                    )}
                   </div>
 
                   <div>
@@ -1170,12 +1282,29 @@ export default function AirportTransferModule({
                       {t.guestEmailLabel} <span className="text-red-500">*</span>
                     </label>
                     <input
+                      id="guest-email-input"
                       type="email"
                       placeholder="e.g. client@luxury.com"
                       value={guestEmail}
-                      onChange={(e) => setGuestEmail(e.target.value)}
-                      className="w-full bg-stone-50 dark:bg-[#161B26] border border-stone-200 dark:border-stone-700/80 rounded-xl px-3.5 py-2.5 text-xs text-stone-900 dark:text-white font-medium focus:outline-none focus:border-[#C5A059]"
+                      onChange={(e) => {
+                        setGuestEmail(e.target.value);
+                        if (fieldErrors.guestEmail) {
+                          setFieldErrors((prev) => ({ ...prev, guestEmail: undefined }));
+                        }
+                        if (validationError) setValidationError(null);
+                      }}
+                      className={`w-full bg-stone-50 dark:bg-[#161B26] border rounded-xl px-3.5 py-2.5 text-xs text-stone-900 dark:text-white font-medium focus:outline-none transition-all ${
+                        fieldErrors.guestEmail
+                          ? 'border-2 border-red-500 ring-2 ring-red-500/20 bg-red-50/20 dark:bg-red-950/20'
+                          : 'border-stone-200 dark:border-stone-700/80 focus:border-[#C5A059]'
+                      }`}
                     />
+                    {fieldErrors.guestEmail && (
+                      <div className="flex items-center gap-1.5 mt-1.5 text-[11px] font-bold text-red-600 dark:text-red-400">
+                        <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                        <span>{fieldErrors.guestEmail}</span>
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -1184,12 +1313,32 @@ export default function AirportTransferModule({
                     {t.guestPhoneLabel}
                   </label>
                   <input
+                    id="guest-phone-input"
                     type="tel"
                     placeholder="e.g. +81 80 1234 5678 or +1 415 555 0199"
                     value={guestPhone}
-                    onChange={(e) => setGuestPhone(e.target.value)}
-                    className="w-full bg-stone-50 dark:bg-[#161B26] border border-stone-200 dark:border-stone-700/80 rounded-xl px-3.5 py-2.5 text-xs text-stone-900 dark:text-white font-medium focus:outline-none focus:border-[#C5A059]"
+                    onChange={(e) => {
+                      setGuestPhone(e.target.value);
+                      if (fieldErrors.guestPhone) {
+                        setFieldErrors((prev) => ({ ...prev, guestPhone: undefined }));
+                      }
+                      if (validationError) setValidationError(null);
+                    }}
+                    className={`w-full bg-stone-50 dark:bg-[#161B26] border rounded-xl px-3.5 py-2.5 text-xs text-stone-900 dark:text-white font-medium focus:outline-none transition-all ${
+                      fieldErrors.guestPhone
+                        ? 'border-2 border-red-500 ring-2 ring-red-500/20 bg-red-50/20 dark:bg-red-950/20'
+                        : 'border-stone-200 dark:border-stone-700/80 focus:border-[#C5A059]'
+                    }`}
                   />
+                  {fieldErrors.guestPhone && (
+                    <div className="flex items-center gap-1.5 mt-1.5 text-[11px] font-bold text-red-600 dark:text-red-400">
+                      <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                      <span>{fieldErrors.guestPhone}</span>
+                    </div>
+                  )}
+                  <span className="text-[10px] text-stone-400 block mt-1">
+                    Chauffeur sends SMS / WhatsApp arrival notice directly to this number upon flight landing.
+                  </span>
                 </div>
 
                 {/* Narita Greeter Toggle if NRT */}
@@ -1323,13 +1472,20 @@ export default function AirportTransferModule({
                 </div>
 
                 {/* Mandatory Agreement Checkbox */}
-                <div className="space-y-2">
+                <div id="section-agreement" className={`p-3 rounded-2xl transition-all ${
+                  fieldErrors.agreement
+                    ? 'bg-red-50/40 dark:bg-red-950/30 border-2 border-red-500 ring-2 ring-red-500/20'
+                    : 'space-y-2'
+                }`}>
                   <label className="flex items-start gap-2.5 cursor-pointer select-none">
                     <input
                       type="checkbox"
                       checked={isConfirmedAgreement}
                       onChange={(e) => {
                         setIsConfirmedAgreement(e.target.checked);
+                        if (fieldErrors.agreement) {
+                          setFieldErrors((prev) => ({ ...prev, agreement: undefined }));
+                        }
                         if (validationError) setValidationError(null);
                       }}
                       className="w-4 h-4 mt-0.5 rounded text-[#C5A059] border-stone-300 focus:ring-[#C5A059] cursor-pointer"
@@ -1339,8 +1495,15 @@ export default function AirportTransferModule({
                     </span>
                   </label>
 
-                  {validationError && (
-                    <div className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800/80 rounded-xl text-xs text-red-600 dark:text-red-400 flex items-center gap-2">
+                  {fieldErrors.agreement && (
+                    <div className="flex items-center gap-1.5 mt-1.5 text-[11px] font-bold text-red-600 dark:text-red-400">
+                      <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                      <span>{fieldErrors.agreement}</span>
+                    </div>
+                  )}
+
+                  {validationError && !fieldErrors.agreement && (
+                    <div className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800/80 rounded-xl text-xs text-red-600 dark:text-red-400 flex items-center gap-2 mt-2">
                       <AlertCircle className="w-4 h-4 shrink-0" />
                       <span>{validationError}</span>
                     </div>

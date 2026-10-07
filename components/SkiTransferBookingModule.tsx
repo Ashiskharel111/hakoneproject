@@ -17,7 +17,8 @@ import {
   Car,
   Check,
   AlertTriangle,
-  FileText
+  FileText,
+  AlertCircle,
 } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import StripePaymentModal, { BookingPaymentDetails } from '@/components/StripePaymentModal';
@@ -144,6 +145,13 @@ export default function SkiTransferBookingModule({
 
   const [isConfirmedAgreement, setIsConfirmedAgreement] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<{
+    chaletAddress?: string;
+    guestName?: string;
+    guestEmail?: string;
+    guestPhone?: string;
+    agreement?: string;
+  }>({});
 
   // Stripe Modals
   const [isStripeModalOpen, setIsStripeModalOpen] = useState(false);
@@ -427,6 +435,14 @@ export default function SkiTransferBookingModule({
   };
 
   const handleInitiatePayment = () => {
+    const newErrors: {
+      chaletAddress?: string;
+      guestName?: string;
+      guestEmail?: string;
+      guestPhone?: string;
+      agreement?: string;
+    } = {};
+
     if (isOverCapacity && !addSecondVehicle) {
       setValidationError(
         lang === 'ja'
@@ -438,44 +454,43 @@ export default function SkiTransferBookingModule({
       return;
     }
     if (!chaletAddress.trim()) {
-      setValidationError(
+      newErrors.chaletAddress =
         lang === 'ja'
           ? '目的地の宿・シャレー名または住所をご入力ください。'
           : lang === 'zh'
           ? '请输入目的地木屋、酒店名称或具体地址。'
-          : 'Please enter your destination chalet, hotel name, or address.'
-      );
-      return;
+          : 'Please enter your destination chalet, hotel name, or address.';
     }
-    if (!guestName.trim() || !guestEmail.trim()) {
-      setValidationError(
+    if (!guestName.trim()) {
+      newErrors.guestName =
         lang === 'ja'
-          ? '代表者様のお名前と予約確認書送信用メールアドレスをご入力ください。'
+          ? '代表者様のお名前をご入力ください。'
           : lang === 'zh'
-          ? '请输入代表乘客姓名与确认单电子邮箱。'
-          : 'Please enter the lead guest name and confirmation email address.'
-      );
-      return;
+          ? '请输入代表乘客姓名。'
+          : 'Please enter the lead guest name.';
     }
-    if (!isValidEmail(guestEmail)) {
-      setValidationError(
+    if (!guestEmail.trim()) {
+      newErrors.guestEmail =
+        lang === 'ja'
+          ? '予約確認書送信用メールアドレスをご入力ください。'
+          : lang === 'zh'
+          ? '请输入接收预订确认凭证的电子邮箱。'
+          : 'Please enter confirmation email address.';
+    } else if (!isValidEmail(guestEmail)) {
+      newErrors.guestEmail =
         lang === 'ja'
           ? '有効なメールアドレスをご入力ください（例: name@example.com）。'
           : lang === 'zh'
           ? '请输入有效的电子邮箱地址（例如: name@example.com）。'
-          : 'Please enter a valid email address (e.g. name@example.com).'
-      );
-      return;
+          : 'Please enter a valid email address (e.g. name@example.com).';
     }
     if (guestPhone.trim() && !isValidPhone(guestPhone)) {
-      setValidationError(
+      newErrors.guestPhone =
         lang === 'ja'
           ? '国際電話番号（国番号付き 例: +81 90...）をご入力ください。'
           : lang === 'zh'
           ? '请输入包含国家区号的有效联系电话（例如: +81 90...）。'
-          : 'Please enter a valid phone number with country code (e.g. +81 90...).'
-      );
-      return;
+          : 'Please enter a valid phone number with country code (e.g. +81 90...).';
     }
     if (travelDate < getTodayJST()) {
       setValidationError(
@@ -488,15 +503,34 @@ export default function SkiTransferBookingModule({
       return;
     }
     if (!isConfirmedAgreement) {
-      setValidationError(
+      newErrors.agreement =
         lang === 'ja'
           ? 'お支払い前に同意のチェックボックスを選択してください。'
           : lang === 'zh'
           ? '请在支付前勾选确认条款。'
-          : 'Please check the mandatory confirmation box before proceeding.'
-      );
+          : 'Please check the mandatory confirmation box before proceeding.';
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setFieldErrors(newErrors);
+      setValidationError(Object.values(newErrors)[0]);
+
+      if (newErrors.chaletAddress) {
+        document.getElementById('ski-chalet-address')?.focus?.();
+        document.getElementById('ski-chalet-address')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else if (newErrors.guestName) {
+        document.getElementById('ski-guest-name')?.focus?.();
+        document.getElementById('ski-guest-name')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else if (newErrors.guestEmail) {
+        document.getElementById('ski-guest-email')?.focus?.();
+        document.getElementById('ski-guest-email')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else if (newErrors.agreement) {
+        document.getElementById('ski-agreement')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
       return;
     }
+
+    setFieldErrors({});
     setValidationError(null);
     setIsStripeModalOpen(true);
   };
@@ -790,15 +824,29 @@ export default function SkiTransferBookingModule({
                     {t.chaletLabel} <span className="text-red-500">*</span>
                   </label>
                   <input
+                    id="ski-chalet-address"
                     type="text"
                     placeholder={t.chaletPlaceholder}
                     value={chaletAddress}
                     onChange={(e) => {
                       setChaletAddress(e.target.value);
+                      if (fieldErrors.chaletAddress) {
+                        setFieldErrors((prev) => ({ ...prev, chaletAddress: undefined }));
+                      }
                       if (validationError) setValidationError(null);
                     }}
-                    className="w-full bg-[#F5F7FA] dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none focus:border-[#0068FF]"
+                    className={`w-full bg-[#F5F7FA] dark:bg-[#161f30] border rounded-xl px-3.5 py-2.5 text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none transition-all ${
+                      fieldErrors.chaletAddress
+                        ? 'border-2 border-red-500 ring-2 ring-red-500/20 bg-red-50/20 dark:bg-red-950/20'
+                        : 'border-[#E5E8ED] dark:border-slate-700 focus:border-[#C5A059]'
+                    }`}
                   />
+                  {fieldErrors.chaletAddress && (
+                    <div className="flex items-center gap-1.5 mt-1.5 text-[11px] font-bold text-red-600 dark:text-red-400">
+                      <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                      <span>{fieldErrors.chaletAddress}</span>
+                    </div>
+                  )}
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -807,15 +855,29 @@ export default function SkiTransferBookingModule({
                       {t.leadNameLabel} <span className="text-red-500">*</span>
                     </label>
                     <input
+                      id="ski-guest-name"
                       type="text"
                       placeholder="e.g. John Smith"
                       value={guestName}
                       onChange={(e) => {
                         setGuestName(e.target.value);
+                        if (fieldErrors.guestName) {
+                          setFieldErrors((prev) => ({ ...prev, guestName: undefined }));
+                        }
                         if (validationError) setValidationError(null);
                       }}
-                      className="w-full bg-[#F5F7FA] dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none focus:border-[#0068FF]"
+                      className={`w-full bg-[#F5F7FA] dark:bg-[#161f30] border rounded-xl px-3.5 py-2.5 text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none transition-all ${
+                        fieldErrors.guestName
+                          ? 'border-2 border-red-500 ring-2 ring-red-500/20 bg-red-50/20 dark:bg-red-950/20'
+                          : 'border-[#E5E8ED] dark:border-slate-700 focus:border-[#C5A059]'
+                      }`}
                     />
+                    {fieldErrors.guestName && (
+                      <div className="flex items-center gap-1.5 mt-1.5 text-[11px] font-bold text-red-600 dark:text-red-400">
+                        <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                        <span>{fieldErrors.guestName}</span>
+                      </div>
+                    )}
                   </div>
 
                   <div>
@@ -823,15 +885,29 @@ export default function SkiTransferBookingModule({
                       {t.emailLabel} <span className="text-red-500">*</span>
                     </label>
                     <input
+                      id="ski-guest-email"
                       type="email"
                       placeholder="client@example.com"
                       value={guestEmail}
                       onChange={(e) => {
                         setGuestEmail(e.target.value);
+                        if (fieldErrors.guestEmail) {
+                          setFieldErrors((prev) => ({ ...prev, guestEmail: undefined }));
+                        }
                         if (validationError) setValidationError(null);
                       }}
-                      className="w-full bg-[#F5F7FA] dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none focus:border-[#0068FF]"
+                      className={`w-full bg-[#F5F7FA] dark:bg-[#161f30] border rounded-xl px-3.5 py-2.5 text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none transition-all ${
+                        fieldErrors.guestEmail
+                          ? 'border-2 border-red-500 ring-2 ring-red-500/20 bg-red-50/20 dark:bg-red-950/20'
+                          : 'border-[#E5E8ED] dark:border-slate-700 focus:border-[#C5A059]'
+                      }`}
                     />
+                    {fieldErrors.guestEmail && (
+                      <div className="flex items-center gap-1.5 mt-1.5 text-[11px] font-bold text-red-600 dark:text-red-400">
+                        <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                        <span>{fieldErrors.guestEmail}</span>
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -839,7 +915,7 @@ export default function SkiTransferBookingModule({
                 <div className="pt-1">
                   <label className="flex items-center justify-between p-3 rounded-xl bg-[#F5F7FA] dark:bg-[#131b2c] border border-[#E5E8ED] dark:border-slate-700 cursor-pointer">
                     <div className="flex items-center gap-2.5">
-                      <Car className="w-4 h-4 text-[#0068FF]" />
+                      <Car className="w-4 h-4 text-[#C5A059]" />
                       <div>
                         <span className="text-xs font-bold text-[#1A1A1A] dark:text-white block">
                           {t.addSecondVehicleTitle}
@@ -856,7 +932,7 @@ export default function SkiTransferBookingModule({
                         setAddSecondVehicle(e.target.checked);
                         if (validationError) setValidationError(null);
                       }}
-                      className="w-4 h-4 rounded border-[#D1D5DB] text-[#0068FF] focus:ring-[#0068FF] cursor-pointer"
+                      className="w-4 h-4 rounded border-[#D1D5DB] text-[#C5A059] focus:ring-[#C5A059] cursor-pointer"
                     />
                   </label>
                 </div>
@@ -864,7 +940,7 @@ export default function SkiTransferBookingModule({
                 {/* Additional Memo Section */}
                 <div>
                   <label className="text-xs font-semibold text-[#4B5563] dark:text-slate-300 block mb-1 flex items-center gap-1.5">
-                    <FileText className="w-3.5 h-3.5 text-[#0068FF]" />
+                    <FileText className="w-3.5 h-3.5 text-[#C5A059]" />
                     <span>{t.memoLabel}</span>
                   </label>
                   <textarea
@@ -872,26 +948,39 @@ export default function SkiTransferBookingModule({
                     placeholder={t.memoPlaceholder}
                     value={vehicleMemo}
                     onChange={(e) => setVehicleMemo(e.target.value)}
-                    className="w-full bg-[#F5F7FA] dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none focus:border-[#0068FF] resize-none"
+                    className="w-full bg-[#F5F7FA] dark:bg-[#161f30] border border-[#E5E8ED] dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-[#1A1A1A] dark:text-white font-medium focus:outline-none focus:border-[#C5A059] resize-none"
                   />
                 </div>
 
                 {/* Mandatory Confirmation Checkbox */}
-                <div className="pt-2">
-                  <label className="flex items-start gap-2.5 p-3 rounded-xl bg-[#F5F7FA] dark:bg-[#131b2c] border border-[#E5E8ED] dark:border-slate-700 cursor-pointer select-none">
+                <div id="ski-agreement" className="pt-2">
+                  <label className={`flex items-start gap-2.5 p-3 rounded-xl cursor-pointer select-none transition-all ${
+                    fieldErrors.agreement
+                      ? 'bg-red-50/40 dark:bg-red-950/30 border-2 border-red-500 ring-2 ring-red-500/20'
+                      : 'bg-[#F5F7FA] dark:bg-[#131b2c] border border-[#E5E8ED] dark:border-slate-700'
+                  }`}>
                     <input
                       type="checkbox"
                       checked={isConfirmedAgreement}
                       onChange={(e) => {
                         setIsConfirmedAgreement(e.target.checked);
+                        if (fieldErrors.agreement) {
+                          setFieldErrors((prev) => ({ ...prev, agreement: undefined }));
+                        }
                         if (validationError) setValidationError(null);
                       }}
-                      className="mt-0.5 w-4 h-4 rounded border-[#D1D5DB] text-[#0068FF] focus:ring-[#0068FF] cursor-pointer shrink-0"
+                      className="mt-0.5 w-4 h-4 rounded border-[#D1D5DB] text-[#C5A059] focus:ring-[#C5A059] cursor-pointer shrink-0"
                     />
                     <span className="text-[11px] text-[#4B5563] dark:text-slate-300 leading-tight">
                       {t.agreementText}
                     </span>
                   </label>
+                  {fieldErrors.agreement && (
+                    <div className="flex items-center gap-1.5 mt-1.5 text-[11px] font-bold text-red-600 dark:text-red-400">
+                      <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                      <span>{fieldErrors.agreement}</span>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
