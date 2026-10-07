@@ -143,7 +143,7 @@ export default function SkiTransferBookingModule({
   const [guestPhone, setGuestPhone] = useState<string>('');
   const [vehicleMemo, setVehicleMemo] = useState<string>('');
 
-  const [isConfirmedAgreement, setIsConfirmedAgreement] = useState(false);
+  const [isConfirmedAgreement, setIsConfirmedAgreement] = useState(true);
   const [validationError, setValidationError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<{
     chaletAddress?: string;

@@ -136,14 +136,8 @@ function CheckoutForm({
   const [isProcessing, setIsProcessing] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // Default selected payment method based on device detection
-  const initialMethod: PaymentMethodType = deviceCaps.detectedWallet === 'apple_pay'
-    ? 'apple_pay'
-    : deviceCaps.detectedWallet === 'google_pay'
-    ? 'google_pay'
-    : 'card';
-
-  const [selectedMethod, setSelectedMethod] = useState<PaymentMethodType>(initialMethod);
+  // Default to 'card' so Stripe Card inputs are immediately visible on modal open
+  const [selectedMethod, setSelectedMethod] = useState<PaymentMethodType>('card');
   const [hardwareWalletVerified, setHardwareWalletVerified] = useState<boolean>(false);
 
   // Check live Stripe PaymentRequest hardware tokenization
@@ -165,11 +159,6 @@ function CheckoutForm({
       pr.canMakePayment().then((result) => {
         if (result) {
           setHardwareWalletVerified(true);
-          if (result.applePay) {
-            setSelectedMethod('apple_pay');
-          } else if (result.googlePay) {
-            setSelectedMethod('google_pay');
-          }
         }
       });
     } catch (e) {
@@ -567,271 +556,175 @@ function CheckoutForm({
 
       {/* Selected Payment Method Active Panel */}
       <div className="bg-[#0A0D14] border border-slate-800 rounded-2xl p-4 space-y-4">
-        {/* 1. Apple Pay Selected View */}
-        {selectedMethod === 'apple_pay' && (
-          <div className="space-y-3.5">
-            <div className="flex items-center justify-between pb-2 border-b border-slate-800/80">
-              <div className="flex items-center gap-2">
+        {/* Active Payment Panel (All methods powered by unified Stripe Elements) */}
+        <div className="space-y-4">
+          <div className="flex items-center justify-between pb-2 border-b border-slate-800/80">
+            <div className="flex items-center gap-2">
+              {selectedMethod === 'apple_pay' ? (
                 <div className="bg-black border border-slate-700 rounded-md px-2 py-0.5 text-white font-semibold text-xs flex items-center gap-1">
                   <span></span>
                   <span>Pay</span>
                 </div>
-                <span className="text-xs text-slate-300 font-medium">{t.applePayTitle}</span>
-              </div>
-              <span className="text-xs font-bold text-[#C5A059] font-mono">
-                ¥{bookingDetails.amount.toLocaleString()} JPY
-              </span>
-            </div>
-
-            {deviceCaps.supportsApplePay ? (
-              <p className="text-xs text-slate-300 leading-relaxed">
-                {lang === 'ja'
-                  ? 'Apple Pay に登録されたカードを使用して、Touch ID / Face ID で即時かつ安全にお支払いいただけます。'
-                  : lang === 'zh'
-                  ? '使用您 Apple 钱包中绑定的银行卡，通过 Face ID 或 Touch ID 极速完成预订与支付。'
-                  : 'Pay instantly with Apple Pay using your saved cards and authenticate securely via Face ID or Touch ID.'}
-              </p>
-            ) : (
-              <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-2.5 text-[11px] text-amber-300">
-                {lang === 'ja'
-                  ? '※ このブラウザまたは端末は Apple Pay に対応していません。Safari または iPhone / iPad / Mac でご利用いただくか、クレジットカードまたは他の決済方法をご選択ください。'
-                  : lang === 'zh'
-                  ? '※ 当前浏览器或设备未启用 Apple Pay。请使用 Safari 或苹果设备，或选择国际信用卡及其他支付方式。'
-                  : 'Notice: Apple Pay is available on Safari for iOS / iPadOS / macOS. You can also select Credit Card or other payment methods.'}
-              </div>
-            )}
-
-            {!isSandbox && stripe && elements ? (
-              <div className="pt-1">
-                <ExpressCheckoutElement
-                  onConfirm={handleExpressConfirm}
-                  options={{
-                    buttonHeight: 46,
-                    buttonTheme: {
-                      applePay: 'black',
-                    },
-                    paymentMethods: {
-                      applePay: 'auto',
-                      googlePay: 'never',
-                      link: 'never',
-                    },
-                  }}
-                />
-              </div>
-            ) : (
-              <button
-                type="button"
-                onClick={() => handleGenericPayment()}
-                disabled={isProcessing}
-                className="w-full bg-black hover:bg-slate-900 border border-slate-700 text-white font-bold py-3.5 rounded-2xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl transition-all cursor-pointer disabled:opacity-50"
-              >
-                {isProcessing ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin text-white" />
-                    <span>{t.processing}</span>
-                  </>
-                ) : (
-                  <>
-                    <span className="text-base leading-none"></span>
-                    <span>{t.payWithApple}</span>
-                  </>
-                )}
-              </button>
-            )}
-          </div>
-        )}
-
-        {/* 2. Google Pay Selected View */}
-        {selectedMethod === 'google_pay' && (
-          <div className="space-y-3.5">
-            <div className="flex items-center justify-between pb-2 border-b border-slate-800/80">
-              <div className="flex items-center gap-2">
+              ) : selectedMethod === 'google_pay' ? (
                 <div className="bg-slate-900 border border-slate-700 rounded-md px-2 py-0.5 text-white font-semibold text-xs flex items-center gap-1">
                   <span>G</span>
                   <span>Pay</span>
                 </div>
-                <span className="text-xs text-slate-300 font-medium">{t.googlePayTitle}</span>
-              </div>
-              <span className="text-xs font-bold text-[#C5A059] font-mono">
-                ¥{bookingDetails.amount.toLocaleString()} JPY
+              ) : selectedMethod === 'paypay' ? (
+                <span className="bg-[#FF0033] text-white text-[10px] font-extrabold px-1.5 py-0.5 rounded">PayPay</span>
+              ) : selectedMethod === 'wechat_pay' ? (
+                <span className="bg-[#07C160] text-white text-[10px] font-bold px-1.5 py-0.5 rounded">微信支付</span>
+              ) : selectedMethod === 'alipay' ? (
+                <span className="bg-[#1677FF] text-white text-[10px] font-bold px-1.5 py-0.5 rounded">支付宝</span>
+              ) : (
+                <CreditCard className="w-4 h-4 text-sky-400" />
+              )}
+              <span className="text-xs text-slate-300 font-medium">
+                {selectedMethod === 'apple_pay'
+                  ? t.applePayTitle
+                  : selectedMethod === 'google_pay'
+                  ? t.googlePayTitle
+                  : selectedMethod === 'paypay'
+                  ? t.paypayTitle
+                  : selectedMethod === 'wechat_pay'
+                  ? t.wechatTitle
+                  : selectedMethod === 'alipay'
+                  ? t.alipayTitle
+                  : t.cardsTitle}
               </span>
             </div>
-
-            <p className="text-xs text-slate-300 leading-relaxed">
-              {lang === 'ja'
-                ? 'Google アカウントに登録されたお支払い方法で、素早く安全に決済を完了します。'
-                : lang === 'zh'
-                ? '使用绑定在 Google 账户中的支付方式，一键快速完成安全预订。'
-                : 'Fast, simple, and secure checkout using payment methods saved in your Google Account.'}
-            </p>
-
-            {!isSandbox && stripe && elements ? (
-              <div className="pt-1">
-                <ExpressCheckoutElement
-                  onConfirm={handleExpressConfirm}
-                  options={{
-                    buttonHeight: 46,
-                    buttonTheme: {
-                      googlePay: 'black',
-                    },
-                    paymentMethods: {
-                      googlePay: 'auto',
-                      applePay: 'never',
-                      link: 'never',
-                    },
-                  }}
-                />
-              </div>
-            ) : (
-              <button
-                type="button"
-                onClick={() => handleGenericPayment()}
-                disabled={isProcessing}
-                className="w-full bg-slate-900 hover:bg-slate-800 border border-slate-700 text-white font-bold py-3.5 rounded-2xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl transition-all cursor-pointer disabled:opacity-50"
-              >
-                {isProcessing ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin text-white" />
-                    <span>{t.processing}</span>
-                  </>
-                ) : (
-                  <>
-                    <svg className="w-4 h-4" viewBox="0 0 24 24">
-                      <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                      <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                      <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-                      <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-                    </svg>
-                    <span>{t.payWithGoogle}</span>
-                  </>
-                )}
-              </button>
-            )}
+            <div className="flex items-center gap-1">
+              <span className="text-[#1A1F71] bg-white px-1 rounded text-[9px] font-bold">VISA</span>
+              <span className="text-[#EB001B] font-extrabold text-[9px]">MC</span>
+              <span className="text-[#006FCF] font-extrabold text-[9px]">AMEX</span>
+              <span className="text-[#005BAC] font-extrabold text-[9px]">JCB</span>
+              <span className="text-[#D92D20] bg-white px-1 rounded text-[9px] font-bold">银联</span>
+            </div>
           </div>
-        )}
 
-        {/* 3. Card & Universal Stripe Checkout View (Card, PayPay, WeChat Pay, Alipay) */}
-        {(selectedMethod === 'card' || selectedMethod === 'paypay' || selectedMethod === 'wechat_pay' || selectedMethod === 'alipay') && (
-          <div className="space-y-4">
-            <div className="flex items-center justify-between pb-2 border-b border-slate-800/80">
-              <div className="flex items-center gap-2">
-                {selectedMethod === 'card' ? (
-                  <CreditCard className="w-4 h-4 text-sky-400" />
-                ) : selectedMethod === 'paypay' ? (
-                  <span className="bg-[#FF0033] text-white text-[10px] font-extrabold px-1.5 py-0.5 rounded">PayPay</span>
-                ) : selectedMethod === 'wechat_pay' ? (
-                  <span className="bg-[#07C160] text-white text-[10px] font-bold px-1.5 py-0.5 rounded">微信支付</span>
-                ) : (
-                  <span className="bg-[#1677FF] text-white text-[10px] font-bold px-1.5 py-0.5 rounded">支付宝</span>
-                )}
-                <span className="text-xs text-slate-300 font-medium">
-                  {selectedMethod === 'card'
-                    ? t.cardsTitle
-                    : selectedMethod === 'paypay'
-                    ? t.paypayTitle
+          {/* Contextual Guidance Banner */}
+          {selectedMethod !== 'card' && (
+            <div className="p-3 bg-slate-900/70 rounded-xl border border-slate-800 text-[11px] text-slate-300 space-y-1">
+              <div className="flex items-center gap-2 font-semibold text-white">
+                <ShieldCheck className="w-4 h-4 text-[#C5A059]" />
+                <span>
+                  {selectedMethod === 'apple_pay'
+                    ? (lang === 'ja' ? 'Apple Pay または クレジットカード決済' : 'Apple Pay & Credit Card Checkout')
+                    : selectedMethod === 'google_pay'
+                    ? (lang === 'ja' ? 'Google Pay または クレジットカード決済' : 'Google Pay & Credit Card Checkout')
                     : selectedMethod === 'wechat_pay'
-                    ? t.wechatTitle
-                    : t.alipayTitle}
+                    ? (lang === 'zh' ? '支持微信支付及国际银联/信用卡自动转换' : 'WeChat Pay & Global Card Gateway')
+                    : selectedMethod === 'alipay'
+                    ? (lang === 'zh' ? '支持支付宝扫码及国际银联/信用卡自动结算' : 'Alipay & Global Card Gateway')
+                    : (lang === 'ja' ? 'PayPay および主要クレジットカード決済' : 'PayPay & Major Credit Cards')}
                 </span>
               </div>
-              <div className="flex items-center gap-1">
-                <span className="text-[#1A1F71] bg-white px-1 rounded text-[9px] font-bold">VISA</span>
-                <span className="text-[#EB001B] font-extrabold text-[9px]">MC</span>
-                <span className="text-[#006FCF] font-extrabold text-[9px]">AMEX</span>
-                <span className="text-[#005BAC] font-extrabold text-[9px]">JCB</span>
-                <span className="text-[#D92D20] bg-white px-1 rounded text-[9px] font-bold">银联</span>
-              </div>
+              <p className="text-[10px] text-slate-400">
+                {lang === 'ja'
+                  ? 'Stripeの安全な決済エンジンにより、ワンクリックまたはカードで即時にお支払いいただけます。'
+                  : lang === 'zh'
+                  ? '通过 Stripe 国际安全收银台，支持一键快捷支付或直接输入卡号完成结算。'
+                  : 'Secured via Stripe VIP Gateway. Complete payment via 1-click wallet or credit card below.'}
+              </p>
             </div>
+          )}
 
-            {/* Contextual notice if user selected Alipay/WeChat/PayPay */}
-            {selectedMethod !== 'card' && (
-              <div className="p-3 bg-slate-900/70 rounded-xl border border-slate-800 text-[11px] text-slate-300 space-y-1">
-                <div className="flex items-center gap-2 font-semibold text-white">
-                  <ShieldCheck className="w-4 h-4 text-[#C5A059]" />
-                  <span>
-                    {selectedMethod === 'wechat_pay'
-                      ? (lang === 'zh' ? '支持微信支付及国际银联/信用卡自动转换' : 'WeChat Pay & Global Card Gateway')
-                      : selectedMethod === 'alipay'
-                      ? (lang === 'zh' ? '支持支付宝扫码及国际银联/信用卡自动结算' : 'Alipay & Global Card Gateway')
-                      : (lang === 'ja' ? 'PayPay および主要クレジットカード決済' : 'PayPay & Major Credit Cards')}
-                  </span>
-                </div>
-                <p className="text-[10px] text-slate-400">
-                  {lang === 'ja'
-                    ? 'Stripeの安全な決済エンジンにより、ご利用可能な決済手段が自動的に表示されます。'
-                    : lang === 'zh'
-                    ? '通过 Stripe 国际安全收银台，系统已为您自动匹配最佳支付方式与实时汇率。'
-                    : 'Secured via Stripe Payment Gateway. Available payment methods will appear below automatically.'}
-                </p>
-              </div>
-            )}
-
-            {!isSandbox && stripe && elements ? (
-              <PaymentElement
+          {/* 1-Click Express Checkout (Apple Pay / Google Pay / Link) when available */}
+          {!isSandbox && stripe && elements && (selectedMethod === 'apple_pay' || selectedMethod === 'google_pay' || selectedMethod === 'card') && (
+            <div className="pt-0.5 space-y-2">
+              <ExpressCheckoutElement
+                onConfirm={handleExpressConfirm}
                 options={{
-                  layout: {
-                    type: 'accordion',
-                    defaultCollapsed: false,
-                    radios: 'always',
-                    spacedAccordionItems: true,
+                  buttonHeight: 46,
+                  buttonTheme: {
+                    applePay: 'black',
+                    googlePay: 'black',
                   },
                 }}
               />
-            ) : (
-              <div className="space-y-3">
-                <div className="bg-[#07090E] border border-slate-800 rounded-xl p-3 space-y-2 text-xs">
-                  <div className="flex justify-between text-slate-400 text-[11px]">
-                    <span>{t.cardHolder}</span>
-                    <span className="text-white font-medium">{bookingDetails.guestName}</span>
-                  </div>
-                  <div className="flex justify-between text-slate-400 text-[11px]">
-                    <span>{t.amountLabel}</span>
-                    <span className="text-[#C5A059] font-bold">¥{bookingDetails.amount.toLocaleString()} JPY</span>
-                  </div>
-                  <div className="p-2.5 bg-slate-900/60 rounded-lg border border-slate-800 text-[11px] text-slate-300 flex items-center gap-2">
-                    <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
-                    <span>3D Secure 2.0 生体認証暗号化決済が自動適用されます。</span>
-                  </div>
+              <div className="relative flex py-1 items-center">
+                <div className="flex-grow border-t border-slate-800"></div>
+                <span className="flex-shrink mx-3 text-[10px] text-slate-500 uppercase tracking-widest font-mono">
+                  {lang === 'ja' ? 'またはカードで支払う' : lang === 'zh' ? '或使用国际卡支付' : 'Or pay with card'}
+                </span>
+                <div className="flex-grow border-t border-slate-800"></div>
+              </div>
+            </div>
+          )}
+
+          {!isSandbox && stripe && elements ? (
+            <PaymentElement
+              options={{
+                layout: {
+                  type: 'accordion',
+                  defaultCollapsed: false,
+                  radios: 'always',
+                  spacedAccordionItems: true,
+                },
+              }}
+            />
+          ) : (
+            <div className="space-y-3">
+              <div className="bg-[#07090E] border border-slate-800 rounded-xl p-3 space-y-2 text-xs">
+                <div className="flex justify-between text-slate-400 text-[11px]">
+                  <span>{t.cardHolder}</span>
+                  <span className="text-white font-medium">{bookingDetails.guestName}</span>
+                </div>
+                <div className="flex justify-between text-slate-400 text-[11px]">
+                  <span>{t.amountLabel}</span>
+                  <span className="text-[#C5A059] font-bold">¥{bookingDetails.amount.toLocaleString()} JPY</span>
+                </div>
+                <div className="p-2.5 bg-slate-900/60 rounded-lg border border-slate-800 text-[11px] text-slate-300 flex items-center gap-2">
+                  <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>3D Secure 2.0 生体認証暗号化決済が自動適用されます。</span>
                 </div>
               </div>
-            )}
+            </div>
+          )}
 
-            <button
-              type="button"
-              onClick={() => handleGenericPayment()}
-              disabled={isProcessing}
-              className={`w-full ${
-                selectedMethod === 'paypay'
-                  ? 'bg-[#FF0033] hover:bg-[#E6002E] text-white shadow-[#FF0033]/20'
-                  : selectedMethod === 'wechat_pay'
-                  ? 'bg-[#07C160] hover:bg-[#06ad56] text-white shadow-[#07C160]/20'
-                  : selectedMethod === 'alipay'
-                  ? 'bg-[#1677FF] hover:bg-[#1264db] text-white shadow-[#1677FF]/20'
-                  : 'bg-gradient-to-r from-[#C5A059] via-[#d8b46b] to-[#C5A059] text-[#0A0D14] shadow-[#C5A059]/10'
-              } font-extrabold py-3.5 rounded-2xl text-xs uppercase tracking-widest flex items-center justify-center gap-2 shadow-xl transition-all cursor-pointer disabled:opacity-50`}
-            >
-              {isProcessing ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  <span>{t.processing}</span>
-                </>
-              ) : (
-                <>
-                  <Lock className="w-4 h-4" />
-                  <span>
-                    {selectedMethod === 'paypay'
-                      ? t.payWithPayPay
-                      : selectedMethod === 'wechat_pay'
-                      ? t.payWithWeChat
-                      : selectedMethod === 'alipay'
-                      ? t.payWithAlipay
-                      : t.payWithCard}
-                  </span>
-                </>
-              )}
-            </button>
-          </div>
-        )}
+          <button
+            type="button"
+            onClick={() => handleGenericPayment()}
+            disabled={isProcessing}
+            className={`w-full ${
+              selectedMethod === 'paypay'
+                ? 'bg-[#FF0033] hover:bg-[#E6002E] text-white shadow-[#FF0033]/20'
+                : selectedMethod === 'wechat_pay'
+                ? 'bg-[#07C160] hover:bg-[#06ad56] text-white shadow-[#07C160]/20'
+                : selectedMethod === 'alipay'
+                ? 'bg-[#1677FF] hover:bg-[#1264db] text-white shadow-[#1677FF]/20'
+                : selectedMethod === 'apple_pay'
+                ? 'bg-black hover:bg-slate-900 border border-slate-700 text-white'
+                : selectedMethod === 'google_pay'
+                ? 'bg-slate-900 hover:bg-slate-800 border border-slate-700 text-white'
+                : 'bg-gradient-to-r from-[#C5A059] via-[#d8b46b] to-[#C5A059] text-[#0A0D14] shadow-[#C5A059]/10'
+            } font-extrabold py-3.5 rounded-2xl text-xs uppercase tracking-widest flex items-center justify-center gap-2 shadow-xl transition-all cursor-pointer disabled:opacity-50`}
+          >
+            {isProcessing ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                <span>{t.processing}</span>
+              </>
+            ) : (
+              <>
+                <Lock className="w-4 h-4" />
+                <span>
+                  {selectedMethod === 'paypay'
+                    ? t.payWithPayPay
+                    : selectedMethod === 'wechat_pay'
+                    ? t.payWithWeChat
+                    : selectedMethod === 'alipay'
+                    ? t.payWithAlipay
+                    : selectedMethod === 'apple_pay'
+                    ? t.payWithApple
+                    : selectedMethod === 'google_pay'
+                    ? t.payWithGoogle
+                    : t.payWithCard}
+                </span>
+              </>
+            )}
+          </button>
+        </div>
       </div>
 
       {errorMessage && (

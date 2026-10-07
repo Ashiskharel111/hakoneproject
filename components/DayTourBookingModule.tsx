@@ -983,7 +983,7 @@ export default function DayTourBookingModule({
   const [guestPhone, setGuestPhone] = useState<string>('');
   const [specialRequests, setSpecialRequests] = useState<string>('');
 
-  const [isConfirmedAgreement, setIsConfirmedAgreement] = useState(false);
+  const [isConfirmedAgreement, setIsConfirmedAgreement] = useState(true);
   const [validationError, setValidationError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<{
     pickupHotel?: string;

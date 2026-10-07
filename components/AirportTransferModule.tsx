@@ -124,7 +124,7 @@ export default function AirportTransferModule({
   const [vipMeetCount] = useState<number>(0);
 
   // Confirmation & Error State
-  const [isConfirmedAgreement, setIsConfirmedAgreement] = useState<boolean>(false);
+  const [isConfirmedAgreement, setIsConfirmedAgreement] = useState<boolean>(true);
   const [validationError, setValidationError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<{
     hotelAddress?: string;
