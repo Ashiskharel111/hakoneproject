@@ -51,7 +51,7 @@ interface FlightInfo {
   source: string;
 }
 
-interface AirportTransferModuleProps {
+export interface AirportTransferModuleProps {
   initialAirport?: Airport;
   initialDate?: string;
   initialDirection?: TransferDirection;
@@ -59,6 +59,8 @@ interface AirportTransferModuleProps {
   initialLuggage?: number;
   initialHotelAddress?: string;
   onBackToCatalog?: () => void;
+  onStageChange?: (stage: 'vehicle' | 'details') => void;
+  onEditSearch?: () => void;
 }
 
 export default function AirportTransferModule({
@@ -68,11 +70,25 @@ export default function AirportTransferModule({
   initialPassengers = 2,
   initialLuggage = 2,
   initialHotelAddress = '',
+  onBackToCatalog,
+  onStageChange,
+  onEditSearch,
 }: AirportTransferModuleProps) {
   const [lang] = useLanguage();
 
   // Booking Flow Stage: 'vehicle' -> 'details'
   const [bookingStage, setBookingStage] = useState<'vehicle' | 'details'>('vehicle');
+
+  const navigateToStage = (stage: 'vehicle' | 'details') => {
+    setBookingStage(stage);
+    onStageChange?.(stage);
+    setTimeout(() => {
+      const el = document.getElementById('booking-engine');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 50);
+  };
 
   // Direction & Route parameters
   const [direction] = useState<TransferDirection>(initialDirection);
@@ -254,11 +270,11 @@ export default function AirportTransferModule({
       es: 'Detalles del Vuelo y Pasajeros',
     }[lang],
     changeVehicle: {
-      en: 'Change Vehicle',
-      ja: '車両を変更する',
-      zh: '更换车型',
-      fr: 'Changer de véhicule',
-      es: 'Cambiar de vehículo',
+      en: '← Back to Step 2: Change Vehicle',
+      ja: '← ステップ2に戻る（車両変更）',
+      zh: '← 返回步骤2：更换车型',
+      fr: '← Retour à l\'Étape 2 (Changer de véhicule)',
+      es: '← Volver al Paso 2 (Cambiar vehículo)',
     }[lang],
     editSearch: {
       en: 'Edit Route / Date',
@@ -302,18 +318,18 @@ export default function AirportTransferModule({
       es: 'Furgoneta de techo alto y batalla larga, excelente espacio interior y enorme capacidad de equipaje.',
     }[lang],
     selectAlphard: {
-      en: 'Select Alphard VIP →',
-      ja: 'アルファードを予約する →',
-      zh: '选择埃尔法座驾 →',
-      fr: 'Sélectionner Alphard →',
-      es: 'Seleccionar Alphard →',
+      en: 'Select Alphard VIP → Continue to Step 3',
+      ja: 'アルファードを選択 → ステップ3へ進む',
+      zh: '选定埃尔法座驾 → 进入步骤3',
+      fr: 'Sélectionner Alphard → Continuer vers Étape 3',
+      es: 'Seleccionar Alphard → Continuar al Paso 3',
     }[lang],
     selectHiace: {
-      en: 'Select Grand Cabin →',
-      ja: 'グランドキャビンを予約する →',
-      zh: '选择海狮大车 →',
-      fr: 'Sélectionner Grand Cabin →',
-      es: 'Seleccionar Grand Cabin →',
+      en: 'Select Grand Cabin → Continue to Step 3',
+      ja: 'グランドキャビンを選択 → ステップ3へ進む',
+      zh: '选定海狮大车 → 进入步骤3',
+      fr: 'Sélectionner Grand Cabin → Continuer vers Étape 3',
+      es: 'Seleccionar Grand Cabin → Continuar al Paso 3',
     }[lang],
     leadPassengerSection: {
       en: 'Lead Passenger & Dispatch Contact',
@@ -583,12 +599,39 @@ export default function AirportTransferModule({
                 </div>
 
                 <a
-                  href="#trip-search-tab"
+                  href="#trip-search-console"
+                  onClick={(e) => {
+                    if (onEditSearch) {
+                      e.preventDefault();
+                      onEditSearch();
+                    }
+                  }}
                   className="text-[11px] font-semibold text-[#C5A059] hover:text-[#d6b46e] px-2.5 py-1.5 rounded-lg border border-[#C5A059]/30 hover:border-[#C5A059] transition-colors"
                 >
                   {t.editSearch}
                 </a>
               </div>
+            </div>
+          </div>
+
+          {/* Step 2 Clear Directive Callout */}
+          <div className="p-4 bg-[#C5A059]/10 border border-[#C5A059]/30 rounded-2xl text-xs text-stone-800 dark:text-stone-200 flex items-start gap-3 shadow-xs">
+            <Sparkles className="w-4 h-4 text-[#C5A059] shrink-0 mt-0.5" />
+            <div>
+              <span className="font-bold block text-stone-900 dark:text-white">
+                {lang === 'ja'
+                  ? 'ステップ2：下記よりご希望の車両クラスをお選びください'
+                  : lang === 'zh'
+                  ? '步骤2：请在下方选择您心仪的专车车型'
+                  : 'Step 2: Choose your luxury chauffeur vehicle below'}
+              </span>
+              <p className="text-[11px] text-stone-600 dark:text-stone-400 mt-0.5">
+                {lang === 'ja'
+                  ? '「アルファードを選択」または「グランドキャビンを選択」を押して、フライト番号・乗車者情報の入力（ステップ3）へお進みください。'
+                  : lang === 'zh'
+                  ? '点击“选定车型进入步骤3”即可锁定全包一口价，并填写航班号激活实时雷达监控。'
+                  : 'Tap "Select Vehicle & Continue to Step 3" on either vehicle card below to proceed to flight radar & passenger details.'}
+              </p>
             </div>
           </div>
 
@@ -711,8 +754,7 @@ export default function AirportTransferModule({
                       } else {
                         setIsMultiVehicle(false);
                       }
-                      setBookingStage('details');
-                      window.scrollTo({ top: 400, behavior: 'smooth' });
+                      navigateToStage('details');
                     }}
                     className="cursor-pointer px-6 py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider bg-stone-900 hover:bg-stone-800 dark:bg-[#C5A059] dark:hover:bg-[#d4b068] text-white dark:text-stone-950 shadow-sm transition-all flex items-center gap-2"
                   >
@@ -817,8 +859,7 @@ export default function AirportTransferModule({
                     onClick={() => {
                       setVehicleType('Wagon');
                       setIsMultiVehicle(false);
-                      setBookingStage('details');
-                      window.scrollTo({ top: 400, behavior: 'smooth' });
+                      navigateToStage('details');
                     }}
                     className="cursor-pointer px-6 py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider bg-stone-900 hover:bg-stone-800 dark:bg-[#C5A059] dark:hover:bg-[#d4b068] text-white dark:text-stone-950 shadow-sm transition-all flex items-center gap-2"
                   >
@@ -842,7 +883,7 @@ export default function AirportTransferModule({
             <div className="flex items-center gap-3">
               <button
                 type="button"
-                onClick={() => setBookingStage('vehicle')}
+                onClick={() => navigateToStage('vehicle')}
                 className="cursor-pointer inline-flex items-center gap-1.5 text-xs font-semibold text-[#C5A059] hover:underline"
               >
                 <ArrowLeft className="w-4 h-4" />
@@ -850,7 +891,9 @@ export default function AirportTransferModule({
               </button>
               <span className="text-stone-300 dark:text-stone-600">•</span>
               <div>
-                <span className="text-xs text-stone-500 dark:text-stone-400 block font-mono">SELECTED VEHICLE:</span>
+                <span className="text-[10px] text-stone-500 dark:text-stone-400 block font-mono font-bold">
+                  STEP 3 OF 3: PASSENGER & FLIGHT
+                </span>
                 <span className="text-sm font-bold text-stone-900 dark:text-white">
                   {vehicleNameDisplay} · ¥{pricing.totalAmount.toLocaleString()} JPY
                 </span>
@@ -862,6 +905,27 @@ export default function AirportTransferModule({
               <span>{directionText}</span>
               <span className="text-stone-300 dark:text-stone-600">•</span>
               <span>{travelDate}</span>
+            </div>
+          </div>
+
+          {/* Step 3 Clear Directive Notice */}
+          <div className="p-4 bg-[#C5A059]/10 border border-[#C5A059]/30 rounded-2xl text-xs text-stone-800 dark:text-stone-200 flex items-start gap-3 shadow-xs">
+            <Sparkles className="w-4 h-4 text-[#C5A059] shrink-0 mt-0.5" />
+            <div>
+              <span className="font-bold block text-stone-900 dark:text-white">
+                {lang === 'ja'
+                  ? 'ステップ3：フライト便名と代表者様のご連絡先をご入力ください'
+                  : lang === 'zh'
+                  ? '步骤3：请填写您的航班号与代表乘客联系方式'
+                  : 'Step 3: Enter flight number & lead passenger contact'}
+              </span>
+              <p className="text-[11px] text-stone-600 dark:text-stone-400 mt-0.5">
+                {lang === 'ja'
+                  ? '便名をご入力いただくと、遅延時も追加料金なしで運行管理デスクがリアルタイム追跡いたします（未定の場合は「TBD」と入力可能）。'
+                  : lang === 'zh'
+                  ? '输入航班号后调度雷达将全天候追踪，延误90分钟内免费守候；如尚未出票可填「TBD」先行锁定运费。'
+                  : 'Enter your flight code to activate complimentary 90-minute delay tracking. If your flight is not booked yet, enter "TBD".'}
+              </p>
             </div>
           </div>
 

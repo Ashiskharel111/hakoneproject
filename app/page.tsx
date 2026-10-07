@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   ShieldCheck,
   Clock,
@@ -10,6 +10,7 @@ import {
 import dynamic from 'next/dynamic';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
+import StepProgressBar from '@/components/StepProgressBar';
 import TripSearchTab, {
   AirportSearchParams,
   SightseeingSearchParams,
@@ -56,6 +57,8 @@ type ServiceType = 'airport' | 'sightseeing' | 'ski';
 export default function BookingPortalHomePage() {
   const [lang] = useLanguage();
   const [activeService, setActiveService] = useState<ServiceType>('airport');
+  const [hasSearched, setHasSearched] = useState<boolean>(false);
+  const [currentStep, setCurrentStep] = useState<1 | 2 | 3 | 4>(1);
 
   // Search parameters state passed to active booking modules
   const [airportParams, setAirportParams] = useState<AirportSearchParams>({
@@ -84,6 +87,77 @@ export default function BookingPortalHomePage() {
     passengers: 4,
     skiGearCount: 4,
   });
+
+  // Smooth scroll helper
+  const scrollToBookingEngine = () => {
+    setTimeout(() => {
+      const el = document.getElementById('booking-engine');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 100);
+  };
+
+  const scrollToSearchConsole = () => {
+    setTimeout(() => {
+      const el = document.getElementById('trip-search-console');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 50);
+  };
+
+  const handleAirportSearch = (params: AirportSearchParams) => {
+    setAirportParams(params);
+    setHasSearched(true);
+    setCurrentStep(2);
+    scrollToBookingEngine();
+  };
+
+  const handleSightseeingSearch = (params: SightseeingSearchParams) => {
+    setSightseeingParams(params);
+    setHasSearched(true);
+    setCurrentStep(2);
+    scrollToBookingEngine();
+  };
+
+  const handleSkiSearch = (params: SkiSearchParams) => {
+    setSkiParams(params);
+    setHasSearched(true);
+    setCurrentStep(2);
+    scrollToBookingEngine();
+  };
+
+  const handleStepClick = (step: 1 | 2 | 3) => {
+    if (step === 1) {
+      setCurrentStep(1);
+      scrollToSearchConsole();
+    } else if (step === 2) {
+      setCurrentStep(2);
+      scrollToBookingEngine();
+    }
+  };
+
+  const routeSummary = useMemo(() => {
+    if (activeService === 'airport') {
+      const apt = airportParams.airport === 'HND' ? 'Haneda (HND)' : 'Narita (NRT)';
+      const dest = airportParams.hotelAddress.trim() || (airportParams.direction === 'airport_to_hotel' ? 'Tokyo Downtown' : 'Airport');
+      return `${apt} ➔ ${dest} • ${airportParams.passengers} Pax • ${airportParams.travelDate}`;
+    }
+    if (activeService === 'sightseeing') {
+      return `Charter: ${sightseeingParams.destination === 'fuji-kawaguchiko' ? 'Mt. Fuji & Kawaguchiko' : sightseeingParams.destination} • ${sightseeingParams.passengers} Pax`;
+    }
+    return `Alpine Ski: ${skiParams.resort.toUpperCase()} • ${skiParams.passengers} Pax`;
+  }, [activeService, airportParams, sightseeingParams, skiParams]);
+
+  const vehicleSummary = useMemo(() => {
+    if (activeService === 'airport') {
+      return airportParams.passengers > 4
+        ? 'Toyota HiAce Grand Cabin VIP (or 2× Alphard Convoy)'
+        : 'Toyota Alphard VIP Executive Lounge';
+    }
+    return undefined;
+  }, [activeService, airportParams]);
 
   const t = {
     badge: {
@@ -122,7 +196,9 @@ export default function BookingPortalHomePage() {
       {/* ── Sleek Portal Header ── */}
       <SiteHeader
         activeService={activeService}
-        onSelectService={(srv) => setActiveService(srv)}
+        onSelectService={(srv) => {
+          setActiveService(srv);
+        }}
       />
 
       {/* ── Main Booking Portal Content ── */}
@@ -146,52 +222,68 @@ export default function BookingPortalHomePage() {
           </p>
         </section>
 
+        {/* ── Prominent 4-Step Progress Tracker ── */}
+        <StepProgressBar
+          currentStep={currentStep}
+          activeService={activeService}
+          routeSummary={hasSearched ? routeSummary : undefined}
+          vehicleSummary={vehicleSummary}
+          onStepClick={handleStepClick}
+        />
+
         {/* ── Trip.com Style Search Tab (Unified Quick Configuration) ── */}
         <TripSearchTab
           activeService={activeService}
-          onServiceChange={(service) => setActiveService(service)}
-          onSearchAirport={(params) => setAirportParams(params)}
-          onSearchSightseeing={(params) => setSightseeingParams(params)}
-          onSearchSki={(params) => setSkiParams(params)}
+          onServiceChange={(service) => {
+            setActiveService(service);
+          }}
+          onSearchAirport={handleAirportSearch}
+          onSearchSightseeing={handleSightseeingSearch}
+          onSearchSki={handleSkiSearch}
+          hasSearched={hasSearched}
         />
 
-        {/* 2. Seamless Active Booking Engine Container */}
-        <section id="booking-engine" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-14 scroll-mt-20">
-          <div className="transition-opacity duration-200">
-            {activeService === 'airport' && (
-              <AirportTransferModule
-                key={`airport-${airportParams.airport}-${airportParams.direction}-${airportParams.travelDate}-${airportParams.passengers}-${airportParams.luggage}-${airportParams.hotelAddress}`}
-                initialAirport={airportParams.airport}
-                initialDirection={airportParams.direction}
-                initialDate={airportParams.travelDate}
-                initialPassengers={airportParams.passengers}
-                initialLuggage={airportParams.luggage}
-                initialHotelAddress={airportParams.hotelAddress}
-              />
-            )}
+        {/* 2. Seamless Active Booking Engine Container - ONLY rendered after details are entered */}
+        {hasSearched && (
+          <section id="booking-engine" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-14 scroll-mt-24 animate-fade-in">
+            <div className="transition-opacity duration-200">
+              {activeService === 'airport' && (
+                <AirportTransferModule
+                  key={`airport-${airportParams.airport}-${airportParams.direction}-${airportParams.travelDate}-${airportParams.passengers}-${airportParams.luggage}-${airportParams.hotelAddress}`}
+                  initialAirport={airportParams.airport}
+                  initialDirection={airportParams.direction}
+                  initialDate={airportParams.travelDate}
+                  initialPassengers={airportParams.passengers}
+                  initialLuggage={airportParams.luggage}
+                  initialHotelAddress={airportParams.hotelAddress}
+                  onStageChange={(stage) => setCurrentStep(stage === 'details' ? 3 : 2)}
+                  onEditSearch={() => handleStepClick(1)}
+                />
+              )}
 
-            {activeService === 'sightseeing' && (
-              <DayTourBookingModule
-                key={`sightseeing-${sightseeingParams.destination}-${sightseeingParams.travelDate}-${sightseeingParams.passengers}-${sightseeingParams.pickupHotel}`}
-                initialDestination={sightseeingParams.destination}
-                initialDate={sightseeingParams.travelDate}
-                initialPassengers={sightseeingParams.passengers}
-                initialPickupHotel={sightseeingParams.pickupHotel}
-              />
-            )}
+              {activeService === 'sightseeing' && (
+                <DayTourBookingModule
+                  key={`sightseeing-${sightseeingParams.destination}-${sightseeingParams.travelDate}-${sightseeingParams.passengers}-${sightseeingParams.pickupHotel}`}
+                  initialDestination={sightseeingParams.destination}
+                  initialDate={sightseeingParams.travelDate}
+                  initialPassengers={sightseeingParams.passengers}
+                  initialPickupHotel={sightseeingParams.pickupHotel}
+                />
+              )}
 
-            {activeService === 'ski' && (
-              <SkiTransferBookingModule
-                key={`ski-${skiParams.resort}-${skiParams.pickupPoint}-${skiParams.travelDate}-${skiParams.passengers}-${skiParams.skiGearCount}`}
-                initialResort={skiParams.resort}
-                initialPickup={skiParams.pickupPoint}
-                initialDate={skiParams.travelDate}
-                initialPassengers={skiParams.passengers}
-                initialSkiGearCount={skiParams.skiGearCount}
-              />
-            )}
-          </div>
-        </section>
+              {activeService === 'ski' && (
+                <SkiTransferBookingModule
+                  key={`ski-${skiParams.resort}-${skiParams.pickupPoint}-${skiParams.travelDate}-${skiParams.passengers}-${skiParams.skiGearCount}`}
+                  initialResort={skiParams.resort}
+                  initialPickup={skiParams.pickupPoint}
+                  initialDate={skiParams.travelDate}
+                  initialPassengers={skiParams.passengers}
+                  initialSkiGearCount={skiParams.skiGearCount}
+                />
+              )}
+            </div>
+          </section>
+        )}
 
         {/* 3. Institutional Assurance Ledger */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">

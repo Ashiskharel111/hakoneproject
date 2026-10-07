@@ -55,6 +55,7 @@ interface TripSearchTabProps {
   onSearchAirport: (params: AirportSearchParams) => void;
   onSearchSightseeing: (params: SightseeingSearchParams) => void;
   onSearchSki: (params: SkiSearchParams) => void;
+  hasSearched?: boolean;
 }
 
 const TOKYO_POPULAR_DISTRICTS = [
@@ -73,6 +74,7 @@ export default function TripSearchTab({
   onSearchAirport,
   onSearchSightseeing,
   onSearchSki,
+  hasSearched = false,
 }: TripSearchTabProps) {
   const [lang] = useLanguage();
 
@@ -127,7 +129,13 @@ export default function TripSearchTab({
     dateTime: { ja: '日時 (日本時間)', zh: '乘车日期与时间', fr: 'Date & Heure', es: 'Fecha y Hora', en: 'Date & Time' }[lang],
     guestsBags: { ja: '乗車人数・荷物個数', zh: '人数与行李数', fr: 'Passagers & Bagages', es: 'Pasajeros y Maletas', en: 'Guests & Luggage' }[lang],
     
-    searchBtn: { ja: '料金確認・予約へ進む', zh: '搜索专车并即时预订', fr: 'Vérifier & Réserver', es: 'Consultar y Reservar', en: 'Search Rates & Book' }[lang],
+    searchBtn: {
+      ja: hasSearched ? '料金・空車情報を更新 ↓' : 'ステップ2へ進む（車両選択） →',
+      zh: hasSearched ? '更新车型与价格 ↓' : '前往步骤2：选择车型 →',
+      fr: hasSearched ? 'Mettre à jour les tarifs ↓' : 'Continuer vers l\'Étape 2 (Véhicules) →',
+      es: hasSearched ? 'Actualizar tarifas ↓' : 'Continuar al Paso 2: Seleccionar Vehículo →',
+      en: hasSearched ? 'Update Fares & View Vehicles ↓' : 'Continue to Step 2: Choose Vehicle →',
+    }[lang],
     startingFromHND: { ja: '羽田 定額 ¥24,000〜', zh: '羽田 定额 ¥24,000起', fr: 'Haneda dès ¥24 000', es: 'Haneda desde ¥24,000', en: 'Haneda From ¥24,000' }[lang],
     startingFromNRT: { ja: '成田 定額 ¥45,000〜', zh: '成田 定额 ¥45,000起', fr: 'Narita dès ¥45 000', es: 'Narita desde ¥45,000', en: 'Narita From ¥45,000' }[lang],
     startingFromTour: { ja: '貸切10時間 ¥75,000〜', zh: '10小时包车 ¥75,000起', fr: '10h dès ¥75 000', es: '10h desde ¥75,000', en: '10h Day Tour From ¥75,000' }[lang],
@@ -186,7 +194,7 @@ export default function TripSearchTab({
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 sm:mb-10">
+    <div id="trip-search-console" className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 sm:mb-10 scroll-mt-24">
       
       {/* ── Outer Card (Sleek Monolithic Console) ── */}
       <div className="bg-white dark:bg-[#0A0D14] border border-stone-200 dark:border-white/[0.08] rounded-2xl sm:rounded-3xl shadow-xl shadow-black/[0.03] dark:shadow-black/60 overflow-hidden">
@@ -252,6 +260,23 @@ export default function TripSearchTab({
           {/* ============================================================== */}
           {activeService === 'airport' && (
             <form onSubmit={handleAirportSubmit} className="space-y-4">
+
+              {/* Step 1 Clarity Banner */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 mb-2 border-b border-stone-200/70 dark:border-white/[0.06]">
+                <div className="flex items-center gap-2">
+                  <span className="px-2.5 py-1 rounded-md bg-[#C5A059] text-stone-950 font-black text-[10px] tracking-wider font-mono uppercase">
+                    STEP 1 OF 3
+                  </span>
+                  <span className="text-xs font-bold text-stone-900 dark:text-white">
+                    {lang === 'ja' ? '日程・区間と乗車人数の設定' : lang === 'zh' ? '行程、日期与乘车人数' : 'Route, Schedule & Passenger Details'}
+                  </span>
+                </div>
+                <span className="text-[11px] text-stone-500 dark:text-stone-400">
+                  {hasSearched
+                    ? (lang === 'ja' ? '✓ 設定完了。車両クラスは下記に表示されています' : lang === 'zh' ? '✓ 已配置完成，可选车型已在下方展示' : '✓ Journey configured. Available vehicles shown below')
+                    : (lang === 'ja' ? '入力完了後に車両クラスと定額運賃を選択できます' : lang === 'zh' ? '输入后前往步骤2选择专属车型' : 'Submit below to proceed to Step 2 vehicle selection')}
+                </span>
+              </div>
               
               {/* Direction Toggle */}
               <div className="flex items-center gap-2 pb-1">
@@ -481,6 +506,23 @@ export default function TripSearchTab({
           {activeService === 'sightseeing' && (
             <form onSubmit={handleSightseeingSubmit} className="space-y-4">
               
+              {/* Step 1 Clarity Banner */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 mb-2 border-b border-stone-200/70 dark:border-white/[0.06]">
+                <div className="flex items-center gap-2">
+                  <span className="px-2.5 py-1 rounded-md bg-[#C5A059] text-stone-950 font-black text-[10px] tracking-wider font-mono uppercase">
+                    STEP 1 OF 3
+                  </span>
+                  <span className="text-xs font-bold text-stone-900 dark:text-white">
+                    {lang === 'ja' ? '観光コース・出発地・乗車人数の設定' : lang === 'zh' ? '观光路线、出发地与人数' : 'Sightseeing Tour Route & Schedule'}
+                  </span>
+                </div>
+                <span className="text-[11px] text-stone-500 dark:text-stone-400">
+                  {hasSearched
+                    ? (lang === 'ja' ? '✓ 設定完了。プラン詳細は下記に表示されています' : lang === 'zh' ? '✓ 已配置完成，行程方案已在下方展示' : '✓ Tour configured. Itinerary shown below')
+                    : (lang === 'ja' ? '入力完了後に車両クラスと定額運賃を選択できます' : lang === 'zh' ? '输入后前往步骤2选择专属车型' : 'Submit below to proceed to Step 2 vehicle selection')}
+                </span>
+              </div>
+              
               <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-stretch">
                 
                 {/* Field 1: Destination Tour Select */}
@@ -574,7 +616,7 @@ export default function TripSearchTab({
                   className="w-full sm:w-auto px-8 py-3.5 bg-[#C5A059] hover:bg-[#D4AF37] text-stone-950 font-black rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-[#C5A059]/20 transition-all cursor-pointer ml-auto"
                 >
                   <Search className="w-4 h-4" />
-                  <span>Search Charters & Book</span>
+                  <span>{t.searchBtn}</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
@@ -587,6 +629,23 @@ export default function TripSearchTab({
           {/* ============================================================== */}
           {activeService === 'ski' && (
             <form onSubmit={handleSkiSubmit} className="space-y-4">
+              
+              {/* Step 1 Clarity Banner */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 mb-2 border-b border-stone-200/70 dark:border-white/[0.06]">
+                <div className="flex items-center gap-2">
+                  <span className="px-2.5 py-1 rounded-md bg-[#C5A059] text-stone-950 font-black text-[10px] tracking-wider font-mono uppercase">
+                    STEP 1 OF 3
+                  </span>
+                  <span className="text-xs font-bold text-stone-900 dark:text-white">
+                    {lang === 'ja' ? 'スキー場・出発地・乗車人数の設定' : lang === 'zh' ? '滑雪场、出发地与人数' : 'Ski Resort Route & Schedule'}
+                  </span>
+                </div>
+                <span className="text-[11px] text-stone-500 dark:text-stone-400">
+                  {hasSearched
+                    ? (lang === 'ja' ? '✓ 設定完了。4WD車両は下記に表示されています' : lang === 'zh' ? '✓ 已配置完成，4WD车型已在下方展示' : '✓ Ski transfer configured. 4WD vehicles shown below')
+                    : (lang === 'ja' ? '入力完了後に車両クラスと定額運賃を選択できます' : lang === 'zh' ? '输入后前往步骤2选择专属4WD车型' : 'Submit below to proceed to Step 2 vehicle selection')}
+                </span>
+              </div>
               
               <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-stretch">
                 
@@ -696,7 +755,7 @@ export default function TripSearchTab({
                   className="w-full sm:w-auto px-8 py-3.5 bg-[#C5A059] hover:bg-[#D4AF37] text-stone-950 font-black rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-[#C5A059]/20 transition-all cursor-pointer ml-auto"
                 >
                   <Search className="w-4 h-4" />
-                  <span>Find 4WD Ski Chauffeur</span>
+                  <span>{t.searchBtn}</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
