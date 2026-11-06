@@ -5,7 +5,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import {
   MessageSquare,
-  Snowflake,
   Menu,
   X,
   Plane,
@@ -13,11 +12,16 @@ import {
   ChevronRight,
   Moon,
   Sun,
+  Car,
+  ShieldCheck,
+  HelpCircle,
 } from 'lucide-react';
 import { Language } from '@/lib/translations';
 import LanguageSelector from '@/components/LanguageSelector';
 import { useLanguage } from '@/context/LanguageContext';
 import { useTheme } from '@/context/ThemeContext';
+
+type SectionId = 'services' | 'fleet' | 'destinations' | 'compliance' | 'faq' | 'inquire';
 
 interface SiteHeaderProps {
   currentLang?: Language;
@@ -29,13 +33,13 @@ interface SiteHeaderProps {
 export default function SiteHeader({
   currentLang: propCurrentLang,
   onLanguageChange: propOnLanguageChange,
-  activeService = 'airport',
   onSelectService,
 }: SiteHeaderProps) {
   const [contextLang, setContextLang] = useLanguage();
   const currentLang = propCurrentLang || contextLang;
   const onLanguageChange = propOnLanguageChange || setContextLang;
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState<SectionId>('services');
   const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
@@ -49,30 +53,59 @@ export default function SiteHeader({
     };
   }, [isMobileMenuOpen]);
 
+  // Interactive scroll-spy to highlight the active horizontal button
+  useEffect(() => {
+    const sectionIds: SectionId[] = ['services', 'fleet', 'destinations', 'compliance', 'inquire', 'faq'];
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY + 140;
+      for (let i = sectionIds.length - 1; i >= 0; i--) {
+        const id = sectionIds[i];
+        const el = document.getElementById(id);
+        if (el && el.offsetTop <= scrollPosition) {
+          setActiveSection(id);
+          return;
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const nav = {
-    airport: { ja: '空港送迎', zh: '机场接送', fr: 'Aéroports', es: 'Aeropuertos', en: 'Airport Transfers' }[currentLang],
-    sightseeing: { ja: '観光チャーター', zh: '观光包车', fr: 'Excursions', es: 'Tours', en: 'Sightseeing' }[currentLang],
-    ski: { ja: 'スキー送迎', zh: '滑雪专车', fr: 'Ski VIP', es: 'Esquí VIP', en: 'Ski Transfers' }[currentLang],
+    services: { ja: 'サービス', zh: '核心服务', fr: 'Services', es: 'Servicios', en: 'Services' }[currentLang],
+    fleet: { ja: '車両一覧', zh: '豪华车队', fr: 'La Flotte', es: 'Flota VIP', en: 'Luxury Fleet' }[currentLang],
+    destinations: { ja: '料金・ルート', zh: '热门路线与参考价', fr: 'Destinations & Tarifs', es: 'Rutas y Tarifas', en: 'Routes & Rates' }[currentLang],
+    compliance: { ja: '緑ナンバー安全基準', zh: '绿牌合规保障', fr: 'Licence MLIT', es: 'Licencia MLIT', en: 'Why SK Limo' }[currentLang],
+    faq: { ja: 'よくある質問', zh: '常见问题', fr: 'FAQ', es: 'Preguntas', en: 'FAQ' }[currentLang],
   };
 
+  const navItems: { id: SectionId; label: string }[] = [
+    { id: 'services', label: nav.services },
+    { id: 'fleet', label: nav.fleet },
+    { id: 'destinations', label: nav.destinations },
+    { id: 'compliance', label: nav.compliance },
+    { id: 'faq', label: nav.faq },
+  ];
+
   const whatsAppUrl = `https://wa.me/818038582729?text=${encodeURIComponent(
-    `Hello SK Limo! I am inquiring about booking a private chauffeur in Japan.`
+    `Hello SK Limo (sk.limo)! I would like to inquire about booking a private chauffeur in Japan.`
   )}`;
 
   const ui = {
-    bookNow: { ja: '今すぐ予約', zh: '在线预订', fr: 'Réserver', es: 'Reservar', en: 'Book Now' }[currentLang],
-    liveDesk: { ja: '予約デスク 稼働中', zh: '在线预订实时受理', fr: 'Réservation Ouverte', es: 'Reservas Activas', en: 'Live Booking Desk' }[currentLang],
+    inquireNow: { ja: 'お問い合わせ・見積', zh: '立即咨询 / 预约', fr: 'Demander un Devis', es: 'Solicitar Reserva', en: 'Inquire / Book' }[currentLang],
     whatsAppConcierge: { ja: 'WhatsApp 24時間コンシェルジュ', zh: 'WhatsApp 24小时专属管家', fr: 'Conciergerie WhatsApp 24/7', es: 'Conserjería WhatsApp 24/7', en: 'WhatsApp 24/7 Concierge' }[currentLang],
     lightMode: { ja: 'ライトモード', zh: '浅色模式', fr: 'Mode Clair', es: 'Modo Claro', en: 'Light Mode' }[currentLang],
     darkMode: { ja: 'ダークモード', zh: '深色模式', fr: 'Mode Sombre', es: 'Modo Oscuro', en: 'Dark Mode' }[currentLang],
     mlitLicensed: { ja: '国土交通省許可 緑ナンバー正規運行', zh: '日本国土交通省正规绿牌认证', fr: 'Opérateur Agréé MLIT Plaque Verte', es: 'Operador Oficial Licenciado MLIT', en: 'MLIT Licensed Green-Plate Operator' }[currentLang],
   };
 
-  const handleServiceClick = (service: 'airport' | 'sightseeing' | 'ski') => {
-    if (onSelectService) {
+  const scrollToSection = (sectionId: SectionId, service?: 'airport' | 'sightseeing' | 'ski') => {
+    setActiveSection(sectionId);
+    if (service && onSelectService) {
       onSelectService(service);
     }
-    const el = document.getElementById('booking-engine');
+    const el = document.getElementById(sectionId);
     if (el) {
       el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
@@ -81,82 +114,61 @@ export default function SiteHeader({
 
   return (
     <>
-      {/* ── Modern Booking Portal Header ── */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 dark:bg-[#080B11]/95 backdrop-blur-md border-b border-[#E5E8ED] dark:border-slate-800 shadow-sm transition-colors duration-200">
+      {/* ── Official sk.limo Executive Header ── */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 dark:bg-[#080B11]/95 backdrop-blur-md border-b border-[#E5E8ED] dark:border-slate-800 shadow-xs transition-colors duration-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
 
-          {/* Brand */}
-          <Link href="/" className="flex items-center gap-2.5 shrink-0" title="booking.sk.limo">
-            <div className="relative h-8 w-20 sm:h-9 sm:w-24">
-              <Image
-                src="/images/brand-sklimo-official-logo-250x250.png"
-                alt="SK Limo"
-                fill
-                className="object-contain dark:brightness-110"
-                priority
-              />
-            </div>
-            <div>
-              <div className="flex items-center gap-1.5">
-                <span className="text-[12px] font-extrabold text-[#1A1A1A] dark:text-white tracking-tight leading-tight">
-                  SK LIMO
-                </span>
-                <span className="text-[9px] font-black uppercase px-1.5 py-0.5 rounded-sm bg-[#C5A059]/15 text-[#8C6D3F] dark:text-[#E5C378] border border-[#C5A059]/30">
-                  BOOKING
-                </span>
+          {/* Left Side: Brand (Logo + SK Limo) + Horizontal Interactive Navigation */}
+          <div className="flex items-center gap-4 sm:gap-6 min-w-0">
+            <Link
+              href="/"
+              className="flex items-center gap-2.5 shrink-0 group"
+              title="SK Limo — Official Website"
+            >
+              <div className="relative h-8 w-20 sm:h-9 sm:w-24">
+                <Image
+                  src="/images/brand-sklimo-official-logo-250x250.png"
+                  alt="SK Limo Japan"
+                  fill
+                  className="object-contain dark:brightness-110"
+                  preload
+                />
               </div>
-              <span className="text-[9px] text-[#9CA3AF] block leading-tight">
-                booking.sk.limo
+              <span className="text-sm sm:text-base font-extrabold tracking-tight text-[#111827] dark:text-white whitespace-nowrap group-hover:text-[#C5A059] transition-colors">
+                SK Limo
               </span>
-            </div>
-          </Link>
+            </Link>
 
-          {/* Desktop Nav - Active Service Tabs */}
-          <nav className="hidden lg:flex items-center gap-1 bg-[#F5F7FA] dark:bg-slate-900/80 p-1 rounded-2xl border border-[#E5E8ED] dark:border-slate-800">
-            <button
-              type="button"
-              onClick={() => handleServiceClick('airport')}
-              className={`h-8 px-3.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
-                activeService === 'airport'
-                  ? 'bg-white dark:bg-slate-800 text-[#0F172A] dark:text-white shadow-xs border border-slate-200/80 dark:border-slate-700'
-                  : 'text-[#64748B] dark:text-slate-400 hover:text-black dark:hover:text-white'
-              }`}
+            {/* Horizontal Interactive Navigation Buttons on the Left */}
+            <nav
+              aria-label="Primary Navigation"
+              className="hidden md:flex items-center flex-nowrap gap-1 bg-[#F5F7FA] dark:bg-slate-900/90 p-1 rounded-xl border border-[#E5E8ED] dark:border-slate-800 overflow-x-auto no-scrollbar"
             >
-              <Plane className="w-3.5 h-3.5 text-[#C5A059]" />
-              <span>{nav.airport}</span>
-            </button>
+              {navItems.map((item) => {
+                const isActive = activeSection === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => scrollToSection(item.id)}
+                    aria-current={isActive ? 'location' : undefined}
+                    className={`h-8 px-3.5 rounded-lg text-xs font-semibold transition-all duration-200 flex items-center justify-center whitespace-nowrap shrink-0 cursor-pointer active:scale-95 ${
+                      isActive
+                        ? 'bg-[#111827] text-white dark:bg-[#C5A059] dark:text-[#0A0D14] shadow-xs'
+                        : 'text-[#475569] dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 hover:text-[#111827] dark:hover:text-white'
+                    }`}
+                  >
+                    <span>{item.label}</span>
+                  </button>
+                );
+              })}
+            </nav>
+          </div>
 
-            <button
-              type="button"
-              onClick={() => handleServiceClick('sightseeing')}
-              className={`h-8 px-3.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
-                activeService === 'sightseeing'
-                  ? 'bg-white dark:bg-slate-800 text-[#0F172A] dark:text-white shadow-xs border border-slate-200/80 dark:border-slate-700'
-                  : 'text-[#64748B] dark:text-slate-400 hover:text-black dark:hover:text-white'
-              }`}
-            >
-              <Compass className="w-3.5 h-3.5 text-[#C5A059]" />
-              <span>{nav.sightseeing}</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => handleServiceClick('ski')}
-              className={`h-8 px-3.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
-                activeService === 'ski'
-                  ? 'bg-white dark:bg-slate-800 text-[#0F172A] dark:text-white shadow-xs border border-slate-200/80 dark:border-slate-700'
-                  : 'text-[#64748B] dark:text-slate-400 hover:text-black dark:hover:text-white'
-              }`}
-            >
-              <Snowflake className="w-3.5 h-3.5 text-[#C5A059]" />
-              <span>{nav.ski}</span>
-            </button>
-          </nav>
-
-          {/* Right actions: Theme + Language + WhatsApp */}
+          {/* Right actions: Theme + Language + Inquire + WhatsApp */}
           <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
 
-            {/* Crescent Moon / Sun Theme Toggle (h-9) */}
+            {/* Theme Toggle */}
             <button
               type="button"
               onClick={toggleTheme}
@@ -171,29 +183,30 @@ export default function SiteHeader({
               )}
             </button>
 
-            {/* Language Selector (h-9) */}
+            {/* Language Selector */}
             <LanguageSelector currentLang={currentLang} onLanguageChange={onLanguageChange} />
 
-            {/* RydAgent Gold Book Now CTA (h-9) */}
-            <a
-              href="#booking-engine"
-              className="hidden sm:inline-flex h-9 items-center justify-center bg-[#C5A059] hover:bg-[#d8b46b] text-[#0A0D14] font-extrabold px-4 rounded-xl text-xs uppercase tracking-wider shadow-sm transition-all whitespace-nowrap cursor-pointer"
+            {/* Gold Inquire / Book CTA */}
+            <button
+              type="button"
+              onClick={() => scrollToSection('inquire')}
+              className="hidden sm:inline-flex h-9 items-center justify-center bg-[#C5A059] hover:bg-[#d8b46b] text-[#0A0D14] font-extrabold px-4 rounded-xl text-xs uppercase tracking-wider shadow-xs transition-all whitespace-nowrap cursor-pointer active:scale-95"
             >
-              <span>{ui.bookNow}</span>
-            </a>
+              <span>{ui.inquireNow}</span>
+            </button>
 
-            {/* WhatsApp CTA (h-9) */}
+            {/* WhatsApp CTA */}
             <a
               href={whatsAppUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden sm:inline-flex h-9 items-center justify-center gap-1.5 bg-[#25D366] hover:bg-[#20ba5a] text-white px-3.5 rounded-xl text-xs font-bold shadow-sm transition-colors whitespace-nowrap"
+              className="hidden sm:inline-flex h-9 items-center justify-center gap-1.5 bg-[#25D366] hover:bg-[#20ba5a] text-white px-3.5 rounded-xl text-xs font-bold shadow-xs transition-colors whitespace-nowrap"
             >
               <MessageSquare className="w-3.5 h-3.5" />
               <span>WhatsApp</span>
             </a>
 
-            {/* Mobile WhatsApp Icon Button (h-9) */}
+            {/* Mobile WhatsApp Icon Button */}
             <a
               href={whatsAppUrl}
               target="_blank"
@@ -204,11 +217,11 @@ export default function SiteHeader({
               <MessageSquare className="w-4 h-4" />
             </a>
 
-            {/* Mobile Menu Hamburger (h-9) */}
+            {/* Mobile Menu Hamburger */}
             <button
               type="button"
               onClick={() => setIsMobileMenuOpen(true)}
-              className="lg:hidden h-9 w-9 flex items-center justify-center rounded-xl border border-[#E5E8ED] dark:border-slate-700 bg-white dark:bg-[#0E131F] hover:bg-[#F5F7FA] dark:hover:bg-slate-800 text-[#4B5563] dark:text-slate-200 transition-colors"
+              className="md:hidden h-9 w-9 flex items-center justify-center rounded-xl border border-[#E5E8ED] dark:border-slate-700 bg-white dark:bg-[#0E131F] hover:bg-[#F5F7FA] dark:hover:bg-slate-800 text-[#4B5563] dark:text-slate-200 transition-colors"
               aria-label="Open Menu"
             >
               <Menu className="w-4 h-4" />
@@ -219,21 +232,19 @@ export default function SiteHeader({
 
       {/* ── Mobile drawer ── */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-[100] lg:hidden animate-fade-in">
-          {/* Backdrop */}
+        <div className="fixed inset-0 z-[100] md:hidden animate-fade-in">
           <div
             className="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity"
             onClick={() => setIsMobileMenuOpen(false)}
           />
 
-          {/* Drawer panel */}
           <div className="absolute right-0 top-0 bottom-0 w-[85%] max-w-sm bg-white dark:bg-[#0E131F] flex flex-col shadow-2xl transition-transform animate-slide-up">
-            {/* Drawer header */}
             <div className="p-4 border-b border-[#E5E8ED] dark:border-slate-800 flex items-center justify-between">
               <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2">
                 <div className="relative h-7 w-20">
                   <Image src="/images/brand-sklimo-official-logo-250x250.png" alt="SK Limo" fill className="object-contain dark:brightness-110" />
                 </div>
+                <span className="text-sm font-extrabold text-[#111827] dark:text-white">SK Limo</span>
               </Link>
               <button
                 type="button"
@@ -245,57 +256,67 @@ export default function SiteHeader({
               </button>
             </div>
 
-            {/* Nav links */}
             <div className="flex-1 overflow-y-auto p-4 space-y-2">
               <button
                 type="button"
-                onClick={() => handleServiceClick('airport')}
-                className={`w-full flex items-center justify-between p-3.5 rounded-xl transition-all cursor-pointer ${
-                  activeService === 'airport'
-                    ? 'bg-[#0F172A] text-[#C5A059] font-bold shadow-sm'
-                    : 'text-[#1A1A1A] dark:text-slate-100 hover:bg-[#F5F7FA] dark:hover:bg-slate-800'
-                }`}
+                onClick={() => scrollToSection('services')}
+                className="w-full flex items-center justify-between p-3.5 rounded-xl text-[#1A1A1A] dark:text-slate-100 hover:bg-[#F5F7FA] dark:hover:bg-slate-800 transition-all cursor-pointer"
               >
                 <span className="flex items-center gap-3">
                   <Plane className="w-4 h-4 text-[#C5A059]" />
-                  <span className="font-semibold text-sm">{nav.airport}</span>
+                  <span className="font-semibold text-sm">{nav.services}</span>
                 </span>
                 <ChevronRight className="w-4 h-4 text-[#D1D5DB]" />
               </button>
 
               <button
                 type="button"
-                onClick={() => handleServiceClick('sightseeing')}
-                className={`w-full flex items-center justify-between p-3.5 rounded-xl transition-all cursor-pointer ${
-                  activeService === 'sightseeing'
-                    ? 'bg-[#0F172A] text-[#C5A059] font-bold shadow-sm'
-                    : 'text-[#1A1A1A] dark:text-slate-100 hover:bg-[#F5F7FA] dark:hover:bg-slate-800'
-                }`}
+                onClick={() => scrollToSection('fleet')}
+                className="w-full flex items-center justify-between p-3.5 rounded-xl text-[#1A1A1A] dark:text-slate-100 hover:bg-[#F5F7FA] dark:hover:bg-slate-800 transition-all cursor-pointer"
+              >
+                <span className="flex items-center gap-3">
+                  <Car className="w-4 h-4 text-[#C5A059]" />
+                  <span className="font-semibold text-sm">{nav.fleet}</span>
+                </span>
+                <ChevronRight className="w-4 h-4 text-[#D1D5DB]" />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => scrollToSection('destinations')}
+                className="w-full flex items-center justify-between p-3.5 rounded-xl text-[#1A1A1A] dark:text-slate-100 hover:bg-[#F5F7FA] dark:hover:bg-slate-800 transition-all cursor-pointer"
               >
                 <span className="flex items-center gap-3">
                   <Compass className="w-4 h-4 text-[#C5A059]" />
-                  <span className="font-semibold text-sm">{nav.sightseeing}</span>
+                  <span className="font-semibold text-sm">{nav.destinations}</span>
                 </span>
                 <ChevronRight className="w-4 h-4 text-[#D1D5DB]" />
               </button>
 
               <button
                 type="button"
-                onClick={() => handleServiceClick('ski')}
-                className={`w-full flex items-center justify-between p-3.5 rounded-xl transition-all cursor-pointer ${
-                  activeService === 'ski'
-                    ? 'bg-[#0F172A] text-[#C5A059] font-bold shadow-sm'
-                    : 'text-[#1A1A1A] dark:text-slate-100 hover:bg-[#F5F7FA] dark:hover:bg-slate-800'
-                }`}
+                onClick={() => scrollToSection('compliance')}
+                className="w-full flex items-center justify-between p-3.5 rounded-xl text-[#1A1A1A] dark:text-slate-100 hover:bg-[#F5F7FA] dark:hover:bg-slate-800 transition-all cursor-pointer"
               >
                 <span className="flex items-center gap-3">
-                  <Snowflake className="w-4 h-4 text-[#C5A059]" />
-                  <span className="font-semibold text-sm">{nav.ski}</span>
+                  <ShieldCheck className="w-4 h-4 text-[#00B37E]" />
+                  <span className="font-semibold text-sm">{nav.compliance}</span>
                 </span>
                 <ChevronRight className="w-4 h-4 text-[#D1D5DB]" />
               </button>
 
-              {/* Mobile Theme Toggle Button */}
+              <button
+                type="button"
+                onClick={() => scrollToSection('faq')}
+                className="w-full flex items-center justify-between p-3.5 rounded-xl text-[#1A1A1A] dark:text-slate-100 hover:bg-[#F5F7FA] dark:hover:bg-slate-800 transition-all cursor-pointer"
+              >
+                <span className="flex items-center gap-3">
+                  <HelpCircle className="w-4 h-4 text-[#C5A059]" />
+                  <span className="font-semibold text-sm">{nav.faq}</span>
+                </span>
+                <ChevronRight className="w-4 h-4 text-[#D1D5DB]" />
+              </button>
+
               <button
                 type="button"
                 onClick={toggleTheme}
@@ -308,21 +329,28 @@ export default function SiteHeader({
                 <span className="text-xs text-[#9CA3AF] capitalize">{theme}</span>
               </button>
 
+              <button
+                type="button"
+                onClick={() => scrollToSection('inquire')}
+                className="w-full flex items-center justify-center gap-2 bg-[#C5A059] text-[#0A0D14] font-extrabold py-3 rounded-xl text-sm mt-3 shadow-xs cursor-pointer"
+              >
+                <span>{ui.inquireNow}</span>
+              </button>
+
               <a
                 href={whatsAppUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 bg-[#25D366] text-white font-semibold py-3 rounded-xl text-sm mt-4 shadow-md"
+                className="flex items-center justify-center gap-2 bg-[#25D366] text-white font-semibold py-3 rounded-xl text-sm mt-2 shadow-md"
               >
                 <MessageSquare className="w-4 h-4" />
                 <span>{ui.whatsAppConcierge}</span>
               </a>
             </div>
 
-            {/* Drawer footer */}
             <div className="p-4 border-t border-[#E5E8ED] dark:border-slate-800 text-center text-[10px] text-[#9CA3AF]">
               <span className="block font-medium">{ui.mlitLicensed}</span>
-              <span>株式会社SKリモ (SK LIMO Co., Ltd.)</span>
+              <span>SK LIMO Co., Ltd. (sk.limo)</span>
             </div>
           </div>
         </div>

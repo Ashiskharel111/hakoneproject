@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { Language } from '@/lib/translations';
 
-const STORAGE_KEY = 'sk_limo_lang';
+const STORAGE_KEY = 'sk_limo_preview_lang';
 const VALID_LANGUAGES: Language[] = ['en', 'ja', 'zh', 'fr', 'es'];
 
 interface LanguageContextType {
@@ -66,13 +66,6 @@ export function getInitialLanguage(): Language {
       setCookie(STORAGE_KEY, stored);
       return stored as Language;
     }
-    
-    // 3. Fallback to browser language
-    const browserLang = navigator.language?.toLowerCase() || '';
-    if (browserLang.startsWith('ja')) return 'ja';
-    if (browserLang.startsWith('zh')) return 'zh';
-    if (browserLang.startsWith('fr')) return 'fr';
-    if (browserLang.startsWith('es')) return 'es';
   } catch (e) {
     console.error('Error reading language persistence:', e);
   }

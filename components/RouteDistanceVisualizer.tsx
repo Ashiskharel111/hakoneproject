@@ -63,7 +63,7 @@ const CORRIDOR_ROUTES: RouteItem[] = [
     durationMins: '25–35 Mins',
     expressway: 'Shuto Expressway (Wangan Line & Route 1)',
     scenicStops: ['Rainbow Bridge View', 'Tokyo Bay Waterfront', 'Oi Junction'],
-    startingPrice: 16000,
+    startingPrice: 24000,
     embedMapQuery: 'Haneda+Airport+Tokyo+Japan',
     image: '/images/dest-haneda-hero-1920x1080.jpg',
   },
@@ -83,7 +83,7 @@ const CORRIDOR_ROUTES: RouteItem[] = [
     durationMins: '60–75 Mins',
     expressway: 'Higashi-Kanto & Shin-Kuko Expressway',
     scenicStops: ['Makuhari Coastal Area', 'Shisui Service Area', 'Narita Approach'],
-    startingPrice: 28000,
+    startingPrice: 36000,
     embedMapQuery: 'Narita+Airport+Chiba+Japan',
     image: '/images/dest-narita-hero-1920x1080.jpg',
   },
@@ -183,7 +183,7 @@ const CORRIDOR_ROUTES: RouteItem[] = [
     durationMins: '3 hr 45 min',
     expressway: 'Kan-etsu & Joshin-etsu & Nagano Expressway',
     scenicStops: ['Kamisato Service Area', 'Chikuma River Rest Point', 'North Alps Mountain View'],
-    startingPrice: 115000,
+    startingPrice: 130000,
     embedMapQuery: 'Hakuba+Nagano+Japan',
     image: '/images/ski-hakuba-hero-4032x3024.jpg',
   },
@@ -400,13 +400,13 @@ export default function RouteDistanceVisualizer() {
 
             {/* Book This Corridor CTA */}
             <div className="pt-2">
-              <Link
-                href="/tours"
-                className="w-full bg-[#0068FF] hover:bg-[#0050CC] text-white font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-sm transition-colors"
+              <a
+                href="#inquire"
+                className="w-full bg-[#C5A059] hover:bg-[#d8b46b] text-[#0A0D14] font-extrabold py-3.5 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-sm transition-colors"
               >
                 <span>{t.reserveRouteBtn}</span>
                 <ArrowRight className="w-4 h-4" />
-              </Link>
+              </a>
             </div>
           </div>
 

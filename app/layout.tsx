@@ -1,18 +1,11 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { ThemeProvider } from "@/context/ThemeContext";
 
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-sans",
-});
-
 export const metadata: Metadata = {
-  title: "SK Limo Booking | Luxury Chauffeur & Private Transfers Japan (Official)",
-  description: "Official booking portal for SK Limo Japan (booking.sk.limo). Haneda & Narita Airport transfers, Tokyo sightseeing private charters, and Hakuba/Nagano 4WD ski transfers. MLIT Licensed Green-Plate Operator.",
+  title: "SK Limo Japan | Luxury Private Chauffeur & Limousine Service (sk.limo)",
+  description: "Official preview website for SK Limo Japan (sk.limo). MLIT-licensed Green-Plate luxury chauffeur service in Tokyo, Haneda & Narita airports, Mt. Fuji, Hakone, and Hakuba ski resorts.",
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",
@@ -26,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ja" className={`h-full antialiased ${inter.variable}`}>
+    <html lang="en" className="h-full antialiased">
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
